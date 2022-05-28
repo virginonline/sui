@@ -27,21 +27,14 @@ function DisplayBox({ display }: { display: string }) {
         setHasFailedToLoad(false);
         setHasImgBeenChecked(false);
         setImgAllowState(false);
-        console.log(
-            `start DisplayBox image content check, network: ${network}`
-        );
 
         new ImageModClient(network)
             .checkImage(processDisplayValue(display))
             .then(({ ok }) => {
                 //setHasImgBeenChecked(true);
                 setImgAllowState(ok);
-                console.log(
-                    `image allow check for ${display} returned:  ${ok}`
-                );
             })
             .catch((error) => {
-                console.error('image content check threw', error);
                 //setHasImgBeenChecked(true);
                 // default to allow, so a broken img check service doesn't break NFT display
                 setImgAllowState(true);
@@ -60,18 +53,21 @@ function DisplayBox({ display }: { display: string }) {
         [setHasFailedToLoad]
     );
 
+    const loadedWithoutAllowedState = hasDisplayLoaded && !imgAllowState;
+    const shouldBlur = loadedWithoutAllowedState && !hasImgBeenChecked;
+    const shouldStillBlur = loadedWithoutAllowedState && hasImgBeenChecked;
     // if we've loaded the display image but the check hasn't returned, display a blurry version
-    const shouldBlur = hasDisplayLoaded && !hasImgBeenChecked && !imgAllowState;
-    const imgClass = shouldBlur ? styles.imageboxblur : styles.imagebox;
+    let imgClass = shouldBlur ? styles.imageboxblur : styles.imagebox;
+    // if we've loaded the display image and the check did not pass, blur harder & stop animation
+    imgClass = shouldStillBlur ? styles.imageblurstill : imgClass;
 
     return (
         <div className={styles['display-container']}>
-            {!hasDisplayLoaded ||
-                (hasDisplayLoaded && !imgAllowState && (
-                    <div className={styles.imagebox} id="pleaseWaitImage">
-                        image loading...
-                    </div>
-                ))}
+            {!hasDisplayLoaded && (
+                <div className={styles.imagebox} id="pleaseWaitImage">
+                    image loading...
+                </div>
+            )}
             {hasFailedToLoad ? (
                 <div className={styles.imagebox} id="noImage">
                     No Image was Found
