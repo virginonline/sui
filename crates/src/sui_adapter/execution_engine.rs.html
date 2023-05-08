@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-adapter/src/execution_engine.rs`."><title>execution_engine.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_adapter" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (458d4dae8 2023-04-25)" data-search-js="search-618e954b235f6acc.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_adapter/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-adapter/src/execution_engine.rs`."><title>execution_engine.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_adapter" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (c4190f2d3 2023-05-07)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_adapter/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -788,16 +788,80 @@
 <a href="#788" id="788">788</a>
 <a href="#789" id="789">789</a>
 <a href="#790" id="790">790</a>
+<a href="#791" id="791">791</a>
+<a href="#792" id="792">792</a>
+<a href="#793" id="793">793</a>
+<a href="#794" id="794">794</a>
+<a href="#795" id="795">795</a>
+<a href="#796" id="796">796</a>
+<a href="#797" id="797">797</a>
+<a href="#798" id="798">798</a>
+<a href="#799" id="799">799</a>
+<a href="#800" id="800">800</a>
+<a href="#801" id="801">801</a>
+<a href="#802" id="802">802</a>
+<a href="#803" id="803">803</a>
+<a href="#804" id="804">804</a>
+<a href="#805" id="805">805</a>
+<a href="#806" id="806">806</a>
+<a href="#807" id="807">807</a>
+<a href="#808" id="808">808</a>
+<a href="#809" id="809">809</a>
+<a href="#810" id="810">810</a>
+<a href="#811" id="811">811</a>
+<a href="#812" id="812">812</a>
+<a href="#813" id="813">813</a>
+<a href="#814" id="814">814</a>
+<a href="#815" id="815">815</a>
+<a href="#816" id="816">816</a>
+<a href="#817" id="817">817</a>
+<a href="#818" id="818">818</a>
+<a href="#819" id="819">819</a>
+<a href="#820" id="820">820</a>
+<a href="#821" id="821">821</a>
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
+<a href="#830" id="830">830</a>
+<a href="#831" id="831">831</a>
+<a href="#832" id="832">832</a>
+<a href="#833" id="833">833</a>
+<a href="#834" id="834">834</a>
+<a href="#835" id="835">835</a>
+<a href="#836" id="836">836</a>
+<a href="#837" id="837">837</a>
+<a href="#838" id="838">838</a>
+<a href="#839" id="839">839</a>
+<a href="#840" id="840">840</a>
+<a href="#841" id="841">841</a>
+<a href="#842" id="842">842</a>
+<a href="#843" id="843">843</a>
+<a href="#844" id="844">844</a>
+<a href="#845" id="845">845</a>
+<a href="#846" id="846">846</a>
+<a href="#847" id="847">847</a>
+<a href="#848" id="848">848</a>
+<a href="#849" id="849">849</a>
+<a href="#850" id="850">850</a>
+<a href="#851" id="851">851</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-</span><span class="kw">use </span>std::{collections::BTreeSet, sync::Arc};
-
-<span class="kw">use </span><span class="kw">crate</span>::execution_mode::{<span class="self">self</span>, ExecutionMode};
+</span><span class="kw">use </span><span class="kw">crate</span>::execution_mode::{<span class="self">self</span>, ExecutionMode};
 <span class="kw">use </span>move_binary_format::access::ModuleAccess;
 <span class="kw">use </span>move_binary_format::CompiledModule;
 <span class="kw">use </span>move_bytecode_utils::module_cache::GetModule;
 <span class="kw">use </span>move_vm_runtime::move_vm::MoveVM;
+<span class="kw">use </span>once_cell::sync::Lazy;
+<span class="kw">use </span>std::{
+    collections::{BTreeSet, HashSet},
+    sync::Arc,
+};
 <span class="kw">use </span>sui_types::balance::{
     BALANCE_CREATE_REWARDS_FUNCTION_NAME, BALANCE_DESTROY_REBATES_FUNCTION_NAME,
     BALANCE_MODULE_NAME,
@@ -814,32 +878,64 @@
 <span class="kw">use </span>sui_protocol_config::{check_limit_by_meter, LimitThresholdCrossed, ProtocolConfig};
 <span class="kw">use </span>sui_types::clock::{CLOCK_MODULE_NAME, CONSENSUS_COMMIT_PROLOGUE_FUNCTION_NAME};
 <span class="kw">use </span>sui_types::committee::EpochId;
+<span class="kw">use </span>sui_types::effects::TransactionEffects;
 <span class="kw">use </span>sui_types::epoch_data::EpochData;
 <span class="kw">use </span>sui_types::error::{ExecutionError, ExecutionErrorKind};
+<span class="kw">use </span>sui_types::execution_status::ExecutionStatus;
 <span class="kw">use </span>sui_types::gas::{GasCostSummary, SuiGasStatusAPI};
-<span class="kw">use </span>sui_types::messages::{
-    Argument, Command, ConsensusCommitPrologue, GenesisTransaction, ObjectArg,
-    ProgrammableTransaction, TransactionKind,
-};
+<span class="kw">use </span>sui_types::messages_consensus::ConsensusCommitPrologue;
 <span class="kw">use </span>sui_types::storage::{ChildObjectResolver, ObjectStore, ParentSync, WriteKind};
 <span class="attr">#[cfg(msim)]
 </span><span class="kw">use </span>sui_types::sui_system_state::advance_epoch_result_injection::maybe_modify_result;
 <span class="kw">use </span>sui_types::sui_system_state::{AdvanceEpochParams, ADVANCE_EPOCH_SAFE_MODE_FUNCTION_NAME};
 <span class="kw">use </span>sui_types::temporary_store::InnerTemporaryStore;
 <span class="kw">use </span>sui_types::temporary_store::TemporaryStore;
+<span class="kw">use </span>sui_types::transaction::{
+    Argument, Command, GenesisTransaction, ObjectArg, ProgrammableTransaction, TransactionKind,
+};
 <span class="kw">use </span>sui_types::{
     base_types::{ObjectRef, SuiAddress, TransactionDigest, TxContext},
     gas::SuiGasStatus,
-    messages::{CallArg, ChangeEpoch, ExecutionStatus, TransactionEffects},
     object::Object,
     storage::BackingPackageStore,
     sui_system_state::{ADVANCE_EPOCH_FUNCTION_NAME, SUI_SYSTEM_MODULE_NAME},
+    transaction::{CallArg, ChangeEpoch},
     SUI_FRAMEWORK_ADDRESS, SUI_SYSTEM_STATE_OBJECT_ID,
 };
 <span class="kw">use </span>sui_types::{
     is_system_package, SUI_CLOCK_OBJECT_ID, SUI_CLOCK_OBJECT_SHARED_VERSION,
     SUI_FRAMEWORK_OBJECT_ID, SUI_SYSTEM_OBJECT_ID, SUI_SYSTEM_STATE_OBJECT_SHARED_VERSION,
 };
+
+<span class="doccomment">/// If a transaction digest shows up in this list, when executing such transaction,
+/// we will always return `ExecutionError::CertificateDenied` without executing it (but still do
+/// gas smashing). Because this list is not gated by protocol version, there are a few important
+/// criteria for adding a digest to this list:
+/// 1. The certificate must be causing all validators to either panic or hang forever deterministically.
+/// 2. If we ever ship a fix to make it no longer panic or hang when executing such transaction,
+/// we must make sure the transaction is already in this list. Otherwise nodes running the newer version
+/// without these transactions in the list will generate forked result.
+/// Below is a scenario of when we need to use this list:
+/// 1. We detect that a specific transaction is causing all validators to either panic or hang forever deterministically.
+/// 2. We push a CertificateDenyConfig to deny such transaction to all validators asap.
+/// 3. To make sure that all fullnodes are able to sync to the latest version, we need to add the transaction digest
+/// to this list as well asap, and ship this binary to all fullnodes, so that they can sync past this transaction.
+/// 4. We then can start fixing the issue, and ship the fix to all nodes.
+/// 5. Unfortunately, we can&#39;t remove the transaction digest from this list, because if we do so, any future
+/// node that sync from genesis will fork on this transaction. We may be able to remove it once
+/// we have stable snapshots and the binary has a minimum supported protocol version past the epoch.
+</span><span class="kw">pub fn </span>get_denied_certificates() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">&#39;static </span>HashSet&lt;TransactionDigest&gt; {
+    <span class="kw">static </span>DENIED_CERTIFICATES: Lazy&lt;HashSet&lt;TransactionDigest&gt;&gt; = Lazy::new(|| HashSet::from([]));
+    Lazy::force(<span class="kw-2">&amp;</span>DENIED_CERTIFICATES)
+}
+
+<span class="kw">fn </span>is_certificate_denied(
+    transaction_digest: <span class="kw-2">&amp;</span>TransactionDigest,
+    certificate_deny_set: <span class="kw-2">&amp;</span>HashSet&lt;TransactionDigest&gt;,
+) -&gt; bool {
+    certificate_deny_set.contains(transaction_digest)
+        || get_denied_certificates().contains(transaction_digest)
+}
 
 <span class="macro">checked_arithmetic! </span>{
 
@@ -860,7 +956,8 @@
     epoch_data: <span class="kw-2">&amp;</span>EpochData,
     protocol_config: <span class="kw-2">&amp;</span>ProtocolConfig,
     metrics: Arc&lt;LimitsMetrics&gt;,
-    enable_expensive_checks: bool
+    enable_expensive_checks: bool,
+    certificate_deny_set: <span class="kw-2">&amp;</span>HashSet&lt;TransactionDigest&gt;,
 ) -&gt; (
     InnerTemporaryStore,
     TransactionEffects,
@@ -881,7 +978,8 @@
         epoch_data.epoch_start_timestamp(),
         protocol_config,
         metrics,
-        enable_expensive_checks
+        enable_expensive_checks,
+        certificate_deny_set,
     )
 }
 
@@ -903,16 +1001,23 @@
     epoch_timestamp_ms: u64,
     protocol_config: <span class="kw-2">&amp;</span>ProtocolConfig,
     metrics: Arc&lt;LimitsMetrics&gt;,
-    enable_expensive_checks: bool
+    enable_expensive_checks: bool,
+    certificate_deny_set: <span class="kw-2">&amp;</span>HashSet&lt;TransactionDigest&gt;,
 ) -&gt; (
     InnerTemporaryStore,
     TransactionEffects,
     <span class="prelude-ty">Result</span>&lt;Mode::ExecutionResults, ExecutionError&gt;,
 ) {
-    <span class="kw">let </span><span class="kw-2">mut </span>tx_ctx = TxContext::new_from_components(<span class="kw-2">&amp;</span>transaction_signer, <span class="kw-2">&amp;</span>transaction_digest, epoch_id, epoch_timestamp_ms);
+    <span class="kw">let </span><span class="kw-2">mut </span>tx_ctx = TxContext::new_from_components(
+        <span class="kw-2">&amp;</span>transaction_signer,
+        <span class="kw-2">&amp;</span>transaction_digest,
+        epoch_id,
+        epoch_timestamp_ms,
+    );
 
     <span class="kw">let </span>is_epoch_change = <span class="macro">matches!</span>(transaction_kind, TransactionKind::ChangeEpoch(<span class="kw">_</span>));
 
+    <span class="kw">let </span>deny_cert = is_certificate_denied(<span class="kw-2">&amp;</span>transaction_digest, certificate_deny_set);
     <span class="kw">let </span>(gas_cost_summary, execution_result) = execute_transaction::&lt;Mode, <span class="kw">_</span>&gt;(
         <span class="kw-2">&amp;mut </span>temporary_store,
         transaction_kind,
@@ -922,15 +1027,15 @@
         gas_status,
         protocol_config,
         metrics,
-        enable_expensive_checks
+        enable_expensive_checks,
+        deny_cert,
     );
 
     <span class="kw">let </span>status = <span class="kw">if let </span><span class="prelude-val">Err</span>(error) = <span class="kw-2">&amp;</span>execution_result {
         <span class="comment">// Elaborate errors in logs if they are unexpected or their status is terse.
         </span><span class="kw">use </span>ExecutionErrorKind <span class="kw">as </span>K;
         <span class="kw">match </span>error.kind() {
-            K::InvariantViolation |
-            K::VMInvariantViolation =&gt; {
+            K::InvariantViolation | K::VMInvariantViolation =&gt; {
                 <span class="attr">#[skip_checked_arithmetic]
                 </span><span class="macro">tracing::error!</span>(
                     kind = <span class="question-mark">?</span>error.kind(),
@@ -938,10 +1043,9 @@
                     <span class="string">&quot;INVARIANT VIOLATION! Source: {:?}&quot;</span>,
                     error.source(),
                 );
-            },
+            }
 
-            K::SuiMoveVerificationError |
-            K::VMVerificationOrDeserializationError =&gt; {
+            K::SuiMoveVerificationError | K::VMVerificationOrDeserializationError =&gt; {
                 <span class="attr">#[skip_checked_arithmetic]
                 </span><span class="macro">tracing::debug!</span>(
                     kind = <span class="question-mark">?</span>error.kind(),
@@ -951,8 +1055,7 @@
                 );
             }
 
-            K::PublishUpgradeMissingDependency |
-            K::PublishUpgradeDependencyDowngrade =&gt; {
+            K::PublishUpgradeMissingDependency | K::PublishUpgradeDependencyDowngrade =&gt; {
                 <span class="attr">#[skip_checked_arithmetic]
                 </span><span class="macro">tracing::debug!</span>(
                     kind = <span class="question-mark">?</span>error.kind(),
@@ -1030,7 +1133,8 @@
     <span class="kw-2">mut </span>gas_status: SuiGasStatus,
     protocol_config: <span class="kw-2">&amp;</span>ProtocolConfig,
     metrics: Arc&lt;LimitsMetrics&gt;,
-    enable_expensive_checks: bool
+    enable_expensive_checks: bool,
+    deny_cert: bool,
 ) -&gt; (
     GasCostSummary,
     <span class="prelude-ty">Result</span>&lt;Mode::ExecutionResults, ExecutionError&gt;,
@@ -1054,16 +1158,23 @@
     // we must still ensure an effect is committed and all objects versions incremented
     </span><span class="kw">let </span>result = charge_gas_for_object_read(temporary_store, <span class="kw-2">&amp;mut </span>gas_status);
     <span class="kw">let </span><span class="kw-2">mut </span>result = result.and_then(|()| {
-        <span class="kw">let </span><span class="kw-2">mut </span>execution_result = execution_loop::&lt;Mode, <span class="kw">_</span>&gt;(
-            temporary_store,
-            transaction_kind,
-            gas_object_ref.<span class="number">0</span>,
-            tx_ctx,
-            move_vm,
-            <span class="kw-2">&amp;mut </span>gas_status,
-            protocol_config,
-            metrics.clone(),
-        );
+        <span class="kw">let </span><span class="kw-2">mut </span>execution_result = <span class="kw">if </span>deny_cert {
+            <span class="prelude-val">Err</span>(ExecutionError::new(
+                ExecutionErrorKind::CertificateDenied,
+                <span class="prelude-val">None</span>,
+            ))
+        } <span class="kw">else </span>{
+            execution_loop::&lt;Mode, <span class="kw">_</span>&gt;(
+                temporary_store,
+                transaction_kind,
+                gas_object_ref.<span class="number">0</span>,
+                tx_ctx,
+                move_vm,
+                <span class="kw-2">&amp;mut </span>gas_status,
+                protocol_config,
+                metrics.clone(),
+            )
+        };
 
         <span class="kw">let </span>effects_estimated_size = temporary_store.estimate_effects_size_upperbound();
 
@@ -1096,11 +1207,11 @@
             }
         };
         <span class="kw">if </span>execution_result.is_ok() {
-
             <span class="comment">// This limit is only present in Version 3 and up, so use this to gate it
-            </span><span class="kw">if let </span>(<span class="prelude-val">Some</span>(normal_lim), <span class="prelude-val">Some</span>(system_lim)) =
-                (protocol_config.max_size_written_objects_as_option(), protocol_config
-            .max_size_written_objects_system_tx_as_option()) {
+            </span><span class="kw">if let </span>(<span class="prelude-val">Some</span>(normal_lim), <span class="prelude-val">Some</span>(system_lim)) = (
+                protocol_config.max_size_written_objects_as_option(),
+                protocol_config.max_size_written_objects_system_tx_as_option(),
+            ) {
                 <span class="kw">let </span>written_objects_size = temporary_store.written_objects_size();
 
                 <span class="kw">match </span><span class="macro">check_limit_by_meter!</span>(
@@ -1128,9 +1239,7 @@
                         ))
                     }
                 };
-
             }
-
         }
 
         execution_result
@@ -1158,7 +1267,8 @@
         </span>temporary_store.conserve_unmetered_storage_rebate(gas_status.unmetered_storage_rebate());
         <span class="kw">if </span>!is_genesis_tx &amp;&amp; !Mode::allow_arbitrary_values() {
             <span class="comment">// ensure that this transaction did not create or destroy SUI, try to recover if the check fails
-            </span><span class="kw">let </span>conservation_result = temporary_store.check_sui_conserved(advance_epoch_gas_summary, enable_expensive_checks);
+            </span><span class="kw">let </span>conservation_result = temporary_store
+                .check_sui_conserved(advance_epoch_gas_summary, enable_expensive_checks);
             <span class="kw">if let </span><span class="prelude-val">Err</span>(conservation_err) = conservation_result {
                 <span class="comment">// conservation violated. try to avoid panic by dumping all writes, charging for gas, re-checking
                 // conservation, and surfacing an aborted transaction with an invariant violation if all of that works
@@ -1166,16 +1276,23 @@
                 temporary_store.reset(gas, <span class="kw-2">&amp;mut </span>gas_status);
                 temporary_store.charge_gas(gas_object_id, <span class="kw-2">&amp;mut </span>gas_status, <span class="kw-2">&amp;mut </span>result, gas);
                 <span class="comment">// check conservation once more more
-                </span><span class="kw">if let </span><span class="prelude-val">Err</span>(recovery_err) = temporary_store.check_sui_conserved(advance_epoch_gas_summary, enable_expensive_checks) {
+                </span><span class="kw">if let </span><span class="prelude-val">Err</span>(recovery_err) = temporary_store
+                    .check_sui_conserved(advance_epoch_gas_summary, enable_expensive_checks)
+                {
                     <span class="comment">// if we still fail, it&#39;s a problem with gas
                     // charging that happens even in the &quot;aborted&quot; case--no other option but panic.
                     // we will create or destroy SUI otherwise
-                    </span><span class="macro">panic!</span>(<span class="string">&quot;SUI conservation fail in tx block {}: {}\nGas status is {}\nTx was &quot;</span>, tx_ctx.digest(), recovery_err, gas_status.summary())
+                    </span><span class="macro">panic!</span>(
+                        <span class="string">&quot;SUI conservation fail in tx block {}: {}\nGas status is {}\nTx was &quot;</span>,
+                        tx_ctx.digest(),
+                        recovery_err,
+                        gas_status.summary()
+                    )
                 }
-              }
+            }
         } <span class="comment">// else, we&#39;re in the genesis transaction which mints the SUI supply, and hence does not satisfy SUI conservation, or
-        // we&#39;re in the non-production dev inspect mode which allows us to violate conservation
-        // === end SUI conservation checks ===
+          // we&#39;re in the non-production dev inspect mode which allows us to violate conservation
+          // === end SUI conservation checks ===
         </span>(cost_summary, result)
     } <span class="kw">else </span>{
         <span class="comment">// legacy code before gas v2, leave it alone
@@ -1220,7 +1337,7 @@
 
             <span class="kw">for </span>genesis_object <span class="kw">in </span>objects {
                 <span class="kw">match </span>genesis_object {
-                    sui_types::messages::GenesisObject::RawObject { data, owner } =&gt; {
+                    sui_types::transaction::GenesisObject::RawObject { data, owner } =&gt; {
                         <span class="kw">let </span>object = Object {
                             data,
                             owner,
@@ -1242,7 +1359,8 @@
                 gas_status,
                 protocol_config,
                 metrics,
-            ).expect(<span class="string">&quot;ConsensusCommitPrologue cannot fail&quot;</span>);
+            )
+            .expect(<span class="string">&quot;ConsensusCommitPrologue cannot fail&quot;</span>);
             <span class="prelude-val">Ok</span>(Mode::empty_results())
         }
         TransactionKind::ProgrammableTransaction(pt) =&gt; {
@@ -1329,10 +1447,7 @@
 
     arguments.append(<span class="kw-2">&amp;mut </span>call_arg_arguments.unwrap());
 
-    <span class="macro">info!</span>(
-        <span class="string">&quot;Call arguments to advance_epoch transaction: {:?}&quot;</span>,
-        params
-    );
+    <span class="macro">info!</span>(<span class="string">&quot;Call arguments to advance_epoch transaction: {:?}&quot;</span>, params);
 
     <span class="kw">let </span>storage_rebates = builder.programmable_move_call(
         SUI_SYSTEM_OBJECT_ID,
@@ -1395,10 +1510,7 @@
 
     arguments.append(<span class="kw-2">&amp;mut </span>call_arg_arguments.unwrap());
 
-    <span class="macro">info!</span>(
-        <span class="string">&quot;Call arguments to advance_epoch transaction: {:?}&quot;</span>,
-        params
-    );
+    <span class="macro">info!</span>(<span class="string">&quot;Call arguments to advance_epoch transaction: {:?}&quot;</span>, params);
 
     builder.programmable_move_call(
         SUI_SYSTEM_OBJECT_ID,
@@ -1444,7 +1556,7 @@
     );
 
     <span class="attr">#[cfg(msim)]
-    </span><span class="kw">let </span>result = maybe_modify_result(result);
+    </span><span class="kw">let </span>result = maybe_modify_result(result, change_epoch.epoch);
 
     <span class="kw">if </span>result.is_err() {
         <span class="macro">tracing::error!</span>(
@@ -1480,7 +1592,14 @@
         <span class="kw">let </span>max_format_version = protocol_config.move_binary_format_version();
         <span class="kw">let </span>deserialized_modules: Vec&lt;<span class="kw">_</span>&gt; = modules
             .iter()
-            .map(|m| CompiledModule::deserialize_with_max_version(m, max_format_version).unwrap())
+            .map(|m| {
+                CompiledModule::deserialize_with_config(
+                    m,
+                    max_format_version,
+                    protocol_config.no_extraneous_module_bytes(),
+                )
+                .unwrap()
+            })
             .collect();
 
         <span class="kw">if </span>version == OBJECT_START_VERSION {
@@ -1506,7 +1625,10 @@
             .expect(<span class="string">&quot;System Package Publish must succeed&quot;</span>);
         } <span class="kw">else </span>{
             <span class="kw">let </span><span class="kw-2">mut </span>new_package = Object::new_system_package(
-                <span class="kw-2">&amp;</span>deserialized_modules, version, dependencies, tx_ctx.digest(),
+                <span class="kw-2">&amp;</span>deserialized_modules,
+                version,
+                dependencies,
+                tx_ctx.digest(),
             );
 
             <span class="macro">info!</span>(

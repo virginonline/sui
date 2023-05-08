@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-proxy/src/consumer.rs`."><title>consumer.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-ba5701c5741a7b69.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_proxy" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (458d4dae8 2023-04-25)" data-search-js="search-618e954b235f6acc.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_proxy/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-proxy/src/consumer.rs`."><title>consumer.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_proxy" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (c4190f2d3 2023-05-07)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_proxy/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -331,10 +331,6 @@
 <a href="#331" id="331">331</a>
 <a href="#332" id="332">332</a>
 <a href="#333" id="333">333</a>
-<a href="#334" id="334">334</a>
-<a href="#335" id="335">335</a>
-<a href="#336" id="336">336</a>
-<a href="#337" id="337">337</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -363,7 +359,6 @@
     )
     .unwrap()
 });
-
 <span class="kw">static </span>CONSUMER_OPS: Lazy&lt;CounterVec&gt; = Lazy::new(|| {
     <span class="macro">register_counter_vec!</span>(
         <span class="string">&quot;consumer_operations&quot;</span>,
@@ -391,7 +386,8 @@
         <span class="kw-2">&amp;</span>[<span class="string">&quot;operation&quot;</span>],
         <span class="macro">vec!</span>[
             <span class="number">0.0008</span>, <span class="number">0.0016</span>, <span class="number">0.0032</span>, <span class="number">0.0064</span>, <span class="number">0.0128</span>, <span class="number">0.0256</span>, <span class="number">0.0512</span>, <span class="number">0.1024</span>, <span class="number">0.2048</span>, <span class="number">0.4096</span>, <span class="number">0.8192</span>,
-            <span class="number">1.0</span>, <span class="number">1.25</span>, <span class="number">1.5</span>, <span class="number">1.75</span>, <span class="number">2.0</span>, <span class="number">4.0</span>, <span class="number">8.0</span>, <span class="number">10.0</span>, <span class="number">12.5</span>, <span class="number">15.0
+            <span class="number">1.0</span>, <span class="number">1.25</span>, <span class="number">1.5</span>, <span class="number">1.75</span>, <span class="number">2.0</span>, <span class="number">2.25</span>, <span class="number">2.5</span>, <span class="number">2.75</span>, <span class="number">3.0</span>, <span class="number">3.25</span>, <span class="number">3.5</span>, <span class="number">3.75</span>, <span class="number">4.0</span>, <span class="number">4.25</span>, <span class="number">4.5</span>, <span class="number">4.75</span>,
+            <span class="number">5.0</span>, <span class="number">6.0</span>, <span class="number">7.0</span>, <span class="number">8.0</span>, <span class="number">9.0</span>, <span class="number">10.0</span>, <span class="number">11.0</span>, <span class="number">12.0</span>, <span class="number">13.0</span>, <span class="number">14.0</span>, <span class="number">15.0
         </span>],
     )
     .unwrap()
@@ -446,6 +442,7 @@
     <span class="kw">let </span>timer = CONSUMER_OPERATION_DURATION
         .with_label_values(<span class="kw-2">&amp;</span>[<span class="string">&quot;populate_labels&quot;</span>])
         .start_timer();
+    <span class="macro">debug!</span>(<span class="string">&quot;received metrics from {name} on {inventory_hostname}&quot;</span>);
     <span class="comment">// proto::LabelPair doesn&#39;t have pub fields so we can&#39;t use
     // struct literals to construct
     </span><span class="kw">let </span><span class="kw-2">mut </span>network_label = proto::LabelPair::default();
@@ -456,11 +453,7 @@
     host_label.set_name(<span class="string">&quot;host&quot;</span>.into());
     host_label.set_value(name);
 
-    <span class="kw">let </span><span class="kw-2">mut </span>relay_host_label = proto::LabelPair::default();
-    relay_host_label.set_name(<span class="string">&quot;relay_host&quot;</span>.into());
-    relay_host_label.set_value(inventory_hostname);
-
-    <span class="kw">let </span>labels = <span class="macro">vec!</span>[network_label, host_label, relay_host_label];
+    <span class="kw">let </span>labels = <span class="macro">vec!</span>[network_label, host_label];
 
     <span class="kw">let </span><span class="kw-2">mut </span>data = data;
     <span class="comment">// add our extra labels to our incoming metric data
@@ -667,7 +660,6 @@
             <span class="kw-2">&amp;</span>create_labels(<span class="macro">vec!</span>[
                 (<span class="string">&quot;network&quot;</span>, <span class="string">&quot;unittest-network&quot;</span>),
                 (<span class="string">&quot;host&quot;</span>, <span class="string">&quot;validator-0&quot;</span>),
-                (<span class="string">&quot;relay_host&quot;</span>, <span class="string">&quot;inventory-hostname&quot;</span>),
             ])
         );
     }
