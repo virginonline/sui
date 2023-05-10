@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-rosetta/src/types.rs`."><title>types.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_rosetta" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (c4190f2d3 2023-05-07)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_rosetta/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-rosetta/src/types.rs`."><title>types.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_rosetta" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (2f6bc5d25 2023-05-09)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_rosetta/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -942,19 +942,6 @@
 <a href="#942" id="942">942</a>
 <a href="#943" id="943">943</a>
 <a href="#944" id="944">944</a>
-<a href="#945" id="945">945</a>
-<a href="#946" id="946">946</a>
-<a href="#947" id="947">947</a>
-<a href="#948" id="948">948</a>
-<a href="#949" id="949">949</a>
-<a href="#950" id="950">950</a>
-<a href="#951" id="951">951</a>
-<a href="#952" id="952">952</a>
-<a href="#953" id="953">953</a>
-<a href="#954" id="954">954</a>
-<a href="#955" id="955">955</a>
-<a href="#956" id="956">956</a>
-<a href="#957" id="957">957</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -964,7 +951,6 @@
 <span class="kw">use </span>axum::response::{IntoResponse, Response};
 <span class="kw">use </span>axum::Json;
 <span class="kw">use </span>fastcrypto::encoding::Hex;
-<span class="kw">use </span>fastcrypto::traits::ToFromBytes;
 <span class="kw">use </span>serde::de::Error <span class="kw">as </span>DeError;
 <span class="kw">use </span>serde::{Deserialize, Serializer};
 <span class="kw">use </span>serde::{Deserializer, Serialize};
@@ -981,9 +967,7 @@
 <span class="kw">use </span>sui_types::programmable_transaction_builder::ProgrammableTransactionBuilder;
 <span class="kw">use </span>sui_types::sui_system_state::SUI_SYSTEM_MODULE_NAME;
 <span class="kw">use </span>sui_types::transaction::{Argument, CallArg, Command, ObjectArg, TransactionData};
-<span class="kw">use </span>sui_types::{
-    SUI_SYSTEM_OBJECT_ID, SUI_SYSTEM_STATE_OBJECT_ID, SUI_SYSTEM_STATE_OBJECT_SHARED_VERSION,
-};
+<span class="kw">use </span>sui_types::SUI_SYSTEM_OBJECT_ID;
 
 <span class="kw">use </span><span class="kw">crate</span>::errors::{Error, ErrorType};
 <span class="kw">use </span><span class="kw">crate</span>::operations::Operations;
@@ -1286,15 +1270,15 @@
     <span class="kw">fn </span>from(pk: SuiPublicKey) -&gt; <span class="self">Self </span>{
         <span class="kw">match </span>pk {
             SuiPublicKey::Ed25519(k) =&gt; PublicKey {
-                hex_bytes: Hex::from_bytes(k.as_bytes()),
+                hex_bytes: Hex::from_bytes(<span class="kw-2">&amp;</span>k.<span class="number">0</span>),
                 curve_type: CurveType::Edwards25519,
             },
             SuiPublicKey::Secp256k1(k) =&gt; PublicKey {
-                hex_bytes: Hex::from_bytes(k.as_bytes()),
+                hex_bytes: Hex::from_bytes(<span class="kw-2">&amp;</span>k.<span class="number">0</span>),
                 curve_type: CurveType::Secp256k1,
             },
             SuiPublicKey::Secp256r1(k) =&gt; PublicKey {
-                hex_bytes: Hex::from_bytes(k.as_bytes()),
+                hex_bytes: Hex::from_bytes(<span class="kw-2">&amp;</span>k.<span class="number">0</span>),
                 curve_type: CurveType::Secp256r1,
             },
         }
@@ -1837,22 +1821,17 @@
                 validator, amount, ..
             } =&gt; {
                 <span class="kw">let </span><span class="kw-2">mut </span>builder = ProgrammableTransactionBuilder::new();
-                <span class="kw">let </span>system_state = CallArg::Object(ObjectArg::SharedObject {
-                    id: SUI_SYSTEM_STATE_OBJECT_ID,
-                    initial_shared_version: SUI_SYSTEM_STATE_OBJECT_SHARED_VERSION,
-                    mutable: <span class="bool-val">true</span>,
-                });
 
                 <span class="comment">// [WORKAROUND] - this is a hack to work out if the staking ops is for a selected amount or None amount (whole wallet).
                 // if amount is none, validator input will be created after the system object input
                 </span><span class="kw">let </span>(validator, system_state, amount) = <span class="kw">if let </span><span class="prelude-val">Some</span>(amount) = amount {
                     <span class="kw">let </span>amount = builder.pure(amount)<span class="question-mark">?</span>;
                     <span class="kw">let </span>validator = builder.input(CallArg::Pure(bcs::to_bytes(<span class="kw-2">&amp;</span>validator)<span class="question-mark">?</span>))<span class="question-mark">?</span>;
-                    <span class="kw">let </span>state = builder.input(system_state)<span class="question-mark">?</span>;
+                    <span class="kw">let </span>state = builder.input(CallArg::SUI_SYSTEM_MUT)<span class="question-mark">?</span>;
                     (validator, state, amount)
                 } <span class="kw">else </span>{
                     <span class="kw">let </span>amount = builder.pure(metadata.total_coin_value - metadata.budget)<span class="question-mark">?</span>;
-                    <span class="kw">let </span>state = builder.input(system_state)<span class="question-mark">?</span>;
+                    <span class="kw">let </span>state = builder.input(CallArg::SUI_SYSTEM_MUT)<span class="question-mark">?</span>;
                     <span class="kw">let </span>validator = builder.input(CallArg::Pure(bcs::to_bytes(<span class="kw-2">&amp;</span>validator)<span class="question-mark">?</span>))<span class="question-mark">?</span>;
                     (validator, state, amount)
                 };
@@ -1871,22 +1850,17 @@
             }
             InternalOperation::WithdrawStake { stake_ids, .. } =&gt; {
                 <span class="kw">let </span><span class="kw-2">mut </span>builder = ProgrammableTransactionBuilder::new();
-                <span class="kw">let </span>system_state = CallArg::Object(ObjectArg::SharedObject {
-                    id: SUI_SYSTEM_STATE_OBJECT_ID,
-                    initial_shared_version: SUI_SYSTEM_STATE_OBJECT_SHARED_VERSION,
-                    mutable: <span class="bool-val">true</span>,
-                });
 
                 <span class="kw">for </span>stake_id <span class="kw">in </span>metadata.objects {
                     <span class="comment">// [WORKAROUND] - this is a hack to work out if the withdraw stake ops is for selected stake_ids or None (all stakes) using the index of the call args.
                     // if stake_ids is not empty, id input will be created after the system object input
                     </span><span class="kw">let </span>(system_state, id) = <span class="kw">if </span>!stake_ids.is_empty() {
-                        <span class="kw">let </span>system_state = builder.input(system_state.clone())<span class="question-mark">?</span>;
+                        <span class="kw">let </span>system_state = builder.input(CallArg::SUI_SYSTEM_MUT)<span class="question-mark">?</span>;
                         <span class="kw">let </span>id = builder.obj(ObjectArg::ImmOrOwnedObject(stake_id))<span class="question-mark">?</span>;
                         (system_state, id)
                     } <span class="kw">else </span>{
                         <span class="kw">let </span>id = builder.obj(ObjectArg::ImmOrOwnedObject(stake_id))<span class="question-mark">?</span>;
-                        <span class="kw">let </span>system_state = builder.input(system_state.clone())<span class="question-mark">?</span>;
+                        <span class="kw">let </span>system_state = builder.input(CallArg::SUI_SYSTEM_MUT)<span class="question-mark">?</span>;
                         (system_state, id)
                     };
 
