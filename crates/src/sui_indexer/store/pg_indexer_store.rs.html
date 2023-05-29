@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-indexer/src/store/pg_indexer_store.rs`."><title>pg_indexer_store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="sui_indexer" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (2f6bc5d25 2023-05-09)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../sui_indexer/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-indexer/src/store/pg_indexer_store.rs`."><title>pg_indexer_store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="sui_indexer" data-themes="" data-resource-suffix="" data-rustdoc-version="1.72.0-nightly (1c53407e8 2023-05-28)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../sui_indexer/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1813,6 +1813,137 @@
 <a href="#1813" id="1813">1813</a>
 <a href="#1814" id="1814">1814</a>
 <a href="#1815" id="1815">1815</a>
+<a href="#1816" id="1816">1816</a>
+<a href="#1817" id="1817">1817</a>
+<a href="#1818" id="1818">1818</a>
+<a href="#1819" id="1819">1819</a>
+<a href="#1820" id="1820">1820</a>
+<a href="#1821" id="1821">1821</a>
+<a href="#1822" id="1822">1822</a>
+<a href="#1823" id="1823">1823</a>
+<a href="#1824" id="1824">1824</a>
+<a href="#1825" id="1825">1825</a>
+<a href="#1826" id="1826">1826</a>
+<a href="#1827" id="1827">1827</a>
+<a href="#1828" id="1828">1828</a>
+<a href="#1829" id="1829">1829</a>
+<a href="#1830" id="1830">1830</a>
+<a href="#1831" id="1831">1831</a>
+<a href="#1832" id="1832">1832</a>
+<a href="#1833" id="1833">1833</a>
+<a href="#1834" id="1834">1834</a>
+<a href="#1835" id="1835">1835</a>
+<a href="#1836" id="1836">1836</a>
+<a href="#1837" id="1837">1837</a>
+<a href="#1838" id="1838">1838</a>
+<a href="#1839" id="1839">1839</a>
+<a href="#1840" id="1840">1840</a>
+<a href="#1841" id="1841">1841</a>
+<a href="#1842" id="1842">1842</a>
+<a href="#1843" id="1843">1843</a>
+<a href="#1844" id="1844">1844</a>
+<a href="#1845" id="1845">1845</a>
+<a href="#1846" id="1846">1846</a>
+<a href="#1847" id="1847">1847</a>
+<a href="#1848" id="1848">1848</a>
+<a href="#1849" id="1849">1849</a>
+<a href="#1850" id="1850">1850</a>
+<a href="#1851" id="1851">1851</a>
+<a href="#1852" id="1852">1852</a>
+<a href="#1853" id="1853">1853</a>
+<a href="#1854" id="1854">1854</a>
+<a href="#1855" id="1855">1855</a>
+<a href="#1856" id="1856">1856</a>
+<a href="#1857" id="1857">1857</a>
+<a href="#1858" id="1858">1858</a>
+<a href="#1859" id="1859">1859</a>
+<a href="#1860" id="1860">1860</a>
+<a href="#1861" id="1861">1861</a>
+<a href="#1862" id="1862">1862</a>
+<a href="#1863" id="1863">1863</a>
+<a href="#1864" id="1864">1864</a>
+<a href="#1865" id="1865">1865</a>
+<a href="#1866" id="1866">1866</a>
+<a href="#1867" id="1867">1867</a>
+<a href="#1868" id="1868">1868</a>
+<a href="#1869" id="1869">1869</a>
+<a href="#1870" id="1870">1870</a>
+<a href="#1871" id="1871">1871</a>
+<a href="#1872" id="1872">1872</a>
+<a href="#1873" id="1873">1873</a>
+<a href="#1874" id="1874">1874</a>
+<a href="#1875" id="1875">1875</a>
+<a href="#1876" id="1876">1876</a>
+<a href="#1877" id="1877">1877</a>
+<a href="#1878" id="1878">1878</a>
+<a href="#1879" id="1879">1879</a>
+<a href="#1880" id="1880">1880</a>
+<a href="#1881" id="1881">1881</a>
+<a href="#1882" id="1882">1882</a>
+<a href="#1883" id="1883">1883</a>
+<a href="#1884" id="1884">1884</a>
+<a href="#1885" id="1885">1885</a>
+<a href="#1886" id="1886">1886</a>
+<a href="#1887" id="1887">1887</a>
+<a href="#1888" id="1888">1888</a>
+<a href="#1889" id="1889">1889</a>
+<a href="#1890" id="1890">1890</a>
+<a href="#1891" id="1891">1891</a>
+<a href="#1892" id="1892">1892</a>
+<a href="#1893" id="1893">1893</a>
+<a href="#1894" id="1894">1894</a>
+<a href="#1895" id="1895">1895</a>
+<a href="#1896" id="1896">1896</a>
+<a href="#1897" id="1897">1897</a>
+<a href="#1898" id="1898">1898</a>
+<a href="#1899" id="1899">1899</a>
+<a href="#1900" id="1900">1900</a>
+<a href="#1901" id="1901">1901</a>
+<a href="#1902" id="1902">1902</a>
+<a href="#1903" id="1903">1903</a>
+<a href="#1904" id="1904">1904</a>
+<a href="#1905" id="1905">1905</a>
+<a href="#1906" id="1906">1906</a>
+<a href="#1907" id="1907">1907</a>
+<a href="#1908" id="1908">1908</a>
+<a href="#1909" id="1909">1909</a>
+<a href="#1910" id="1910">1910</a>
+<a href="#1911" id="1911">1911</a>
+<a href="#1912" id="1912">1912</a>
+<a href="#1913" id="1913">1913</a>
+<a href="#1914" id="1914">1914</a>
+<a href="#1915" id="1915">1915</a>
+<a href="#1916" id="1916">1916</a>
+<a href="#1917" id="1917">1917</a>
+<a href="#1918" id="1918">1918</a>
+<a href="#1919" id="1919">1919</a>
+<a href="#1920" id="1920">1920</a>
+<a href="#1921" id="1921">1921</a>
+<a href="#1922" id="1922">1922</a>
+<a href="#1923" id="1923">1923</a>
+<a href="#1924" id="1924">1924</a>
+<a href="#1925" id="1925">1925</a>
+<a href="#1926" id="1926">1926</a>
+<a href="#1927" id="1927">1927</a>
+<a href="#1928" id="1928">1928</a>
+<a href="#1929" id="1929">1929</a>
+<a href="#1930" id="1930">1930</a>
+<a href="#1931" id="1931">1931</a>
+<a href="#1932" id="1932">1932</a>
+<a href="#1933" id="1933">1933</a>
+<a href="#1934" id="1934">1934</a>
+<a href="#1935" id="1935">1935</a>
+<a href="#1936" id="1936">1936</a>
+<a href="#1937" id="1937">1937</a>
+<a href="#1938" id="1938">1938</a>
+<a href="#1939" id="1939">1939</a>
+<a href="#1940" id="1940">1940</a>
+<a href="#1941" id="1941">1941</a>
+<a href="#1942" id="1942">1942</a>
+<a href="#1943" id="1943">1943</a>
+<a href="#1944" id="1944">1944</a>
+<a href="#1945" id="1945">1945</a>
+<a href="#1946" id="1946">1946</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -1823,7 +1954,7 @@
 <span class="kw">use </span>anyhow::anyhow;
 <span class="kw">use </span>async_trait::async_trait;
 <span class="kw">use </span>cached::proc_macro::once;
-<span class="kw">use </span>diesel::dsl::max;
+<span class="kw">use </span>diesel::dsl::{count, max};
 <span class="kw">use </span>diesel::pg::PgConnection;
 <span class="kw">use </span>diesel::query_builder::AsQuery;
 <span class="kw">use </span>diesel::sql_types::{BigInt, VarChar};
@@ -1860,7 +1991,7 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::errors::{Context, IndexerError};
 <span class="kw">use </span><span class="kw">crate</span>::metrics::IndexerMetrics;
-<span class="kw">use </span><span class="kw">crate</span>::models::addresses::Address;
+<span class="kw">use </span><span class="kw">crate</span>::models::addresses::{ActiveAddress, Address, AddressStats};
 <span class="kw">use </span><span class="kw">crate</span>::models::checkpoints::Checkpoint;
 <span class="kw">use </span><span class="kw">crate</span>::models::epoch::DBEpochInfo;
 <span class="kw">use </span><span class="kw">crate</span>::models::events::Event;
@@ -1873,11 +2004,9 @@
 <span class="kw">use </span><span class="kw">crate</span>::models::transaction_index::{InputObject, MoveCall, Recipient};
 <span class="kw">use </span><span class="kw">crate</span>::models::transactions::Transaction;
 <span class="kw">use </span><span class="kw">crate</span>::schema::{
-    addresses, checkpoints, checkpoints::dsl <span class="kw">as </span>checkpoints_dsl, epochs, epochs::dsl <span class="kw">as </span>epochs_dsl,
-    events, input_objects, input_objects::dsl <span class="kw">as </span>input_objects_dsl, move_calls,
-    move_calls::dsl <span class="kw">as </span>move_calls_dsl, objects, objects::dsl <span class="kw">as </span>objects_dsl, objects_history,
-    packages, recipients, recipients::dsl <span class="kw">as </span>recipients_dsl, system_states, transactions,
-    transactions::dsl <span class="kw">as </span>transactions_dsl, validators,
+    active_addresses, address_stats, addresses, checkpoints, epochs, events, input_objects,
+    move_calls, objects, objects_history, packages, recipients, system_states, transactions,
+    validators,
 };
 <span class="kw">use </span><span class="kw">crate</span>::store::diesel_marco::{read_only_blocking, transactional_blocking};
 <span class="kw">use </span><span class="kw">crate</span>::store::indexer_store::TemporaryCheckpointStore;
@@ -2027,7 +2156,7 @@ GROUP BY table_name;
 
     <span class="kw">async fn </span>get_latest_checkpoint_sequence_number(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;i64, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            checkpoints_dsl::checkpoints
+            checkpoints::dsl::checkpoints
                 .select(max(checkpoints::sequence_number))
                 .first::&lt;<span class="prelude-ty">Option</span>&lt;i64&gt;&gt;(conn)
                 <span class="comment">// -1 to differentiate between no checkpoints and the first checkpoint
@@ -2036,28 +2165,17 @@ GROUP BY table_name;
         .context(<span class="string">&quot;Failed reading latest checkpoint sequence number from PostgresDB&quot;</span>)
     }
 
-    <span class="kw">async fn </span>get_latest_object_checkpoint_sequence_number(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;i64, IndexerError&gt; {
-        <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            objects::dsl::objects
-                .select(max(objects::checkpoint))
-                .first::&lt;<span class="prelude-ty">Option</span>&lt;i64&gt;&gt;(conn)
-                <span class="comment">// -1 to differentiate between no checkpoints and the first checkpoint
-                </span>.map(|o| o.unwrap_or(-<span class="number">1</span>))
-        })
-        .context(<span class="string">&quot;Failed reading latest object checkpoint sequence number from PostgresDB&quot;</span>)
-    }
-
     <span class="kw">async fn </span>get_checkpoint(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         id: CheckpointId,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;sui_json_rpc_types::Checkpoint, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
             <span class="kw">let </span>cp: Checkpoint = <span class="kw">match </span>id {
-                CheckpointId::SequenceNumber(seq) =&gt; checkpoints_dsl::checkpoints
+                CheckpointId::SequenceNumber(seq) =&gt; checkpoints::dsl::checkpoints
                     .filter(checkpoints::sequence_number.eq(seq <span class="kw">as </span>i64))
                     .limit(<span class="number">1</span>)
                     .first(conn),
-                CheckpointId::Digest(digest) =&gt; checkpoints_dsl::checkpoints
+                CheckpointId::Digest(digest) =&gt; checkpoints::dsl::checkpoints
                     .filter(checkpoints::checkpoint_digest.eq(digest.base58_encode()))
                     .limit(<span class="number">1</span>)
                     .first(conn),
@@ -2132,7 +2250,7 @@ GROUP BY table_name;
         digest: CheckpointDigest,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;CheckpointSequenceNumber, IndexerError&gt; {
         <span class="prelude-val">Ok</span>(
-            <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| checkpoints_dsl::checkpoints
+            <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| checkpoints::dsl::checkpoints
                 .select(checkpoints::sequence_number)
                 .filter(checkpoints::checkpoint_digest.eq(digest.base58_encode()))
                 .first::&lt;i64&gt;(conn))
@@ -2244,8 +2362,8 @@ GROUP BY table_name;
 
     <span class="kw">async fn </span>get_total_transaction_number_from_checkpoints(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;i64, IndexerError&gt; {
         <span class="kw">let </span>checkpoint: Checkpoint = <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            checkpoints_dsl::checkpoints
-                .order(checkpoints_dsl::network_total_transactions.desc())
+            checkpoints::dsl::checkpoints
+                .order(checkpoints::dsl::network_total_transactions.desc())
                 .first::&lt;Checkpoint&gt;(conn)
         })
         .context(<span class="string">&quot;Failed reading total transaction number&quot;</span>)<span class="question-mark">?</span>;
@@ -2257,8 +2375,8 @@ GROUP BY table_name;
         tx_digest: <span class="kw-2">&amp;</span>str,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;Transaction, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            transactions_dsl::transactions
-                .filter(transactions_dsl::transaction_digest.eq(tx_digest))
+            transactions::dsl::transactions
+                .filter(transactions::dsl::transaction_digest.eq(tx_digest))
                 .first::&lt;Transaction&gt;(conn)
         })
         .context(<span class="kw-2">&amp;</span><span class="macro">format!</span>(
@@ -2358,8 +2476,8 @@ GROUP BY table_name;
         tx_digests: <span class="kw-2">&amp;</span>[String],
     ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Transaction&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            transactions_dsl::transactions
-                .filter(transactions_dsl::transaction_digest.eq_any(tx_digests))
+            transactions::dsl::transactions
+                .filter(transactions::dsl::transaction_digest.eq_any(tx_digests))
                 .load::&lt;Transaction&gt;(conn)
         })
         .context(<span class="kw-2">&amp;</span><span class="macro">format!</span>(
@@ -2374,14 +2492,14 @@ GROUP BY table_name;
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;i64&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(digest) = <span class="kw-2">&amp;</span>tx_digest {
-                <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions_dsl::transactions
-                    .filter(transactions_dsl::transaction_digest.eq(digest))
-                    .select(transactions_dsl::id)
+                <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions::dsl::transactions
+                    .filter(transactions::dsl::transaction_digest.eq(digest))
+                    .select(transactions::dsl::id)
                     .into_boxed();
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.order(transactions_dsl::id.desc());
+                    boxed_query = boxed_query.order(transactions::dsl::id.desc());
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.order(transactions_dsl::id.asc());
+                    boxed_query = boxed_query.order(transactions::dsl::id.asc());
                 }
                 <span class="prelude-val">Some</span>(boxed_query.first::&lt;i64&gt;(conn))
             } <span class="kw">else </span>{
@@ -2424,8 +2542,8 @@ GROUP BY table_name;
                     .get_result::&lt;Object&gt;(conn)
                     .optional()
             } <span class="kw">else </span>{
-                objects_dsl::objects
-                    .filter(objects_dsl::object_id.eq(object_id.to_string()))
+                objects::dsl::objects
+                    .filter(objects::dsl::object_id.eq(object_id.to_string()))
                     .first::&lt;Object&gt;(conn)
                     .optional()
             }
@@ -2515,14 +2633,14 @@ GROUP BY table_name;
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;i64&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(digest) = <span class="kw-2">&amp;</span>tx_digest {
-                <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = move_calls_dsl::move_calls
-                    .filter(move_calls_dsl::transaction_digest.eq(digest))
-                    .select(move_calls_dsl::id)
+                <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = move_calls::dsl::move_calls
+                    .filter(move_calls::dsl::transaction_digest.eq(digest))
+                    .select(move_calls::dsl::id)
                     .into_boxed();
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.order(move_calls_dsl::id.desc());
+                    boxed_query = boxed_query.order(move_calls::dsl::id.desc());
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.order(move_calls_dsl::id.asc());
+                    boxed_query = boxed_query.order(move_calls::dsl::id.asc());
                 }
                 <span class="prelude-val">Some</span>(boxed_query.first::&lt;i64&gt;(conn))
             } <span class="kw">else </span>{
@@ -2542,14 +2660,14 @@ GROUP BY table_name;
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;i64&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(digest) = <span class="kw-2">&amp;</span>tx_digest {
-                <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = input_objects_dsl::input_objects
-                    .filter(input_objects_dsl::transaction_digest.eq(digest))
-                    .select(input_objects_dsl::id)
+                <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = input_objects::dsl::input_objects
+                    .filter(input_objects::dsl::transaction_digest.eq(digest))
+                    .select(input_objects::dsl::id)
                     .into_boxed();
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.order(input_objects_dsl::id.desc());
+                    boxed_query = boxed_query.order(input_objects::dsl::id.desc());
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.order(input_objects_dsl::id.asc());
+                    boxed_query = boxed_query.order(input_objects::dsl::id.asc());
                 }
                 <span class="prelude-val">Some</span>(boxed_query.first::&lt;i64&gt;(conn))
             } <span class="kw">else </span>{
@@ -2569,14 +2687,14 @@ GROUP BY table_name;
     ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;i64&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(digest) = <span class="kw-2">&amp;</span>tx_digest {
-                <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = recipients_dsl::recipients
-                    .filter(recipients_dsl::transaction_digest.eq(digest))
-                    .select(recipients_dsl::id)
+                <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = recipients::dsl::recipients
+                    .filter(recipients::dsl::transaction_digest.eq(digest))
+                    .select(recipients::dsl::id)
                     .into_boxed();
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.order(recipients_dsl::id.desc());
+                    boxed_query = boxed_query.order(recipients::dsl::id.desc());
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.order(recipients_dsl::id.asc());
+                    boxed_query = boxed_query.order(recipients::dsl::id.asc());
                 }
                 <span class="prelude-val">Some</span>(boxed_query.first::&lt;i64&gt;(conn))
             } <span class="kw">else </span>{
@@ -2596,23 +2714,23 @@ GROUP BY table_name;
         is_descending: bool,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Transaction&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions_dsl::transactions.into_boxed();
+            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions::dsl::transactions.into_boxed();
             <span class="kw">if let </span><span class="prelude-val">Some</span>(start_sequence) = start_sequence {
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.filter(transactions_dsl::id.lt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.lt(start_sequence));
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.filter(transactions_dsl::id.gt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.gt(start_sequence));
                 }
             }
 
             <span class="kw">if </span>is_descending {
                 boxed_query
-                    .order(transactions_dsl::id.desc())
+                    .order(transactions::dsl::id.desc())
                     .limit((limit) <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             } <span class="kw">else </span>{
                 boxed_query
-                    .order(transactions_dsl::id.asc())
+                    .order(transactions::dsl::id.asc())
                     .limit((limit) <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             }
@@ -2627,24 +2745,24 @@ GROUP BY table_name;
         is_descending: bool,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Transaction&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions_dsl::transactions
-                .filter(transactions_dsl::checkpoint_sequence_number.eq(checkpoint_sequence_number))
+            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions::dsl::transactions
+                .filter(transactions::dsl::checkpoint_sequence_number.eq(checkpoint_sequence_number))
                 .into_boxed();
             <span class="kw">if let </span><span class="prelude-val">Some</span>(start_sequence) = start_sequence {
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.filter(transactions_dsl::id.lt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.lt(start_sequence));
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.filter(transactions_dsl::id.gt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.gt(start_sequence));
                 }
             }
             <span class="kw">if </span>is_descending {
                 boxed_query
-                    .order(transactions_dsl::id.desc())
+                    .order(transactions::dsl::id.desc())
                     .limit((limit) <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             } <span class="kw">else </span>{
                 boxed_query
-                    .order(transactions_dsl::id.asc())
+                    .order(transactions::dsl::id.asc())
                     .limit((limit) <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             }
@@ -2659,25 +2777,25 @@ GROUP BY table_name;
         is_descending: bool,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Transaction&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions_dsl::transactions
-                .filter(transactions_dsl::transaction_kind.eq(kind.clone()))
+            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions::dsl::transactions
+                .filter(transactions::dsl::transaction_kind.eq(kind.clone()))
                 .into_boxed();
             <span class="kw">if let </span><span class="prelude-val">Some</span>(start_sequence) = start_sequence {
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.filter(transactions_dsl::id.lt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.lt(start_sequence));
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.filter(transactions_dsl::id.gt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.gt(start_sequence));
                 }
             }
 
             <span class="kw">if </span>is_descending {
                 boxed_query
-                    .order(transactions_dsl::id.desc())
+                    .order(transactions::dsl::id.desc())
                     .limit((limit) <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             } <span class="kw">else </span>{
                boxed_query
-                    .order(transactions_dsl::id.asc())
+                    .order(transactions::dsl::id.asc())
                     .limit((limit) <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             }
@@ -2692,26 +2810,26 @@ GROUP BY table_name;
         is_descending: bool,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Transaction&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions_dsl::transactions
-                .filter(transactions_dsl::mutated.contains(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(object_id.clone())]))
-                .or_filter(transactions_dsl::created.contains(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(object_id.clone())]))
-                .or_filter(transactions_dsl::unwrapped.contains(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(object_id.clone())]))
+            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions::dsl::transactions
+                .filter(transactions::dsl::mutated.contains(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(object_id.clone())]))
+                .or_filter(transactions::dsl::created.contains(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(object_id.clone())]))
+                .or_filter(transactions::dsl::unwrapped.contains(<span class="macro">vec!</span>[<span class="prelude-val">Some</span>(object_id.clone())]))
                 .into_boxed();
             <span class="kw">if let </span><span class="prelude-val">Some</span>(start_sequence) = start_sequence {
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.filter(transactions_dsl::id.lt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.lt(start_sequence));
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.filter(transactions_dsl::id.gt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.gt(start_sequence));
                 }
             }
             <span class="kw">if </span>is_descending {
                boxed_query
-                    .order(transactions_dsl::id.desc())
+                    .order(transactions::dsl::id.desc())
                     .limit(limit <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             } <span class="kw">else </span>{
                 boxed_query
-                    .order(transactions_dsl::id.asc())
+                    .order(transactions::dsl::id.asc())
                     .limit(limit <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             }
@@ -2726,25 +2844,25 @@ GROUP BY table_name;
         is_descending: bool,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Transaction&gt;, IndexerError&gt; {
         <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions_dsl::transactions
-                .filter(transactions_dsl::sender.eq(sender_address.clone()))
+            <span class="kw">let </span><span class="kw-2">mut </span>boxed_query = transactions::dsl::transactions
+                .filter(transactions::dsl::sender.eq(sender_address.clone()))
                 .into_boxed();
             <span class="kw">if let </span><span class="prelude-val">Some</span>(start_sequence) = start_sequence {
                 <span class="kw">if </span>is_descending {
-                    boxed_query = boxed_query.filter(transactions_dsl::id.lt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.lt(start_sequence));
                 } <span class="kw">else </span>{
-                    boxed_query = boxed_query.filter(transactions_dsl::id.gt(start_sequence));
+                    boxed_query = boxed_query.filter(transactions::dsl::id.gt(start_sequence));
                 }
             }
 
             <span class="kw">if </span>is_descending {
                 boxed_query
-                    .order(transactions_dsl::id.desc())
+                    .order(transactions::dsl::id.desc())
                     .limit(limit <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             } <span class="kw">else </span>{
                boxed_query
-                    .order(transactions_dsl::id.asc())
+                    .order(transactions::dsl::id.asc())
                     .limit(limit <span class="kw">as </span>i64)
                     .load::&lt;Transaction&gt;(conn)
             }
@@ -2964,6 +3082,7 @@ GROUP BY table_name;
             events,
             object_changes: tx_object_changes,
             addresses,
+            active_addresses,
             packages,
             input_objects,
             move_calls,
@@ -3014,15 +3133,48 @@ GROUP BY table_name;
                 .collect();
             persist_transaction_object_changes(conn, mutated_objects, deleted_objects, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
 
-            <span class="comment">// Commit indexed addresses
-            </span><span class="kw">for </span>addresses_chunk <span class="kw">in </span>addresses.chunks(PG_COMMIT_CHUNK_SIZE) {
+            <span class="comment">// TODO(gegaowp): refactor to consolidate commit blocks
+            // Commit indexed addresses &amp; active addresses
+            </span><span class="kw">for </span>address_chunk <span class="kw">in </span>addresses.chunks(PG_COMMIT_CHUNK_SIZE) {
                 diesel::insert_into(addresses::table)
-                    .values(addresses_chunk)
+                    .values(address_chunk)
                     .on_conflict(addresses::account_address)
-                    .do_nothing()
+                    .do_update()
+                    .set((
+                        addresses::last_appearance_time
+                            .eq(excluded(addresses::last_appearance_time)),
+                        addresses::last_appearance_tx.eq(excluded(addresses::last_appearance_tx)),
+                    ))
                     .execute(conn)
                     .map_err(IndexerError::from)
-                    .context(<span class="string">&quot;Failed writing addresses to PostgresDB&quot;</span>)<span class="question-mark">?</span>;
+                    .context(
+                        <span class="macro">format!</span>(
+                            <span class="string">&quot;Failed writing addresses to PostgresDB with tx {}&quot;</span>,
+                            address_chunk[<span class="number">0</span>].last_appearance_tx
+                        )
+                        .as_str(),
+                    )<span class="question-mark">?</span>;
+            }
+            <span class="kw">for </span>active_address_chunk <span class="kw">in </span>active_addresses.chunks(PG_COMMIT_CHUNK_SIZE) {
+                diesel::insert_into(active_addresses::table)
+                    .values(active_address_chunk)
+                    .on_conflict(active_addresses::account_address)
+                    .do_update()
+                    .set((
+                        active_addresses::last_appearance_time
+                            .eq(excluded(active_addresses::last_appearance_time)),
+                        active_addresses::last_appearance_tx
+                            .eq(excluded(active_addresses::last_appearance_tx)),
+                    ))
+                    .execute(conn)
+                    .map_err(IndexerError::from)
+                    .context(
+                        <span class="macro">format!</span>(
+                            <span class="string">&quot;Failed writing active addresses to PostgresDB with tx {}&quot;</span>,
+                            active_address_chunk[<span class="number">0</span>].last_appearance_tx
+                        )
+                        .as_str(),
+                    )<span class="question-mark">?</span>;
             }
 
             <span class="comment">// Commit indexed packages
@@ -3142,8 +3294,6 @@ WHERE e1.epoch = e2.epoch
                     .iter()
                     .map(|deleted_object| deleted_object.clone().into())
                     .collect();
-                <span class="kw">let </span>(mutation_count, deletion_count) =
-                    (mutated_objects.len(), deleted_objects.len());
                 persist_transaction_object_changes(
                     conn,
                     mutated_objects,
@@ -3151,13 +3301,6 @@ WHERE e1.epoch = e2.epoch
                     <span class="prelude-val">Some</span>(object_mutation_latency),
                     <span class="prelude-val">Some</span>(object_deletion_latency),
                 )<span class="question-mark">?</span>;
-                <span class="macro">info!</span>(
-                <span class="string">&quot;Object checkpoint {} committed with {} transaction, {} mutated objects and {} deleted objects.&quot;</span>,
-                checkpoint.sequence_number,
-                tx_object_changes.len(),
-                mutation_count,
-                deletion_count
-            );
                 <span class="prelude-val">Ok</span>::&lt;(), IndexerError&gt;(())
             }
         })<span class="question-mark">?</span>;
@@ -3179,16 +3322,52 @@ WHERE e1.epoch = e2.epoch
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">async fn </span>persist_addresses(<span class="kw-2">&amp;</span><span class="self">self</span>, addresses: <span class="kw-2">&amp;</span>[Address]) -&gt; <span class="prelude-ty">Result</span>&lt;(), IndexerError&gt; {
+    <span class="kw">async fn </span>persist_addresses(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        addresses: <span class="kw-2">&amp;</span>[Address],
+        active_addresses: <span class="kw-2">&amp;</span>[ActiveAddress],
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), IndexerError&gt; {
         <span class="macro">transactional_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
-            <span class="kw">for </span>addresses_chunk <span class="kw">in </span>addresses.chunks(PG_COMMIT_CHUNK_SIZE) {
+            <span class="kw">for </span>address_chunk <span class="kw">in </span>addresses.chunks(PG_COMMIT_CHUNK_SIZE) {
                 diesel::insert_into(addresses::table)
-                    .values(addresses_chunk)
+                    .values(address_chunk)
                     .on_conflict(addresses::account_address)
-                    .do_nothing()
+                    .do_update()
+                    .set((
+                        addresses::last_appearance_time
+                            .eq(excluded(addresses::last_appearance_time)),
+                        addresses::last_appearance_tx.eq(excluded(addresses::last_appearance_tx)),
+                    ))
                     .execute(conn)
                     .map_err(IndexerError::from)
-                    .context(<span class="string">&quot;Failed writing addresses to PostgresDB&quot;</span>)<span class="question-mark">?</span>;
+                    .context(
+                        <span class="macro">format!</span>(
+                            <span class="string">&quot;Failed writing addresses to PostgresDB with tx {}&quot;</span>,
+                            address_chunk[<span class="number">0</span>].last_appearance_tx
+                        )
+                        .as_str(),
+                    )<span class="question-mark">?</span>;
+            }
+            <span class="kw">for </span>active_address_chunk <span class="kw">in </span>active_addresses.chunks(PG_COMMIT_CHUNK_SIZE) {
+                diesel::insert_into(active_addresses::table)
+                    .values(active_address_chunk)
+                    .on_conflict(active_addresses::account_address)
+                    .do_update()
+                    .set((
+                        active_addresses::last_appearance_time
+                            .eq(excluded(active_addresses::last_appearance_time)),
+                        active_addresses::last_appearance_tx
+                            .eq(excluded(active_addresses::last_appearance_tx)),
+                    ))
+                    .execute(conn)
+                    .map_err(IndexerError::from)
+                    .context(
+                        <span class="macro">format!</span>(
+                            <span class="string">&quot;Failed writing active addresses to PostgresDB with tx {}&quot;</span>,
+                            active_address_chunk[<span class="number">0</span>].last_appearance_tx
+                        )
+                        .as_str(),
+                    )<span class="question-mark">?</span>;
             }
             <span class="prelude-val">Ok</span>::&lt;(), IndexerError&gt;(())
         })<span class="question-mark">?</span>;
@@ -3334,7 +3513,7 @@ WHERE e1.epoch = e2.epoch
         <span class="kw">let </span>id = cursor
             .map(|id| id <span class="kw">as </span>i64)
             .unwrap_or(<span class="kw">if </span>is_descending { i64::MAX } <span class="kw">else </span>{ -<span class="number">1 </span>});
-        <span class="kw">let </span><span class="kw-2">mut </span>query = epochs_dsl::epochs.into_boxed();
+        <span class="kw">let </span><span class="kw-2">mut </span>query = epochs::dsl::epochs.into_boxed();
         <span class="kw">if </span>is_descending {
             query = query
                 .filter(epochs::epoch.lt(id))
@@ -3399,6 +3578,89 @@ WHERE e1.epoch = e2.epoch
         .context(<span class="string">&quot;Failed reading latest validator summary&quot;</span>)<span class="question-mark">?</span>;
 
         epoch_info.to_epoch_info(validators)
+    }
+
+    <span class="doccomment">/// address stats methods
+    </span><span class="kw">async fn </span>get_last_address_processed_checkpoint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;i64, IndexerError&gt; {
+        <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
+            address_stats::dsl::address_stats
+                .select(max(address_stats::checkpoint))
+                .first::&lt;<span class="prelude-ty">Option</span>&lt;i64&gt;&gt;(conn)
+                <span class="comment">// -1 to differentiate between no checkpoints and the first checkpoint
+                </span>.map(|o| o.unwrap_or(-<span class="number">1</span>))
+        })
+        .context(<span class="string">&quot;Failed reading latest object checkpoint from PostgresDB&quot;</span>)
+    }
+
+    <span class="kw">async fn </span>calculate_address_stats(<span class="kw-2">&amp;</span><span class="self">self</span>, checkpoint: i64) -&gt; <span class="prelude-ty">Result</span>&lt;AddressStats, IndexerError&gt; {
+        <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
+            <span class="kw">let </span>cp: Checkpoint = checkpoints::dsl::checkpoints
+                .filter(checkpoints::sequence_number.eq(checkpoint))
+                .limit(<span class="number">1</span>)
+                .first(conn)<span class="question-mark">?</span>;
+            <span class="kw">let </span>cp_timestamp_ms = cp.timestamp_ms;
+            <span class="kw">let </span>cumulative_addresses = addresses::dsl::addresses
+                .filter(addresses::first_appearance_time.le(cp_timestamp_ms))
+                .select(count(addresses::account_address))
+                .first(conn)<span class="question-mark">?</span>;
+            <span class="kw">let </span>cumulative_active_addresses = active_addresses::dsl::active_addresses
+                .filter(active_addresses::first_appearance_time.le(cp_timestamp_ms))
+                .select(count(active_addresses::account_address))
+                .first(conn)<span class="question-mark">?</span>;
+            <span class="kw">let </span>time_one_day_ago = cp_timestamp_ms - <span class="number">1000 </span>* <span class="number">60 </span>* <span class="number">60 </span>* <span class="number">24</span>;
+            <span class="kw">let </span>daily_active_addresses = active_addresses::dsl::active_addresses
+                .filter(active_addresses::first_appearance_time.le(cp_timestamp_ms))
+                .filter(active_addresses::last_appearance_time.gt(time_one_day_ago))
+                .select(count(active_addresses::account_address))
+                .first(conn)<span class="question-mark">?</span>;
+            <span class="prelude-val">Ok</span>::&lt;AddressStats, IndexerError&gt;(AddressStats {
+                checkpoint: cp.sequence_number,
+                epoch: cp.epoch,
+                timestamp_ms: cp_timestamp_ms,
+                cumulative_addresses,
+                cumulative_active_addresses,
+                daily_active_addresses,
+            })
+        })
+        .context(<span class="string">&quot;Failed reading latest object checkpoint sequence number from PostgresDB&quot;</span>)
+    }
+
+    <span class="kw">async fn </span>persist_address_stats(<span class="kw-2">&amp;</span><span class="self">self</span>, addr_stats: <span class="kw-2">&amp;</span>AddressStats) -&gt; <span class="prelude-ty">Result</span>&lt;(), IndexerError&gt; {
+        <span class="macro">transactional_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
+            diesel::insert_into(address_stats::dsl::address_stats)
+                .values(addr_stats)
+                .execute(conn)
+        })
+        .context(<span class="string">&quot;Failed persisting address stats to PostgresDB&quot;</span>)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
+    }
+
+    <span class="kw">async fn </span>get_latest_address_stats(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;AddressStats, IndexerError&gt; {
+        <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
+            address_stats::dsl::address_stats
+                .order_by(address_stats::checkpoint.desc())
+                .first(conn)
+        })
+        .context(<span class="string">&quot;Failed reading latest address stats from PostgresDB&quot;</span>)
+    }
+
+    <span class="kw">async fn </span>get_checkpoint_address_stats(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        checkpoint: i64,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;AddressStats, IndexerError&gt; {
+        <span class="macro">read_only_blocking!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.blocking_cp, |conn| {
+            address_stats::dsl::address_stats
+                .filter(address_stats::checkpoint.eq(checkpoint))
+                .order_by(address_stats::epoch.asc())
+                .first(conn)
+        })
+        .context(
+            <span class="macro">format!</span>(
+                <span class="string">&quot;Failed reading address stats of checkpoint {} from PostgresDB&quot;</span>,
+                checkpoint
+            )
+            .as_str(),
+        )
     }
 }
 

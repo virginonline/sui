@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-replay/src/replay.rs`."><title>replay.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_replay" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (2f6bc5d25 2023-05-09)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_replay/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-replay/src/replay.rs`."><title>replay.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_replay" data-themes="" data-resource-suffix="" data-rustdoc-version="1.72.0-nightly (1c53407e8 2023-05-28)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_replay/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1814,10 +1814,115 @@
 <a href="#1814" id="1814">1814</a>
 <a href="#1815" id="1815">1815</a>
 <a href="#1816" id="1816">1816</a>
+<a href="#1817" id="1817">1817</a>
+<a href="#1818" id="1818">1818</a>
+<a href="#1819" id="1819">1819</a>
+<a href="#1820" id="1820">1820</a>
+<a href="#1821" id="1821">1821</a>
+<a href="#1822" id="1822">1822</a>
+<a href="#1823" id="1823">1823</a>
+<a href="#1824" id="1824">1824</a>
+<a href="#1825" id="1825">1825</a>
+<a href="#1826" id="1826">1826</a>
+<a href="#1827" id="1827">1827</a>
+<a href="#1828" id="1828">1828</a>
+<a href="#1829" id="1829">1829</a>
+<a href="#1830" id="1830">1830</a>
+<a href="#1831" id="1831">1831</a>
+<a href="#1832" id="1832">1832</a>
+<a href="#1833" id="1833">1833</a>
+<a href="#1834" id="1834">1834</a>
+<a href="#1835" id="1835">1835</a>
+<a href="#1836" id="1836">1836</a>
+<a href="#1837" id="1837">1837</a>
+<a href="#1838" id="1838">1838</a>
+<a href="#1839" id="1839">1839</a>
+<a href="#1840" id="1840">1840</a>
+<a href="#1841" id="1841">1841</a>
+<a href="#1842" id="1842">1842</a>
+<a href="#1843" id="1843">1843</a>
+<a href="#1844" id="1844">1844</a>
+<a href="#1845" id="1845">1845</a>
+<a href="#1846" id="1846">1846</a>
+<a href="#1847" id="1847">1847</a>
+<a href="#1848" id="1848">1848</a>
+<a href="#1849" id="1849">1849</a>
+<a href="#1850" id="1850">1850</a>
+<a href="#1851" id="1851">1851</a>
+<a href="#1852" id="1852">1852</a>
+<a href="#1853" id="1853">1853</a>
+<a href="#1854" id="1854">1854</a>
+<a href="#1855" id="1855">1855</a>
+<a href="#1856" id="1856">1856</a>
+<a href="#1857" id="1857">1857</a>
+<a href="#1858" id="1858">1858</a>
+<a href="#1859" id="1859">1859</a>
+<a href="#1860" id="1860">1860</a>
+<a href="#1861" id="1861">1861</a>
+<a href="#1862" id="1862">1862</a>
+<a href="#1863" id="1863">1863</a>
+<a href="#1864" id="1864">1864</a>
+<a href="#1865" id="1865">1865</a>
+<a href="#1866" id="1866">1866</a>
+<a href="#1867" id="1867">1867</a>
+<a href="#1868" id="1868">1868</a>
+<a href="#1869" id="1869">1869</a>
+<a href="#1870" id="1870">1870</a>
+<a href="#1871" id="1871">1871</a>
+<a href="#1872" id="1872">1872</a>
+<a href="#1873" id="1873">1873</a>
+<a href="#1874" id="1874">1874</a>
+<a href="#1875" id="1875">1875</a>
+<a href="#1876" id="1876">1876</a>
+<a href="#1877" id="1877">1877</a>
+<a href="#1878" id="1878">1878</a>
+<a href="#1879" id="1879">1879</a>
+<a href="#1880" id="1880">1880</a>
+<a href="#1881" id="1881">1881</a>
+<a href="#1882" id="1882">1882</a>
+<a href="#1883" id="1883">1883</a>
+<a href="#1884" id="1884">1884</a>
+<a href="#1885" id="1885">1885</a>
+<a href="#1886" id="1886">1886</a>
+<a href="#1887" id="1887">1887</a>
+<a href="#1888" id="1888">1888</a>
+<a href="#1889" id="1889">1889</a>
+<a href="#1890" id="1890">1890</a>
+<a href="#1891" id="1891">1891</a>
+<a href="#1892" id="1892">1892</a>
+<a href="#1893" id="1893">1893</a>
+<a href="#1894" id="1894">1894</a>
+<a href="#1895" id="1895">1895</a>
+<a href="#1896" id="1896">1896</a>
+<a href="#1897" id="1897">1897</a>
+<a href="#1898" id="1898">1898</a>
+<a href="#1899" id="1899">1899</a>
+<a href="#1900" id="1900">1900</a>
+<a href="#1901" id="1901">1901</a>
+<a href="#1902" id="1902">1902</a>
+<a href="#1903" id="1903">1903</a>
+<a href="#1904" id="1904">1904</a>
+<a href="#1905" id="1905">1905</a>
+<a href="#1906" id="1906">1906</a>
+<a href="#1907" id="1907">1907</a>
+<a href="#1908" id="1908">1908</a>
+<a href="#1909" id="1909">1909</a>
+<a href="#1910" id="1910">1910</a>
+<a href="#1911" id="1911">1911</a>
+<a href="#1912" id="1912">1912</a>
+<a href="#1913" id="1913">1913</a>
+<a href="#1914" id="1914">1914</a>
+<a href="#1915" id="1915">1915</a>
+<a href="#1916" id="1916">1916</a>
+<a href="#1917" id="1917">1917</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-</span><span class="kw">use </span><span class="kw">crate</span>::data_fetcher::DataFetcher;
+</span><span class="kw">use </span><span class="kw">crate</span>::config::ReplayableNetworkConfigSet;
+<span class="kw">use </span><span class="kw">crate</span>::data_fetcher::extract_epoch_and_version;
+<span class="kw">use </span><span class="kw">crate</span>::data_fetcher::DataFetcher;
+<span class="kw">use </span><span class="kw">crate</span>::data_fetcher::Fetchers;
+<span class="kw">use </span><span class="kw">crate</span>::data_fetcher::NodeStateDumpFetcher;
 <span class="kw">use </span><span class="kw">crate</span>::data_fetcher::RemoteFetcher;
 <span class="kw">use </span><span class="kw">crate</span>::types::<span class="kw-2">*</span>;
 <span class="kw">use </span>futures::executor::block_on;
@@ -1825,12 +1930,11 @@
 <span class="kw">use </span>move_bytecode_utils::module_cache::GetModule;
 <span class="kw">use </span>move_core_types::account_address::AccountAddress;
 <span class="kw">use </span>move_core_types::language_storage::{ModuleId, StructTag};
-<span class="kw">use </span>move_core_types::parser::parse_struct_tag;
 <span class="kw">use </span>move_core_types::resolver::{ModuleResolver, ResourceResolver};
 <span class="kw">use </span>prometheus::Registry;
 <span class="kw">use </span>similar::{ChangeTag, TextDiff};
 <span class="kw">use </span>std::collections::{BTreeMap, HashSet};
-<span class="kw">use </span>std::str::FromStr;
+<span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::sync::Arc;
 <span class="kw">use </span>std::sync::Mutex;
 <span class="kw">use </span>sui_adapter::adapter;
@@ -1841,6 +1945,7 @@
 <span class="kw">use </span>sui_core::authority::epoch_start_configuration::EpochStartConfiguration;
 <span class="kw">use </span>sui_core::authority::test_authority_builder::TestAuthorityBuilder;
 <span class="kw">use </span>sui_core::authority::AuthorityState;
+<span class="kw">use </span>sui_core::authority::NodeStateDump;
 <span class="kw">use </span>sui_core::authority::TemporaryStore;
 <span class="kw">use </span>sui_core::epoch::epoch_metrics::EpochMetrics;
 <span class="kw">use </span>sui_core::module_cache_metrics::ResolverMetrics;
@@ -1848,7 +1953,6 @@
 <span class="kw">use </span>sui_framework::BuiltInFramework;
 <span class="kw">use </span>sui_json_rpc_types::SuiTransactionBlockEffects;
 <span class="kw">use </span>sui_json_rpc_types::SuiTransactionBlockEffectsAPI;
-<span class="kw">use </span>sui_json_rpc_types::{EventFilter, SuiEvent};
 <span class="kw">use </span>sui_protocol_config::ProtocolConfig;
 <span class="kw">use </span>sui_sdk::{SuiClient, SuiClientBuilder};
 <span class="kw">use </span>sui_types::base_types::{ObjectID, ObjectRef, SequenceNumber, SuiAddress, VersionNumber};
@@ -1865,21 +1969,15 @@
 <span class="kw">use </span>sui_types::storage::{BackingPackageStore, ChildObjectResolver, ObjectStore, ParentSync};
 <span class="kw">use </span>sui_types::sui_system_state::epoch_start_sui_system_state::EpochStartSystemState;
 <span class="kw">use </span>sui_types::temporary_store::InnerTemporaryStore;
-<span class="kw">use </span>sui_types::transaction::CertifiedTransaction;
-<span class="kw">use </span>sui_types::transaction::Transaction;
-<span class="kw">use </span>sui_types::transaction::TransactionData;
-<span class="kw">use </span>sui_types::transaction::VerifiedTransaction;
-<span class="kw">use </span>sui_types::transaction::{InputObjectKind, InputObjects, TransactionKind};
-<span class="kw">use </span>sui_types::transaction::{SenderSignedData, TransactionDataAPI};
-<span class="kw">use </span>sui_types::DEEPBOOK_OBJECT_ID;
+<span class="kw">use </span>sui_types::transaction::{
+    CertifiedTransaction, InputObjectKind, InputObjects, SenderSignedData, Transaction,
+    TransactionData, TransactionDataAPI, TransactionKind, VerifiedTransaction,
+};
+<span class="kw">use </span>sui_types::DEEPBOOK_PACKAGE_ID;
+<span class="kw">use </span>tracing::info;
 <span class="kw">use </span>tracing::{error, warn};
 
 <span class="comment">// TODO: add persistent cache. But perf is good enough already.
-// TODO: handle safe mode
-
-// The logic here is very testnet specific now
-// For testnet, we derive the protocol version map with some nuances due to early safe mode speedrun
-// For other networks it should be much more straightforward
 
 </span><span class="attr">#[derive(Debug)]
 </span><span class="kw">pub struct </span>ExecutionSandboxState {
@@ -1896,10 +1994,10 @@
 }
 
 <span class="kw">impl </span>ExecutionSandboxState {
-    <span class="kw">pub fn </span>check_effects(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), LocalExecError&gt; {
+    <span class="kw">pub fn </span>check_effects(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), ReplayEngineError&gt; {
         <span class="kw">if </span><span class="self">self</span>.transaction_info.effects != <span class="self">self</span>.local_exec_effects {
             <span class="macro">error!</span>(<span class="string">&quot;Replay tool forked {}&quot;</span>, <span class="self">self</span>.transaction_info.tx_digest);
-            <span class="kw">return </span><span class="prelude-val">Err</span>(LocalExecError::EffectsForked {
+            <span class="kw">return </span><span class="prelude-val">Err</span>(ReplayEngineError::EffectsForked {
                 digest: <span class="self">self</span>.transaction_info.tx_digest,
                 diff: <span class="macro">format!</span>(<span class="string">&quot;\n{}&quot;</span>, <span class="self">self</span>.diff_effects()),
                 on_chain: Box::new(<span class="self">self</span>.transaction_info.effects.clone()),
@@ -2019,7 +2117,7 @@
 }
 
 <span class="kw">pub struct </span>LocalExec {
-    <span class="kw">pub </span>client: SuiClient,
+    <span class="kw">pub </span>client: <span class="prelude-ty">Option</span>&lt;SuiClient&gt;,
     <span class="comment">// For a given protocol version, what TX created it, and what is the valid range of epochs
     // at this protocol version.
     </span><span class="kw">pub </span>protocol_version_epoch_table: BTreeMap&lt;u64, ProtocolVersionSummary&gt;,
@@ -2034,9 +2132,7 @@
     <span class="comment">// Debug events
     </span><span class="kw">pub </span>metrics: Arc&lt;LimitsMetrics&gt;,
     <span class="comment">// Used for fetching data from the network or remote store
-    </span><span class="kw">pub </span>fetcher: RemoteFetcher,
-    <span class="doccomment">/// For special casing some logic
-    </span><span class="kw">pub </span>is_testnet: bool,
+    </span><span class="kw">pub </span>fetcher: Fetchers,
 
     <span class="comment">// Retry policies due to RPC errors
     </span><span class="kw">pub </span>num_retries_for_timeout: u32,
@@ -2049,12 +2145,12 @@
     </span><span class="kw">pub async fn </span>multi_download(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         objs: <span class="kw-2">&amp;</span>[(ObjectID, SequenceNumber)],
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Object&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Object&gt;, ReplayEngineError&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>num_retries_for_timeout = <span class="self">self</span>.num_retries_for_timeout <span class="kw">as </span>i64;
         <span class="kw">while </span>num_retries_for_timeout &gt;= <span class="number">0 </span>{
             <span class="kw">match </span><span class="self">self</span>.fetcher.multi_get_versioned(objs).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(objs) =&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(objs),
-                <span class="prelude-val">Err</span>(LocalExecError::SuiRpcRequestTimeout) =&gt; {
+                <span class="prelude-val">Err</span>(ReplayEngineError::SuiRpcRequestTimeout) =&gt; {
                     <span class="macro">warn!</span>(
                         <span class="string">&quot;RPC request timed out. Retries left {}. Sleeping for {}s&quot;</span>,
                         num_retries_for_timeout,
@@ -2066,19 +2162,19 @@
                 <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(e),
             }
         }
-        <span class="prelude-val">Err</span>(LocalExecError::SuiRpcRequestTimeout)
+        <span class="prelude-val">Err</span>(ReplayEngineError::SuiRpcRequestTimeout)
     }
     <span class="doccomment">/// Wrapper around fetcher in case we want to add more functionality
     /// Such as fetching from local DB from snapshot
     </span><span class="kw">pub async fn </span>multi_download_latest(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         objs: <span class="kw-2">&amp;</span>[ObjectID],
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Object&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Object&gt;, ReplayEngineError&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>num_retries_for_timeout = <span class="self">self</span>.num_retries_for_timeout <span class="kw">as </span>i64;
         <span class="kw">while </span>num_retries_for_timeout &gt;= <span class="number">0 </span>{
             <span class="kw">match </span><span class="self">self</span>.fetcher.multi_get_latest(objs).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(objs) =&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(objs),
-                <span class="prelude-val">Err</span>(LocalExecError::SuiRpcRequestTimeout) =&gt; {
+                <span class="prelude-val">Err</span>(ReplayEngineError::SuiRpcRequestTimeout) =&gt; {
                     <span class="macro">warn!</span>(
                         <span class="string">&quot;RPC request timed out. Retries left {}. Sleeping for {}s&quot;</span>,
                         num_retries_for_timeout,
@@ -2090,87 +2186,152 @@
                 <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(e),
             }
         }
-        <span class="prelude-val">Err</span>(LocalExecError::SuiRpcRequestTimeout)
+        <span class="prelude-val">Err</span>(ReplayEngineError::SuiRpcRequestTimeout)
     }
 
     <span class="kw">pub async fn </span>fetch_loaded_child_refs(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tx_digest: <span class="kw-2">&amp;</span>TransactionDigest,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(ObjectID, SequenceNumber)&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(ObjectID, SequenceNumber)&gt;, ReplayEngineError&gt; {
         <span class="comment">// Get the child objects loaded
         </span><span class="self">self</span>.fetcher.get_loaded_child_objects(tx_digest).<span class="kw">await
     </span>}
 
-    <span class="doccomment">/// Gets all the epoch change events
-    </span><span class="kw">pub async fn </span>get_epoch_change_events(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        reverse: bool,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">impl </span>Iterator&lt;Item = SuiEvent&gt;, LocalExecError&gt; {
-        <span class="kw">let </span>struct_tag_str = EPOCH_CHANGE_STRUCT_TAG.to_string();
-        <span class="kw">let </span>struct_tag = parse_struct_tag(<span class="kw-2">&amp;</span>struct_tag_str)<span class="question-mark">?</span>;
-
-        <span class="comment">// TODO: Should probably limit/page this but okay for now?
-        </span><span class="prelude-val">Ok</span>(<span class="self">self
-            </span>.client
-            .event_api()
-            .query_events(EventFilter::MoveEventType(struct_tag), <span class="prelude-val">None</span>, <span class="prelude-val">None</span>, reverse)
-            .<span class="kw">await
-            </span>.map_err(|e| LocalExecError::UnableToQuerySystemEvents {
-                rpc_err: e.to_string(),
-            })<span class="question-mark">?
-            </span>.data
-            .into_iter())
-    }
-
-    <span class="kw">pub async fn </span>new_from_fn_url(http_url: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, LocalExecError&gt; {
-        <span class="self">Self</span>::new(
+    <span class="kw">pub async fn </span>new_from_fn_url(http_url: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ReplayEngineError&gt; {
+        <span class="self">Self</span>::new_for_remote(
             SuiClientBuilder::default()
                 .request_timeout(RPC_TIMEOUT_ERR_SLEEP_RETRY_PERIOD)
                 .max_concurrent_requests(MAX_CONCURRENT_REQUESTS)
                 .build(http_url)
                 .<span class="kw">await</span><span class="question-mark">?</span>,
+            <span class="prelude-val">None</span>,
         )
         .<span class="kw">await
     </span>}
+
+    <span class="kw">pub async fn </span>replay_with_network_config(
+        rpc_url: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        path: <span class="prelude-ty">Option</span>&lt;String&gt;,
+        tx_digest: TransactionDigest,
+        expensive_safety_check_config: ExpensiveSafetyCheckConfig,
+        use_authority: bool,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, ReplayEngineError&gt; {
+        <span class="kw">async fn </span>inner_exec(
+            rpc_url: String,
+            tx_digest: TransactionDigest,
+            expensive_safety_check_config: ExpensiveSafetyCheckConfig,
+            use_authority: bool,
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, ReplayEngineError&gt; {
+            LocalExec::new_from_fn_url(<span class="kw-2">&amp;</span>rpc_url)
+                .<span class="kw">await</span><span class="question-mark">?
+                </span>.init_for_execution()
+                .<span class="kw">await</span><span class="question-mark">?
+                </span>.execute_transaction(<span class="kw-2">&amp;</span>tx_digest, expensive_safety_check_config, use_authority)
+                .<span class="kw">await
+        </span>}
+
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(url) = rpc_url.clone() {
+            <span class="macro">info!</span>(<span class="string">&quot;Using RPC URL: {}&quot;</span>, url);
+            <span class="kw">if let </span><span class="prelude-val">Ok</span>(x) = inner_exec(
+                url,
+                tx_digest,
+                expensive_safety_check_config.clone(),
+                use_authority,
+            )
+            .<span class="kw">await
+            </span>{
+                <span class="kw">return </span><span class="prelude-val">Ok</span>(x);
+            }
+            <span class="macro">warn!</span>(<span class="string">&quot;Failed to execute transaction with provided RPC URL. Attempting to load configs from file&quot;</span>);
+        }
+
+        <span class="kw">let </span>cfg = ReplayableNetworkConfigSet::load_config(path)<span class="question-mark">?</span>;
+        <span class="kw">for </span>cfg <span class="kw">in </span><span class="kw-2">&amp;</span>cfg.base_network_configs {
+            <span class="macro">info!</span>(
+                <span class="string">&quot;Attempting to replay with network rpc: {}&quot;</span>,
+                cfg.public_full_node.clone()
+            );
+            <span class="kw">match </span>inner_exec(
+                cfg.public_full_node.clone(),
+                tx_digest,
+                expensive_safety_check_config.clone(),
+                use_authority,
+            )
+            .<span class="kw">await
+            </span>{
+                <span class="prelude-val">Ok</span>(exec_state) =&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(exec_state),
+                <span class="prelude-val">Err</span>(e) =&gt; {
+                    <span class="macro">warn!</span>(<span class="string">&quot;Failed to execute transaction with network config: {}. Attempting next network config...&quot;</span>, e);
+                    <span class="kw">continue</span>;
+                }
+            }
+        }
+        <span class="macro">error!</span>(<span class="string">&quot;No more configs to attempt. Try specifing Full Node RPC URL directly or provide a config file with a valid URL&quot;</span>);
+        <span class="prelude-val">Err</span>(ReplayEngineError::UnableToExecuteWithNetworkConfigs { cfgs: cfg })
+    }
 
     <span class="doccomment">/// This captures the state of the network at a given point in time and populates
     /// prptocol version tables including which system packages to fetch
     /// If this function is called across epoch boundaries, the info might be stale.
     /// But it should only be called once per epoch.
-    </span><span class="kw">pub async fn </span>init_for_execution(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, LocalExecError&gt; {
+    </span><span class="kw">pub async fn </span>init_for_execution(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ReplayEngineError&gt; {
         <span class="self">self</span>.populate_protocol_version_tables().<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 
-    <span class="kw">pub async fn </span>reset_for_new_execution(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, LocalExecError&gt; {
-        <span class="self">Self</span>::new(<span class="self">self</span>.client).<span class="kw">await</span><span class="question-mark">?</span>.init_for_execution().<span class="kw">await
+    <span class="kw">pub async fn </span>reset_for_new_execution_with_client(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ReplayEngineError&gt; {
+        <span class="self">Self</span>::new_for_remote(
+            <span class="self">self</span>.client.expect(<span class="string">&quot;Remote client not initialized&quot;</span>),
+            <span class="prelude-val">Some</span>(<span class="self">self</span>.fetcher.into_remote()),
+        )
+        .<span class="kw">await</span><span class="question-mark">?
+        </span>.init_for_execution()
+        .<span class="kw">await
     </span>}
 
-    <span class="kw">pub async fn </span>new(client: SuiClient) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, LocalExecError&gt; {
+    <span class="kw">pub async fn </span>new_for_remote(
+        client: SuiClient,
+        remote_fetcher: <span class="prelude-ty">Option</span>&lt;RemoteFetcher&gt;,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ReplayEngineError&gt; {
         <span class="comment">// Use a throwaway metrics registry for local execution.
         </span><span class="kw">let </span>registry = prometheus::Registry::new();
         <span class="kw">let </span>metrics = Arc::new(LimitsMetrics::new(<span class="kw-2">&amp;</span>registry));
 
-        <span class="kw">let </span>fetcher = RemoteFetcher {
-            rpc_client: client.clone(),
-        };
-
-        <span class="kw">let </span>is_testnet = fetcher
-            .get_checkpoint_txs(<span class="number">0</span>)
-            .<span class="kw">await</span><span class="question-mark">?
-            </span>.iter()
-            .any(|tx| tx == <span class="kw-2">&amp;</span>TransactionDigest::from_str(TESTNET_GENESIX_TX_DIGEST).unwrap());
+        <span class="kw">let </span>fetcher = remote_fetcher.unwrap_or(RemoteFetcher::new(client.clone()));
 
         <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
-            client,
+            client: <span class="prelude-val">Some</span>(client),
             protocol_version_epoch_table: BTreeMap::new(),
             protocol_version_system_package_table: BTreeMap::new(),
             current_protocol_version: <span class="number">0</span>,
             exec_store_events: Arc::new(Mutex::new(Vec::new())),
             metrics,
             storage: Storage::default(),
-            fetcher,
-            is_testnet,
+            fetcher: Fetchers::Remote(fetcher),
+            <span class="comment">// TODO: make these configurable
+            </span>num_retries_for_timeout: RPC_TIMEOUT_ERR_NUM_RETRIES,
+            sleep_period_for_timeout: RPC_TIMEOUT_ERR_SLEEP_RETRY_PERIOD,
+        })
+    }
+
+    <span class="kw">pub async fn </span>new_for_state_dump(path: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, ReplayEngineError&gt; {
+        <span class="comment">// Use a throwaway metrics registry for local execution.
+        </span><span class="kw">let </span>registry = prometheus::Registry::new();
+        <span class="kw">let </span>metrics = Arc::new(LimitsMetrics::new(<span class="kw-2">&amp;</span>registry));
+
+        <span class="kw">let </span>state = NodeStateDump::read_from_file(<span class="kw-2">&amp;</span>PathBuf::from(path))<span class="question-mark">?</span>;
+        <span class="kw">let </span>current_protocol_version = state.protocol_version;
+        <span class="kw">let </span>fetcher = NodeStateDumpFetcher::from(state);
+
+        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
+            client: <span class="prelude-val">None</span>,
+            protocol_version_epoch_table: BTreeMap::new(),
+            protocol_version_system_package_table: BTreeMap::new(),
+            current_protocol_version,
+            exec_store_events: Arc::new(Mutex::new(Vec::new())),
+            metrics,
+            storage: Storage::default(),
+            fetcher: Fetchers::NodeStateDump(fetcher),
             <span class="comment">// TODO: make these configurable
             </span>num_retries_for_timeout: RPC_TIMEOUT_ERR_NUM_RETRIES,
             sleep_period_for_timeout: RPC_TIMEOUT_ERR_SLEEP_RETRY_PERIOD,
@@ -2190,7 +2351,7 @@
     <span class="kw">pub async fn </span>multi_download_and_store(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         objs: <span class="kw-2">&amp;</span>[(ObjectID, SequenceNumber)],
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Object&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Object&gt;, ReplayEngineError&gt; {
         <span class="kw">let </span>objs = <span class="self">self</span>.multi_download(objs).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="comment">// Backfill the store
@@ -2217,7 +2378,7 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         objs: Vec&lt;ObjectID&gt;,
         protocol_version: u64,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Object&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;Object&gt;, ReplayEngineError&gt; {
         <span class="kw">let </span>syst_packages = <span class="self">self</span>.system_package_versions_for_epoch(protocol_version)<span class="question-mark">?</span>;
         <span class="kw">let </span>syst_packages_objs = <span class="self">self</span>.multi_download(<span class="kw-2">&amp;</span>syst_packages).<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -2259,7 +2420,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         object_id: <span class="kw-2">&amp;</span>ObjectID,
         version: SequenceNumber,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Object, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Object, ReplayEngineError&gt; {
         <span class="kw">if </span><span class="self">self
             </span>.storage
             .object_version_cache
@@ -2273,7 +2434,7 @@
                 .lock()
                 .expect(<span class="string">&quot;Cannot lock&quot;</span>)
                 .get(<span class="kw-2">&amp;</span>(<span class="kw-2">*</span>object_id, version))
-                .ok_or(LocalExecError::InternalCacheInvariantViolation {
+                .ok_or(ReplayEngineError::InternalCacheInvariantViolation {
                     id: <span class="kw-2">*</span>object_id,
                     version: <span class="prelude-val">Some</span>(version),
                 })<span class="question-mark">?
@@ -2303,7 +2464,7 @@
     </span><span class="kw">pub fn </span>download_latest_object(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         object_id: <span class="kw-2">&amp;</span>ObjectID,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Object&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Object&gt;, ReplayEngineError&gt; {
         <span class="kw">let </span>resp = block_on({
             <span class="comment">//info!(&quot;Downloading latest object {object_id}&quot;);
             </span><span class="self">self</span>.multi_download_latest(<span class="kw-2">&amp;</span>[<span class="kw-2">*</span>object_id])
@@ -2315,11 +2476,11 @@
 
         <span class="kw">match </span>resp {
             <span class="prelude-val">Ok</span>(v) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(v)),
-            <span class="prelude-val">Err</span>(LocalExecError::ObjectNotExist { id }) =&gt; {
+            <span class="prelude-val">Err</span>(ReplayEngineError::ObjectNotExist { id }) =&gt; {
                 <span class="macro">error!</span>(<span class="string">&quot;Could not find object {id} on RPC server. It might have been pruned, deleted, or never existed.&quot;</span>);
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
             }
-            <span class="prelude-val">Err</span>(LocalExecError::ObjectDeleted {
+            <span class="prelude-val">Err</span>(ReplayEngineError::ObjectDeleted {
                 id,
                 version,
                 digest,
@@ -2327,7 +2488,7 @@
                 <span class="macro">error!</span>(<span class="string">&quot;Object {id} {version} {digest} was deleted on RPC server.&quot;</span>);
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
             }
-            <span class="prelude-val">Err</span>(err) =&gt; <span class="prelude-val">Err</span>(LocalExecError::SuiRpcError {
+            <span class="prelude-val">Err</span>(err) =&gt; <span class="prelude-val">Err</span>(ReplayEngineError::SuiRpcError {
                 err: err.to_string(),
             }),
         }
@@ -2336,11 +2497,11 @@
     <span class="kw">pub async fn </span>get_checkpoint_txs(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         checkpoint_id: u64,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;TransactionDigest&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;TransactionDigest&gt;, ReplayEngineError&gt; {
         <span class="self">self</span>.fetcher
             .get_checkpoint_txs(checkpoint_id)
             .<span class="kw">await
-            </span>.map_err(|e| LocalExecError::SuiRpcError { err: e.to_string() })
+            </span>.map_err(|e| ReplayEngineError::SuiRpcError { err: e.to_string() })
     }
 
     <span class="kw">pub async fn </span>execute_all_in_checkpoints(
@@ -2349,7 +2510,7 @@
         expensive_safety_check_config: <span class="kw-2">&amp;</span>ExpensiveSafetyCheckConfig,
         terminate_early: bool,
         use_authority: bool,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;(u64, u64), LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(u64, u64), ReplayEngineError&gt; {
         <span class="comment">// Get all the TXs at this checkpoint
         </span><span class="kw">let </span><span class="kw-2">mut </span>txs = Vec::new();
         <span class="kw">for </span>checkpoint_id <span class="kw">in </span>checkpoint_ids {
@@ -2383,13 +2544,13 @@
         tx_info: <span class="kw-2">&amp;</span>OnChainTransactionInfo,
         override_transaction_kind: <span class="prelude-ty">Option</span>&lt;TransactionKind&gt;,
         expensive_safety_check_config: ExpensiveSafetyCheckConfig,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, ReplayEngineError&gt; {
         <span class="kw">let </span>tx_digest = <span class="kw-2">&amp;</span>tx_info.tx_digest;
         <span class="comment">// A lot of the logic here isnt designed for genesis
         </span><span class="kw">if </span><span class="kw-2">*</span>tx_digest == TransactionDigest::genesis() || tx_info.sender == SuiAddress::ZERO {
             <span class="comment">// Genesis.
             </span><span class="macro">warn!</span>(
-                <span class="string">&quot;Genesis replay not supported: {}, skipping transaction&quot;</span>,
+                <span class="string">&quot;Genesis/system TX replay not supported: {}, skipping transaction&quot;</span>,
                 tx_digest
             );
             <span class="comment">// Return the same data from onchain since we dont want to fail nor do we want to recompute
@@ -2403,11 +2564,9 @@
                 local_exec_status: <span class="prelude-val">Ok</span>(()),
             });
         }
-
         <span class="comment">// Initialize the state necessary for execution
         // Get the input objects
         </span><span class="kw">let </span>input_objects = <span class="self">self</span>.initialize_execution_env_state(tx_info).<span class="kw">await</span><span class="question-mark">?</span>;
-
         <span class="comment">// At this point we have all the objects needed for replay
 
         // This assumes we already initialized the protocol version table `protocol_version_epoch_table`
@@ -2451,7 +2610,8 @@
         );
 
         <span class="kw">let </span>all_required_objects = <span class="self">self</span>.storage.all_objects();
-        <span class="kw">let </span>effects = SuiTransactionBlockEffects::try_from(res.<span class="number">1</span>).map_err(LocalExecError::from)<span class="question-mark">?</span>;
+        <span class="kw">let </span>effects =
+            SuiTransactionBlockEffects::try_from(res.<span class="number">1</span>).map_err(ReplayEngineError::from)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(ExecutionSandboxState {
             transaction_info: tx_info.clone(),
@@ -2467,14 +2627,20 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         tx_digest: <span class="kw-2">&amp;</span>TransactionDigest,
         expensive_safety_check_config: ExpensiveSafetyCheckConfig,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, LocalExecError&gt; {
-        <span class="macro">assert!</span>(
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, ReplayEngineError&gt; {
+        <span class="kw">if </span><span class="self">self</span>.is_remote_replay() {
+            <span class="macro">assert!</span>(
             !<span class="self">self</span>.protocol_version_system_package_table.is_empty()
                 || !<span class="self">self</span>.protocol_version_epoch_table.is_empty(),
             <span class="string">&quot;Required tables not populated. Must call `init_for_execution` before executing transactions&quot;
         </span>);
+        }
 
-        <span class="kw">let </span>tx_info = <span class="self">self</span>.resolve_tx_components(tx_digest).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>tx_info = <span class="kw">if </span><span class="self">self</span>.is_remote_replay() {
+            <span class="self">self</span>.resolve_tx_components(tx_digest).<span class="kw">await</span><span class="question-mark">?
+        </span>} <span class="kw">else </span>{
+            <span class="self">self</span>.resolve_tx_components_from_dump(tx_digest).<span class="kw">await</span><span class="question-mark">?
+        </span>};
         <span class="self">self</span>.execution_engine_execute_with_tx_info_impl(
             <span class="kw-2">&amp;</span>tx_info,
             <span class="prelude-val">None</span>,
@@ -2492,7 +2658,7 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         pre_run_sandbox: <span class="kw-2">&amp;</span>ExecutionSandboxState,
         override_transaction_data: <span class="prelude-ty">Option</span>&lt;TransactionData&gt;,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, ReplayEngineError&gt; {
         <span class="macro">assert!</span>(
             override_transaction_data.is_none(),
             <span class="string">&quot;Custom transaction data is not supported yet&quot;
@@ -2588,13 +2754,14 @@
         <span class="kw">let </span>res = authority_state
             .try_execute_immediately(certificate, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>epoch_store)
             .<span class="kw">await
-            </span>.unwrap();
+            </span>.map_err(ReplayEngineError::from)<span class="question-mark">?</span>;
 
         <span class="kw">let </span>exec_res = <span class="kw">match </span>res.<span class="number">1 </span>{
             <span class="prelude-val">Some</span>(q) =&gt; <span class="prelude-val">Err</span>(q),
             <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(()),
         };
-        <span class="kw">let </span>effects = SuiTransactionBlockEffects::try_from(res.<span class="number">0</span>).map_err(LocalExecError::from)<span class="question-mark">?</span>;
+        <span class="kw">let </span>effects =
+            SuiTransactionBlockEffects::try_from(res.<span class="number">0</span>).map_err(ReplayEngineError::from)<span class="question-mark">?</span>;
 
         <span class="prelude-val">Ok</span>(ExecutionSandboxState {
             transaction_info: pre_run_sandbox.transaction_info.clone(),
@@ -2611,7 +2778,7 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         tx_digest: <span class="kw-2">&amp;</span>TransactionDigest,
         expensive_safety_check_config: ExpensiveSafetyCheckConfig,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, ReplayEngineError&gt; {
         <span class="comment">// Use the lighterweight execution engine to get the pre-run state
         </span><span class="kw">let </span>pre_run_sandbox = <span class="self">self
             </span>.execution_engine_execute_impl(tx_digest, expensive_safety_check_config)
@@ -2626,7 +2793,7 @@
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         tx_digest: <span class="kw-2">&amp;</span>TransactionDigest,
         expensive_safety_check_config: ExpensiveSafetyCheckConfig,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, ReplayEngineError&gt; {
         <span class="kw">let </span>sandbox_state = <span class="self">self
             </span>.execution_engine_execute_impl(tx_digest, expensive_safety_check_config)
             .<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2634,12 +2801,30 @@
         <span class="prelude-val">Ok</span>(sandbox_state)
     }
 
+    <span class="kw">pub async fn </span>execute_state_dump(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        expensive_safety_check_config: ExpensiveSafetyCheckConfig,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(ExecutionSandboxState, NodeStateDump), ReplayEngineError&gt; {
+        <span class="macro">assert!</span>(!<span class="self">self</span>.is_remote_replay());
+
+        <span class="kw">let </span>d = <span class="kw">match </span><span class="self">self</span>.fetcher.clone() {
+            Fetchers::NodeStateDump(d) =&gt; d,
+            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">&quot;Invalid fetcher for state dump&quot;</span>),
+        };
+        <span class="kw">let </span>tx_digest = d.node_state_dump.clone().tx_digest;
+        <span class="kw">let </span>sandbox_state = <span class="self">self
+            </span>.execution_engine_execute_impl(<span class="kw-2">&amp;</span>tx_digest, expensive_safety_check_config)
+            .<span class="kw">await</span><span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>((sandbox_state, d.node_state_dump))
+    }
+
     <span class="kw">pub async fn </span>execute_transaction(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         tx_digest: <span class="kw-2">&amp;</span>TransactionDigest,
         expensive_safety_check_config: ExpensiveSafetyCheckConfig,
         use_authority: bool,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ExecutionSandboxState, ReplayEngineError&gt; {
         <span class="kw">if </span>use_authority {
             <span class="self">self</span>.certificate_execute(tx_digest, expensive_safety_check_config.clone())
                 .<span class="kw">await
@@ -2652,7 +2837,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>ids = BuiltInFramework::all_package_ids();
 
         <span class="kw">if </span>protocol_version &lt; <span class="number">5 </span>{
-            ids.retain(|id| <span class="kw-2">*</span>id != DEEPBOOK_OBJECT_ID)
+            ids.retain(|id| <span class="kw-2">*</span>id != DEEPBOOK_PACKAGE_ID)
         }
         ids
     }
@@ -2662,7 +2847,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         obj_id: <span class="kw-2">&amp;</span>ObjectID,
         package_expected: bool,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Object&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Object&gt;, ReplayEngineError&gt; {
         <span class="kw">if </span>package_expected {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(obj) = <span class="self">self
                 </span>.storage
@@ -2706,30 +2891,47 @@
         <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(o))
     }
 
+    <span class="kw">pub fn </span>is_remote_replay(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="macro">matches!</span>(<span class="self">self</span>.fetcher, Fetchers::Remote(<span class="kw">_</span>))
+    }
+
     <span class="doccomment">/// Must be called after `populate_protocol_version_tables`
     </span><span class="kw">pub fn </span>system_package_versions_for_epoch(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         epoch: u64,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(ObjectID, SequenceNumber)&gt;, LocalExecError&gt; {
-        <span class="prelude-val">Ok</span>(<span class="self">self
-            </span>.protocol_version_system_package_table
-            .get(<span class="kw-2">&amp;</span>epoch)
-            .ok_or(LocalExecError::FrameworkObjectVersionTableNotPopulated { epoch })<span class="question-mark">?
-            </span>.clone()
-            .into_iter()
-            .collect())
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(ObjectID, SequenceNumber)&gt;, ReplayEngineError&gt; {
+        <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.fetcher {
+            Fetchers::Remote(<span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(<span class="self">self
+                </span>.protocol_version_system_package_table
+                .get(<span class="kw-2">&amp;</span>epoch)
+                .ok_or(ReplayEngineError::FrameworkObjectVersionTableNotPopulated { epoch })<span class="question-mark">?
+                </span>.clone()
+                .into_iter()
+                .collect()),
+
+            Fetchers::NodeStateDump(d) =&gt; <span class="prelude-val">Ok</span>(d
+                .node_state_dump
+                .relevant_system_packages
+                .iter()
+                .map(|w| w.compute_object_reference())
+                .map(|q| (q.<span class="number">0</span>, q.<span class="number">1</span>))
+                .collect()),
+        }
     }
 
-    <span class="doccomment">/// Very testnet specific now
-    /// This function is testnet specific and will be extended for other networs later
-    </span><span class="kw">pub async fn </span>protocol_ver_to_epoch_map(
+    <span class="kw">pub async fn </span>protocol_ver_to_epoch_map(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;BTreeMap&lt;u64, ProtocolVersionSummary&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BTreeMap&lt;u64, ProtocolVersionSummary&gt;, ReplayEngineError&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>range_map = BTreeMap::new();
-        <span class="kw">let </span>epoch_change_events = <span class="self">self</span>.get_epoch_change_events(<span class="bool-val">false</span>).<span class="kw">await</span><span class="question-mark">?</span>;
+        <span class="kw">let </span>epoch_change_events = <span class="self">self</span>.fetcher.get_epoch_change_events(<span class="bool-val">false</span>).<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="comment">// Exception for Genesis: Protocol version 1 at epoch 0
-        </span><span class="kw">let </span><span class="kw-2">mut </span>tx_digest = TransactionDigest::from_str(TESTNET_GENESIX_TX_DIGEST).unwrap();
+        </span><span class="kw">let </span><span class="kw-2">mut </span>tx_digest = <span class="kw-2">*</span><span class="self">self
+            </span>.fetcher
+            .get_checkpoint_txs(<span class="number">0</span>)
+            .<span class="kw">await</span><span class="question-mark">?
+            </span>.get(<span class="number">0</span>)
+            .expect(<span class="string">&quot;Genesis TX must be in first checkpoint&quot;</span>);
         <span class="comment">// Somehow the genesis TX did not emit any event, but we know it was the start of version 1
         // So we need to manually add this range
         </span><span class="kw">let </span>(<span class="kw-2">mut </span>start_epoch, <span class="kw-2">mut </span>start_protocol_version, <span class="kw-2">mut </span>start_checkpoint) = (<span class="number">0</span>, <span class="number">1</span>, <span class="number">0u64</span>);
@@ -2737,33 +2939,8 @@
         <span class="kw">let </span>(<span class="kw-2">mut </span>curr_epoch, <span class="kw-2">mut </span>curr_protocol_version, <span class="kw-2">mut </span>curr_checkpoint) =
             (start_epoch, start_protocol_version, start_checkpoint);
 
-        <span class="kw">if </span><span class="self">self</span>.is_testnet {
-            <span class="comment">// Exception for incident: Protocol version 2 started epoch 742
-            // But this was in safe mode so no events emitted
-            // So we need to manually add this range
-            </span>(curr_epoch, curr_protocol_version) = (<span class="number">742</span>, <span class="number">2</span>);
-            curr_checkpoint = <span class="self">self
-                </span>.fetcher
-                .get_transaction(<span class="kw-2">&amp;</span>TransactionDigest::from_str(SAFE_MODE_TX_1_DIGEST).unwrap())
-                .<span class="kw">await</span><span class="question-mark">?
-                </span>.checkpoint
-                .expect(<span class="string">&quot;Checkpoint should be present&quot;</span>);
-            range_map.insert(
-                start_protocol_version,
-                ProtocolVersionSummary {
-                    protocol_version: start_protocol_version,
-                    epoch_start: start_epoch,
-                    epoch_end: curr_epoch - <span class="number">1</span>,
-                    checkpoint_start: start_checkpoint,
-                    checkpoint_end: curr_checkpoint - <span class="number">1</span>,
-                    epoch_change_tx: tx_digest,
-                },
-            );
-        }
-
         (start_epoch, start_protocol_version, start_checkpoint) =
             (curr_epoch, curr_protocol_version, curr_checkpoint);
-        tx_digest = TransactionDigest::from_str(SAFE_MODE_TX_1_DIGEST).unwrap();
 
         <span class="comment">// This is the final tx digest for the epoch change. We need this to track the final checkpoint
         </span><span class="kw">let </span><span class="kw-2">mut </span>end_epoch_tx_digest = tx_digest;
@@ -2771,11 +2948,6 @@
         <span class="kw">for </span>event <span class="kw">in </span>epoch_change_events {
             (curr_epoch, curr_protocol_version) = extract_epoch_and_version(event.clone())<span class="question-mark">?</span>;
             end_epoch_tx_digest = event.id.tx_digest;
-
-            <span class="kw">if </span><span class="self">self</span>.is_testnet &amp;&amp; (curr_protocol_version &lt; <span class="number">3</span>) {
-                <span class="comment">// Ignore protocol versions before 3 as we&#39;ve handled before the loop
-                </span><span class="kw">continue</span>;
-            }
 
             <span class="kw">if </span>start_protocol_version == curr_protocol_version {
                 <span class="comment">// Same range
@@ -2846,7 +3018,7 @@
         version
     }
 
-    <span class="kw">pub async fn </span>populate_protocol_version_tables(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), LocalExecError&gt; {
+    <span class="kw">pub async fn </span>populate_protocol_version_tables(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), ReplayEngineError&gt; {
         <span class="self">self</span>.protocol_version_epoch_table = <span class="self">self</span>.protocol_ver_to_epoch_map().<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">let </span>system_package_revisions = <span class="self">self</span>.system_package_versions().<span class="kw">await</span><span class="question-mark">?</span>;
@@ -2886,7 +3058,8 @@
 
     <span class="kw">pub async fn </span>system_package_versions(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;BTreeMap&lt;ObjectID, Vec&lt;(SequenceNumber, TransactionDigest)&gt;&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;BTreeMap&lt;ObjectID, Vec&lt;(SequenceNumber, TransactionDigest)&gt;&gt;, ReplayEngineError&gt;
+    {
         <span class="kw">let </span>system_package_ids = <span class="self">Self</span>::system_package_ids(
             <span class="kw-2">*</span><span class="self">self
                 </span>.protocol_version_epoch_table
@@ -2926,21 +3099,21 @@
                 .collect();
             system_package_objs = <span class="kw">match </span><span class="self">self</span>.multi_download(<span class="kw-2">&amp;</span>previous_ver_refs).<span class="kw">await </span>{
                 <span class="prelude-val">Ok</span>(packages) =&gt; packages,
-                <span class="prelude-val">Err</span>(LocalExecError::ObjectNotExist { id }) =&gt; {
+                <span class="prelude-val">Err</span>(ReplayEngineError::ObjectNotExist { id }) =&gt; {
                     <span class="comment">// This happens when the RPC server prunes older object
                     // Replays in the current protocol version will work but old ones might not
                     // as we cannot fetch the package
                     </span><span class="macro">warn!</span>(<span class="string">&quot;Object {} does not exist on RPC server. This might be due to pruning. Historical replays might not work&quot;</span>, id);
                     <span class="kw">break</span>;
                 }
-                <span class="prelude-val">Err</span>(LocalExecError::ObjectVersionNotFound { id, version }) =&gt; {
+                <span class="prelude-val">Err</span>(ReplayEngineError::ObjectVersionNotFound { id, version }) =&gt; {
                     <span class="comment">// This happens when the RPC server prunes older object
                     // Replays in the current protocol version will work but old ones might not
                     // as we cannot fetch the package
                     </span><span class="macro">warn!</span>(<span class="string">&quot;Object {} at version {} does not exist on RPC server. This might be due to pruning. Historical replays might not work&quot;</span>, id, version);
                     <span class="kw">break</span>;
                 }
-                <span class="prelude-val">Err</span>(LocalExecError::ObjectVersionTooHigh {
+                <span class="prelude-val">Err</span>(ReplayEngineError::ObjectVersionTooHigh {
                     id,
                     asked_version,
                     latest_version,
@@ -2948,7 +3121,7 @@
                     <span class="macro">warn!</span>(<span class="string">&quot;Object {} at version {} does not exist on RPC server. Latest version is {}. This might be due to pruning. Historical replays might not work&quot;</span>, id, asked_version,latest_version );
                     <span class="kw">break</span>;
                 }
-                <span class="prelude-val">Err</span>(LocalExecError::ObjectDeleted {
+                <span class="prelude-val">Err</span>(ReplayEngineError::ObjectDeleted {
                     id,
                     version,
                     digest,
@@ -2968,20 +3141,25 @@
     <span class="kw">pub async fn </span>get_protocol_config(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         epoch_id: EpochId,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;ProtocolConfig, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;ProtocolConfig, ReplayEngineError&gt; {
         <span class="self">self</span>.protocol_version_epoch_table
             .iter()
             .rev()
             .find(|(<span class="kw">_</span>, rg)| epoch_id &gt;= rg.epoch_start)
             .map(|(p, _rg)| <span class="prelude-val">Ok</span>(ProtocolConfig::get_for_version((<span class="kw-2">*</span>p).into())))
-            .unwrap_or_else(|| <span class="prelude-val">Err</span>(LocalExecError::ProtocolVersionNotFound { epoch: epoch_id }))
+            .unwrap_or_else(|| <span class="prelude-val">Err</span>(ReplayEngineError::ProtocolVersionNotFound { epoch: epoch_id }))
     }
 
-    <span class="kw">pub async fn </span>checkpoints_for_epoch(<span class="kw-2">&amp;</span><span class="self">self</span>, epoch_id: u64) -&gt; <span class="prelude-ty">Result</span>&lt;(u64, u64), LocalExecError&gt; {
+    <span class="kw">pub async fn </span>checkpoints_for_epoch(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        epoch_id: u64,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(u64, u64), ReplayEngineError&gt; {
         <span class="kw">let </span>epoch_change_events = <span class="self">self
-            </span>.get_epoch_change_events(<span class="bool-val">true</span>)
+            </span>.fetcher
+            .get_epoch_change_events(<span class="bool-val">true</span>)
             .<span class="kw">await</span><span class="question-mark">?
-            </span>.collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+            </span>.into_iter()
+            .collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
         <span class="kw">let </span>(start_checkpoint, start_epoch_idx) = <span class="kw">if </span>epoch_id == <span class="number">0 </span>{
             (<span class="number">0</span>, <span class="number">1</span>)
         } <span class="kw">else </span>{
@@ -2991,7 +3169,7 @@
                     <span class="prelude-val">Ok</span>((epoch, <span class="kw">_</span>)) =&gt; epoch == epoch_id,
                     <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
                 })
-                .ok_or(LocalExecError::EventNotFound { epoch: epoch_id })<span class="question-mark">?</span>;
+                .ok_or(ReplayEngineError::EventNotFound { epoch: epoch_id })<span class="question-mark">?</span>;
             <span class="kw">let </span>epoch_change_tx = epoch_change_events[idx].id.tx_digest;
             (
                 <span class="self">self</span>.fetcher
@@ -3006,7 +3184,7 @@
         <span class="kw">let </span>next_epoch_change_tx = epoch_change_events
             .get(start_epoch_idx + <span class="number">1</span>)
             .map(|v| v.id.tx_digest)
-            .ok_or(LocalExecError::UnableToDetermineCheckpoint { epoch: epoch_id })<span class="question-mark">?</span>;
+            .ok_or(ReplayEngineError::UnableToDetermineCheckpoint { epoch: epoch_id })<span class="question-mark">?</span>;
 
         <span class="kw">let </span>next_epoch_checkpoint = <span class="self">self
             </span>.fetcher
@@ -3018,50 +3196,23 @@
         <span class="prelude-val">Ok</span>((start_checkpoint, next_epoch_checkpoint - <span class="number">1</span>))
     }
 
-    <span class="doccomment">/// Very testnet specific
-    /// This function is testnet specific and will be extended for mainnet later
-    </span><span class="kw">pub async fn </span>get_epoch_start_timestamp_and_rgp(
+    <span class="kw">pub async fn </span>get_epoch_start_timestamp_and_rgp(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         epoch_id: u64,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;(u64, u64), LocalExecError&gt; {
-        <span class="comment">// Hack for testnet: for epoch in range [3, 742), we have no data, but no user TX was executed, so return dummy
-        </span><span class="kw">if </span>(<span class="self">self</span>.is_testnet) &amp;&amp; (<span class="number">2 </span>&lt; epoch_id) &amp;&amp; (epoch_id &lt; <span class="number">742</span>) {
-            <span class="kw">return </span><span class="prelude-val">Ok</span>((<span class="number">0</span>, <span class="number">1</span>));
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(u64, u64), ReplayEngineError&gt; {
+        <span class="kw">if </span>epoch_id == <span class="number">0 </span>{
+            <span class="kw">return </span><span class="prelude-val">Err</span>(ReplayEngineError::EpochNotSupported { epoch: epoch_id });
         }
-
-        <span class="kw">let </span>event = <span class="self">self
-            </span>.get_epoch_change_events(<span class="bool-val">true</span>)
-            .<span class="kw">await</span><span class="question-mark">?
-            </span>.find(|ev| <span class="kw">match </span>extract_epoch_and_version(ev.clone()) {
-                <span class="prelude-val">Ok</span>((epoch, <span class="kw">_</span>)) =&gt; epoch == epoch_id,
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
-            })
-            .ok_or(LocalExecError::EventNotFound { epoch: epoch_id })<span class="question-mark">?</span>;
-
-        <span class="kw">let </span>reference_gas_price = <span class="kw">if let </span>serde_json::Value::Object(w) = event.parsed_json {
-            u64::from_str(<span class="kw-2">&amp;</span>w[<span class="string">&quot;reference_gas_price&quot;</span>].to_string().replace(<span class="string">&#39;\&quot;&#39;</span>, <span class="string">&quot;&quot;</span>)).unwrap()
-        } <span class="kw">else </span>{
-            <span class="kw">return </span><span class="prelude-val">Err</span>(LocalExecError::UnexpectedEventFormat { event });
-        };
-
-        <span class="kw">let </span>epoch_change_tx = event.id.tx_digest;
-
-        <span class="comment">// Fetch full transaction content
-        </span><span class="kw">let </span>tx_info = <span class="self">self</span>.fetcher.get_transaction(<span class="kw-2">&amp;</span>epoch_change_tx).<span class="kw">await</span><span class="question-mark">?</span>;
-
-        <span class="kw">let </span>orig_tx: SenderSignedData = bcs::from_bytes(<span class="kw-2">&amp;</span>tx_info.raw_transaction).unwrap();
-        <span class="kw">let </span>tx_kind_orig = orig_tx.transaction_data().kind();
-
-        <span class="kw">if let </span>TransactionKind::ChangeEpoch(change) = tx_kind_orig {
-            <span class="kw">return </span><span class="prelude-val">Ok</span>((change.epoch_start_timestamp_ms, reference_gas_price));
-        }
-        <span class="prelude-val">Err</span>(LocalExecError::InvalidEpochChangeTx { epoch: epoch_id })
-    }
+        <span class="self">self</span>.fetcher
+            .get_epoch_start_timestamp_and_rgp(epoch_id)
+            .<span class="kw">await
+    </span>}
 
     <span class="kw">async fn </span>resolve_tx_components(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         tx_digest: <span class="kw-2">&amp;</span>TransactionDigest,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;OnChainTransactionInfo, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;OnChainTransactionInfo, ReplayEngineError&gt; {
+        <span class="macro">assert!</span>(<span class="self">self</span>.is_remote_replay());
         <span class="comment">// Fetch full transaction content
         </span><span class="kw">let </span>tx_info = <span class="self">self</span>.fetcher.get_transaction(tx_digest).<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="kw">let </span>sender = <span class="kw">match </span>tx_info.clone().transaction.unwrap().data {
@@ -3074,7 +3225,7 @@
         <span class="kw">let </span>input_objs = orig_tx
             .transaction_data()
             .input_objects()
-            .map_err(|e| LocalExecError::UserInputError { err: e })<span class="question-mark">?</span>;
+            .map_err(|e| ReplayEngineError::UserInputError { err: e })<span class="question-mark">?</span>;
         <span class="kw">let </span>tx_kind_orig = orig_tx.transaction_data().kind();
 
         <span class="comment">// Download the objects at the version right before the execution of this TX
@@ -3118,10 +3269,71 @@
         })
     }
 
+    <span class="kw">async fn </span>resolve_tx_components_from_dump(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        tx_digest: <span class="kw-2">&amp;</span>TransactionDigest,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;OnChainTransactionInfo, ReplayEngineError&gt; {
+        <span class="macro">assert!</span>(!<span class="self">self</span>.is_remote_replay());
+
+        <span class="kw">let </span>dp = <span class="self">self</span>.fetcher.as_node_state_dump();
+
+        <span class="kw">let </span>sender = dp
+            .node_state_dump
+            .sender_signed_data
+            .transaction_data()
+            .sender();
+        <span class="kw">let </span>orig_tx = dp.node_state_dump.sender_signed_data.clone();
+        <span class="kw">let </span>effects = dp.node_state_dump.computed_effects.clone();
+        <span class="kw">let </span>effects = SuiTransactionBlockEffects::try_from(effects).unwrap();
+
+        <span class="comment">// Fetch full transaction content
+        //let tx_info = self.fetcher.get_transaction(tx_digest).await?;
+
+        </span><span class="kw">let </span>input_objs = orig_tx
+            .transaction_data()
+            .input_objects()
+            .map_err(|e| ReplayEngineError::UserInputError { err: e })<span class="question-mark">?</span>;
+        <span class="kw">let </span>tx_kind_orig = orig_tx.transaction_data().kind();
+
+        <span class="comment">// Download the objects at the version right before the execution of this TX
+        </span><span class="kw">let </span>modified_at_versions: Vec&lt;(ObjectID, SequenceNumber)&gt; = effects.modified_at_versions();
+
+        <span class="kw">let </span>shared_obj_refs = effects.shared_objects();
+        <span class="kw">let </span>gas_data = orig_tx.transaction_data().gas_data();
+        <span class="kw">let </span>gas_object_refs: Vec&lt;<span class="kw">_</span>&gt; = gas_data.clone().payment.into_iter().collect();
+
+        <span class="kw">let </span>epoch_id = dp.node_state_dump.executed_epoch;
+
+        <span class="kw">let </span>protocol_config =
+            ProtocolConfig::get_for_version(dp.node_state_dump.protocol_version.into());
+        <span class="comment">// Extract the epoch start timestamp
+        </span><span class="kw">let </span>(epoch_start_timestamp, reference_gas_price) =
+            <span class="self">self</span>.get_epoch_start_timestamp_and_rgp(epoch_id).<span class="kw">await</span><span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>(OnChainTransactionInfo {
+            kind: tx_kind_orig.clone(),
+            sender,
+            modified_at_versions,
+            input_objects: input_objs,
+            shared_object_refs: shared_obj_refs.iter().map(|r| r.to_object_ref()).collect(),
+            gas: gas_object_refs,
+            gas_budget: gas_data.budget,
+            gas_price: gas_data.price,
+            executed_epoch: epoch_id,
+            dependencies: effects.dependencies().to_vec(),
+            effects,
+            protocol_config,
+            tx_digest: <span class="kw-2">*</span>tx_digest,
+            epoch_start_timestamp,
+            sender_signed_data: orig_tx.clone(),
+            reference_gas_price,
+        })
+    }
+
     <span class="kw">async fn </span>resolve_download_input_objects(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         tx_info: <span class="kw-2">&amp;</span>OnChainTransactionInfo,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(InputObjectKind, Object)&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(InputObjectKind, Object)&gt;, ReplayEngineError&gt; {
         <span class="comment">// Download the input objects
         </span><span class="kw">let </span><span class="kw-2">mut </span>package_inputs = <span class="macro">vec!</span>[];
         <span class="kw">let </span><span class="kw-2">mut </span>imm_owned_inputs = <span class="macro">vec!</span>[];
@@ -3149,7 +3361,7 @@
                         shared_inputs.push(o.clone());
                         <span class="prelude-val">Ok</span>(())
                     } <span class="kw">else </span>{
-                        <span class="prelude-val">Err</span>(LocalExecError::InternalCacheInvariantViolation {
+                        <span class="prelude-val">Err</span>(ReplayEngineError::InternalCacheInvariantViolation {
                             id: <span class="kw-2">*</span>id,
                             version: <span class="prelude-val">None</span>,
                         })
@@ -3227,7 +3439,7 @@
     </span><span class="kw">async fn </span>initialize_execution_env_state(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         tx_info: <span class="kw-2">&amp;</span>OnChainTransactionInfo,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(InputObjectKind, Object)&gt;, LocalExecError&gt; {
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;(InputObjectKind, Object)&gt;, ReplayEngineError&gt; {
         <span class="comment">// We need this for other activities in this session
         </span><span class="self">self</span>.current_protocol_version = tx_info.protocol_config.version.as_u64();
 
@@ -3348,7 +3560,7 @@
 }
 
 <span class="kw">impl </span>ResourceResolver <span class="kw">for </span>LocalExec {
-    <span class="kw">type </span>Error = LocalExecError;
+    <span class="kw">type </span>Error = ReplayEngineError;
 
     <span class="doccomment">/// In this case we might need to download a Move object on the fly which was not present in the
     /// modified at versions list because packages are immutable
@@ -3361,7 +3573,7 @@
             self_: <span class="kw-2">&amp;</span>LocalExec,
             address: <span class="kw-2">&amp;</span>AccountAddress,
             typ: <span class="kw-2">&amp;</span>StructTag,
-        ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;, LocalExecError&gt; {
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;, ReplayEngineError&gt; {
             <span class="comment">// If package not present fetch it from the network or some remote location
             </span><span class="kw">let </span><span class="prelude-val">Some</span>(object) = self_.get_or_download_object(
                 <span class="kw-2">&amp;</span>ObjectID::from(<span class="kw-2">*</span>address),<span class="bool-val">false </span><span class="comment">/* we expect a Move obj*/</span>)<span class="question-mark">? </span><span class="kw">else </span>{
@@ -3398,7 +3610,7 @@
 }
 
 <span class="kw">impl </span>ModuleResolver <span class="kw">for </span>LocalExec {
-    <span class="kw">type </span>Error = LocalExecError;
+    <span class="kw">type </span>Error = ReplayEngineError;
 
     <span class="doccomment">/// This fetches a module which must already be present in the store
     /// We do not download
@@ -3406,10 +3618,10 @@
         <span class="kw">fn </span>inner(
             self_: <span class="kw-2">&amp;</span>LocalExec,
             module_id: <span class="kw-2">&amp;</span>ModuleId,
-        ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;, LocalExecError&gt; {
+        ) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;, ReplayEngineError&gt; {
             <span class="prelude-val">Ok</span>(self_
                 .get_package(<span class="kw-2">&amp;</span>ObjectID::from(<span class="kw-2">*</span>module_id.address()))
-                .map_err(LocalExecError::from)<span class="question-mark">?
+                .map_err(ReplayEngineError::from)<span class="question-mark">?
                 </span>.and_then(|package| {
                     package
                         .serialized_module_map()
@@ -3431,7 +3643,7 @@
 }
 
 <span class="kw">impl </span>ModuleResolver <span class="kw">for </span><span class="kw-2">&amp;mut </span>LocalExec {
-    <span class="kw">type </span>Error = LocalExecError;
+    <span class="kw">type </span>Error = ReplayEngineError;
 
     <span class="kw">fn </span>get_module(<span class="kw-2">&amp;</span><span class="self">self</span>, module_id: <span class="kw-2">&amp;</span>ModuleId) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Vec&lt;u8&gt;&gt;, <span class="self">Self</span>::Error&gt; {
         <span class="comment">// Recording event here will be double-counting since its already recorded in the get_module fn
@@ -3503,7 +3715,7 @@
 }
 
 <span class="kw">impl </span>GetModule <span class="kw">for </span>LocalExec {
-    <span class="kw">type </span>Error = LocalExecError;
+    <span class="kw">type </span>Error = ReplayEngineError;
     <span class="kw">type </span>Item = CompiledModule;
 
     <span class="kw">fn </span>get_module_by_id(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw-2">&amp;</span>ModuleId) -&gt; anyhow::Result&lt;<span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt;, <span class="self">Self</span>::Error&gt; {
@@ -3525,7 +3737,7 @@
 </span><span class="kw">pub fn </span>get_vm(
     protocol_config: <span class="kw-2">&amp;</span>ProtocolConfig,
     expensive_safety_check_config: ExpensiveSafetyCheckConfig,
-) -&gt; <span class="prelude-ty">Result</span>&lt;Arc&lt;adapter::MoveVM&gt;, LocalExecError&gt; {
+) -&gt; <span class="prelude-ty">Result</span>&lt;Arc&lt;adapter::MoveVM&gt;, ReplayEngineError&gt; {
     <span class="kw">let </span>native_functions = sui_move_natives::all_natives(<span class="comment">/* disable silent */ </span><span class="bool-val">false</span>);
     <span class="kw">let </span>move_vm = Arc::new(
         adapter::new_move_vm(
@@ -3536,16 +3748,6 @@
         .expect(<span class="string">&quot;We defined natives to not fail here&quot;</span>),
     );
     <span class="prelude-val">Ok</span>(move_vm)
-}
-
-<span class="kw">fn </span>extract_epoch_and_version(ev: SuiEvent) -&gt; <span class="prelude-ty">Result</span>&lt;(u64, u64), LocalExecError&gt; {
-    <span class="kw">if let </span>serde_json::Value::Object(w) = ev.parsed_json {
-        <span class="kw">let </span>epoch = u64::from_str(<span class="kw-2">&amp;</span>w[<span class="string">&quot;epoch&quot;</span>].to_string().replace(<span class="string">&#39;\&quot;&#39;</span>, <span class="string">&quot;&quot;</span>)).unwrap();
-        <span class="kw">let </span>version = u64::from_str(<span class="kw-2">&amp;</span>w[<span class="string">&quot;protocol_version&quot;</span>].to_string().replace(<span class="string">&#39;\&quot;&#39;</span>, <span class="string">&quot;&quot;</span>)).unwrap();
-        <span class="kw">return </span><span class="prelude-val">Ok</span>((epoch, version));
-    }
-
-    <span class="prelude-val">Err</span>(LocalExecError::UnexpectedEventFormat { event: ev })
 }
 
 <span class="kw">async fn </span>prep_network(

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["DEFAULT_GAS_AMOUNT","DEFAULT_NUMBER_OF_AUTHORITIES","DEFAULT_NUMBER_OF_OBJECT_PER_ACCOUNT"],"struct":["AccountConfig","GenesisConfig","ValidatorConfigInfo","ValidatorGenesisInfo"]};

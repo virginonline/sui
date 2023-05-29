@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-transactional-test-runner/src/test_adapter.rs`."><title>test_adapter.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_transactional_test_runner" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (2f6bc5d25 2023-05-09)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_transactional_test_runner/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-transactional-test-runner/src/test_adapter.rs`."><title>test_adapter.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="sui_transactional_test_runner" data-themes="" data-resource-suffix="" data-rustdoc-version="1.72.0-nightly (1c53407e8 2023-05-28)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../sui_transactional_test_runner/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1524,6 +1524,53 @@
 <a href="#1524" id="1524">1524</a>
 <a href="#1525" id="1525">1525</a>
 <a href="#1526" id="1526">1526</a>
+<a href="#1527" id="1527">1527</a>
+<a href="#1528" id="1528">1528</a>
+<a href="#1529" id="1529">1529</a>
+<a href="#1530" id="1530">1530</a>
+<a href="#1531" id="1531">1531</a>
+<a href="#1532" id="1532">1532</a>
+<a href="#1533" id="1533">1533</a>
+<a href="#1534" id="1534">1534</a>
+<a href="#1535" id="1535">1535</a>
+<a href="#1536" id="1536">1536</a>
+<a href="#1537" id="1537">1537</a>
+<a href="#1538" id="1538">1538</a>
+<a href="#1539" id="1539">1539</a>
+<a href="#1540" id="1540">1540</a>
+<a href="#1541" id="1541">1541</a>
+<a href="#1542" id="1542">1542</a>
+<a href="#1543" id="1543">1543</a>
+<a href="#1544" id="1544">1544</a>
+<a href="#1545" id="1545">1545</a>
+<a href="#1546" id="1546">1546</a>
+<a href="#1547" id="1547">1547</a>
+<a href="#1548" id="1548">1548</a>
+<a href="#1549" id="1549">1549</a>
+<a href="#1550" id="1550">1550</a>
+<a href="#1551" id="1551">1551</a>
+<a href="#1552" id="1552">1552</a>
+<a href="#1553" id="1553">1553</a>
+<a href="#1554" id="1554">1554</a>
+<a href="#1555" id="1555">1555</a>
+<a href="#1556" id="1556">1556</a>
+<a href="#1557" id="1557">1557</a>
+<a href="#1558" id="1558">1558</a>
+<a href="#1559" id="1559">1559</a>
+<a href="#1560" id="1560">1560</a>
+<a href="#1561" id="1561">1561</a>
+<a href="#1562" id="1562">1562</a>
+<a href="#1563" id="1563">1563</a>
+<a href="#1564" id="1564">1564</a>
+<a href="#1565" id="1565">1565</a>
+<a href="#1566" id="1566">1566</a>
+<a href="#1567" id="1567">1567</a>
+<a href="#1568" id="1568">1568</a>
+<a href="#1569" id="1569">1569</a>
+<a href="#1570" id="1570">1570</a>
+<a href="#1571" id="1571">1571</a>
+<a href="#1572" id="1572">1572</a>
+<a href="#1573" id="1573">1573</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -1576,7 +1623,7 @@
 <span class="kw">use </span>sui_types::accumulator::Accumulator;
 <span class="kw">use </span>sui_types::effects::TransactionEffectsAPI;
 <span class="kw">use </span>sui_types::execution_status::ExecutionStatus;
-<span class="kw">use </span>sui_types::MOVE_STDLIB_OBJECT_ID;
+<span class="kw">use </span>sui_types::MOVE_STDLIB_PACKAGE_ID;
 <span class="kw">use </span>sui_types::{
     base_types::{ObjectID, ObjectRef, SuiAddress, TransactionDigest, SUI_ADDRESS_LENGTH},
     crypto::{get_key_pair_from_rng, AccountKeyPair},
@@ -1596,15 +1643,15 @@
 };
 <span class="kw">use </span>sui_types::{id::UID, DEEPBOOK_ADDRESS};
 <span class="kw">use </span>sui_types::{in_memory_storage::InMemoryStorage, transaction::ProgrammableTransaction};
-<span class="kw">use </span>sui_types::{metrics::LimitsMetrics, DEEPBOOK_OBJECT_ID};
+<span class="kw">use </span>sui_types::{metrics::LimitsMetrics, DEEPBOOK_PACKAGE_ID};
 <span class="kw">use </span>sui_types::{
     move_package::MovePackage,
     transaction::{Argument, CallArg},
 };
 <span class="kw">use </span>sui_types::{
-    programmable_transaction_builder::ProgrammableTransactionBuilder, SUI_FRAMEWORK_OBJECT_ID,
+    programmable_transaction_builder::ProgrammableTransactionBuilder, SUI_FRAMEWORK_PACKAGE_ID,
 };
-<span class="kw">use </span>sui_types::{utils::to_sender_signed_transaction, SUI_SYSTEM_OBJECT_ID};
+<span class="kw">use </span>sui_types::{utils::to_sender_signed_transaction, SUI_SYSTEM_PACKAGE_ID};
 <span class="kw">use </span>tempfile::NamedTempFile;
 
 <span class="attr">#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Debug)]
@@ -1614,10 +1661,10 @@
 }
 
 <span class="kw">const </span>WELL_KNOWN_OBJECTS: <span class="kw-2">&amp;</span>[ObjectID] = <span class="kw-2">&amp;</span>[
-    MOVE_STDLIB_OBJECT_ID,
-    DEEPBOOK_OBJECT_ID,
-    SUI_FRAMEWORK_OBJECT_ID,
-    SUI_SYSTEM_OBJECT_ID,
+    MOVE_STDLIB_PACKAGE_ID,
+    DEEPBOOK_PACKAGE_ID,
+    SUI_FRAMEWORK_PACKAGE_ID,
+    SUI_SYSTEM_PACKAGE_ID,
     SUI_SYSTEM_STATE_OBJECT_ID,
     SUI_CLOCK_OBJECT_ID,
 ];
@@ -1634,6 +1681,8 @@
     vm: Arc&lt;MoveVM&gt;,
     <span class="kw">pub</span>(<span class="kw">crate</span>) storage: Arc&lt;InMemoryStorage&gt;,
     <span class="kw">pub</span>(<span class="kw">crate</span>) compiled_state: CompiledState&lt;<span class="lifetime">&#39;a</span>&gt;,
+    <span class="doccomment">/// For upgrades: maps an upgraded package name to the original package name.
+    </span>package_upgrade_mapping: BTreeMap&lt;Symbol, Symbol&gt;,
     accounts: BTreeMap&lt;String, TestAccount&gt;,
     default_account: TestAccount,
     default_syntax: SyntaxChoice,
@@ -1858,6 +1907,7 @@
                     NumberFormat::Hex,
                 )),
             ),
+            package_upgrade_mapping: BTreeMap::new(),
             accounts,
             default_account,
             default_syntax,
@@ -1936,7 +1986,7 @@
         <span class="kw">let </span>gas_price = <span class="self">self</span>.gas_price;
         <span class="comment">// we are assuming that all packages depend on Move Stdlib and Sui Framework, so these
         // don&#39;t have to be provided explicitly as parameters
-        </span>dependencies.extend([MOVE_STDLIB_OBJECT_ID, SUI_FRAMEWORK_OBJECT_ID]);
+        </span>dependencies.extend([MOVE_STDLIB_PACKAGE_ID, SUI_FRAMEWORK_PACKAGE_ID]);
         <span class="kw">let </span>data = |sender, gas| {
             <span class="kw">let </span><span class="kw-2">mut </span>builder = ProgrammableTransactionBuilder::new();
             <span class="kw">if </span>upgradeable {
@@ -2255,6 +2305,27 @@
                 <span class="kw">else </span>{
                     <span class="macro">panic!</span>(<span class="string">&quot;Unbound package &#39;{package}&#39; for upgrade&quot;</span>);
                 };
+
+                <span class="comment">// Override address mappings for compilation when upgrading. Each dependency is set to its
+                // original address (if that dependency had been upgraded previously). This ensures upgraded
+                // dependencies are resolved during compilation--without this workaround, the compiler will
+                // find multiple definitions of the same module). We persist the original package name and
+                // addresses, which we restore before performing an upgrade transaction below.
+                </span><span class="kw">let </span><span class="kw-2">mut </span>original_package_addrs = <span class="macro">vec!</span>[];
+                <span class="kw">for </span>dep <span class="kw">in </span>dependencies.iter() {
+                    <span class="kw">let </span>named_address_mapping = <span class="kw-2">&amp;mut </span><span class="self">self</span>.compiled_state.named_address_mapping;
+                    <span class="kw">let </span>dep = <span class="kw-2">&amp;</span>Symbol::from(dep.as_str());
+                    <span class="kw">let </span><span class="prelude-val">Some</span>(orig_package) = <span class="self">self</span>.package_upgrade_mapping.get(dep) <span class="kw">else </span>{ <span class="kw">continue </span>};
+                    <span class="kw">let </span><span class="prelude-val">Some</span>(orig_package_address) = named_address_mapping.insert(orig_package.to_string(), zero) <span class="kw">else </span>{ <span class="kw">continue </span>};
+                    original_package_addrs.push((<span class="kw-2">*</span>orig_package, orig_package_address));
+                    <span class="kw">let </span>dep_address = named_address_mapping
+                        .insert(dep.to_string(), orig_package_address)
+                        .unwrap_or_else(||
+                            <span class="macro">panic!</span>(<span class="string">&quot;Internal error: expected dependency {dep} in map when overriding address.&quot;</span>)
+                        );
+                    original_package_addrs.push((<span class="kw-2">*</span>dep, dep_address));
+                }
+
                 <span class="kw">let </span>result = compile_any(
                     <span class="self">self</span>,
                     <span class="string">&quot;upgrade&quot;</span>,
@@ -2266,6 +2337,29 @@
                     stop_line,
                     data,
                     |adapter, modules| {
+                        <span class="comment">// Restore the original package addresses for dependencies before performing the upgrade.
+                        // This ensures package upgrades are properly linked at their correct addresses
+                        // (previously, addresses referred to the dependency&#39;s original package for compilation).
+                        </span><span class="kw">for </span>(name, addr) <span class="kw">in </span>original_package_addrs {
+                            adapter
+                                .compiled_state()
+                                .named_address_mapping
+                                .insert(name.to_string(), addr)
+                                .unwrap_or_else(|| <span class="macro">panic!</span>(<span class="string">&quot;Internal error: expected dependency {name} in map when restoring address.&quot;</span>));
+                        }
+
+                        <span class="kw">let </span>upgraded_name = modules.first().unwrap().<span class="number">0</span>.unwrap();
+                        <span class="kw">let </span>package = <span class="kw-2">&amp;</span>Symbol::from(package.as_str());
+                        <span class="kw">let </span>original_name = adapter
+                            .package_upgrade_mapping
+                            .get(package)
+                            .unwrap_or(package);
+                        <span class="comment">// Persist the upgraded package name with its original package name, so that we can
+                        // refer to the original package name when compiling (see above on overridden addresses).
+                        </span>adapter
+                            .package_upgrade_mapping
+                            .insert(upgraded_name, <span class="kw-2">*</span>original_name);
+
                         <span class="kw">let </span>output = adapter.upgrade_package(
                             before_upgrade,
                             <span class="kw-2">&amp;</span>modules,
@@ -2475,7 +2569,7 @@
         <span class="kw">let </span>digest_arg = builder.pure(digest).unwrap();
 
         <span class="kw">let </span>upgrade_ticket = builder.programmable_move_call(
-            SUI_FRAMEWORK_OBJECT_ID,
+            SUI_FRAMEWORK_PACKAGE_ID,
             <span class="macro">ident_str!</span>(<span class="string">&quot;package&quot;</span>).to_owned(),
             <span class="macro">ident_str!</span>(<span class="string">&quot;authorize_upgrade&quot;</span>).to_owned(),
             <span class="macro">vec!</span>[],
@@ -2487,7 +2581,7 @@
             builder.upgrade(package_id, upgrade_ticket, dependencies, modules_bytes);
 
         builder.programmable_move_call(
-            SUI_FRAMEWORK_OBJECT_ID,
+            SUI_FRAMEWORK_PACKAGE_ID,
             <span class="macro">ident_str!</span>(<span class="string">&quot;package&quot;</span>).to_owned(),
             <span class="macro">ident_str!</span>(<span class="string">&quot;commit_upgrade&quot;</span>).to_owned(),
             <span class="macro">vec!</span>[],
@@ -2948,7 +3042,7 @@
         <span class="comment">// we are assuming that all packages depend on Move Stdlib and Sui Framework, so these
         // don&#39;t have to be provided explicitly as parameters
         </span><span class="kw">if </span>include_std {
-            dependencies.extend([MOVE_STDLIB_OBJECT_ID, SUI_FRAMEWORK_OBJECT_ID]);
+            dependencies.extend([MOVE_STDLIB_PACKAGE_ID, SUI_FRAMEWORK_PACKAGE_ID]);
         }
         <span class="prelude-val">Ok</span>(dependencies)
     }

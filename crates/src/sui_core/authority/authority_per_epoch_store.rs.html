@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-core/src/authority/authority_per_epoch_store.rs`."><title>authority_per_epoch_store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="sui_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (2f6bc5d25 2023-05-09)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../sui_core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-core/src/authority/authority_per_epoch_store.rs`."><title>authority_per_epoch_store.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="sui_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.72.0-nightly (1c53407e8 2023-05-28)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../sui_core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2020,40 +2020,15 @@
 <a href="#2020" id="2020">2020</a>
 <a href="#2021" id="2021">2021</a>
 <a href="#2022" id="2022">2022</a>
-<a href="#2023" id="2023">2023</a>
-<a href="#2024" id="2024">2024</a>
-<a href="#2025" id="2025">2025</a>
-<a href="#2026" id="2026">2026</a>
-<a href="#2027" id="2027">2027</a>
-<a href="#2028" id="2028">2028</a>
-<a href="#2029" id="2029">2029</a>
-<a href="#2030" id="2030">2030</a>
-<a href="#2031" id="2031">2031</a>
-<a href="#2032" id="2032">2032</a>
-<a href="#2033" id="2033">2033</a>
-<a href="#2034" id="2034">2034</a>
-<a href="#2035" id="2035">2035</a>
-<a href="#2036" id="2036">2036</a>
-<a href="#2037" id="2037">2037</a>
-<a href="#2038" id="2038">2038</a>
-<a href="#2039" id="2039">2039</a>
-<a href="#2040" id="2040">2040</a>
-<a href="#2041" id="2041">2041</a>
-<a href="#2042" id="2042">2042</a>
-<a href="#2043" id="2043">2043</a>
-<a href="#2044" id="2044">2044</a>
-<a href="#2045" id="2045">2045</a>
-<a href="#2046" id="2046">2046</a>
-<a href="#2047" id="2047">2047</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
 </span><span class="kw">use </span>futures::future::{join_all, select, Either};
 <span class="kw">use </span>futures::FutureExt;
+<span class="kw">use </span>itertools::izip;
 <span class="kw">use </span>narwhal_executor::ExecutionIndices;
-<span class="kw">use </span>narwhal_types::Round;
 <span class="kw">use </span>parking_lot::RwLock;
-<span class="kw">use </span>parking_lot::{Mutex, RwLockReadGuard};
+<span class="kw">use </span>parking_lot::{Mutex, RwLockReadGuard, RwLockWriteGuard};
 <span class="kw">use </span>rocksdb::Options;
 <span class="kw">use </span>serde::{Deserialize, Serialize};
 <span class="kw">use </span>std::collections::{HashMap, HashSet};
@@ -2069,7 +2044,7 @@
 <span class="kw">use </span>sui_types::error::{SuiError, SuiResult};
 <span class="kw">use </span>sui_types::signature::GenericSignature;
 <span class="kw">use </span>sui_types::transaction::{
-    CertifiedTransaction, SenderSignedData, SharedInputObject, TransactionData, TransactionDataAPI,
+    CertifiedTransaction, SenderSignedData, SharedInputObject, TransactionDataAPI,
     VerifiedCertificate, VerifiedSignedTransaction,
 };
 <span class="kw">use </span>tracing::{debug, error, info, trace, warn};
@@ -2082,7 +2057,7 @@
 <span class="kw">use </span><span class="kw">crate</span>::authority::{AuthorityStore, ResolverWrapper};
 <span class="kw">use </span><span class="kw">crate</span>::checkpoints::{
     BuilderCheckpointSummary, CheckpointCommitHeight, CheckpointServiceNotify, EpochStats,
-    PendingCheckpoint, PendingCheckpointInfo,
+    PendingCheckpoint,
 };
 <span class="kw">use </span><span class="kw">crate</span>::consensus_handler::{
     SequencedConsensusTransaction, SequencedConsensusTransactionKey,
@@ -2100,7 +2075,6 @@
 <span class="kw">use </span>mysten_common::sync::notify_read::NotifyRead;
 <span class="kw">use </span>mysten_metrics::monitored_scope;
 <span class="kw">use </span>prometheus::IntCounter;
-<span class="kw">use </span>std::cmp::Ordering <span class="kw">as </span>CmpOrdering;
 <span class="kw">use </span>sui_adapter::adapter;
 <span class="kw">use </span>sui_macros::fail_point;
 <span class="kw">use </span>sui_protocol_config::{ProtocolConfig, ProtocolVersion};
@@ -2112,7 +2086,6 @@
 <span class="kw">use </span>sui_types::message_envelope::TrustedEnvelope;
 <span class="kw">use </span>sui_types::messages_checkpoint::{
     CheckpointContents, CheckpointSequenceNumber, CheckpointSignatureMessage, CheckpointSummary,
-    CheckpointTimestamp,
 };
 <span class="kw">use </span>sui_types::messages_consensus::{
     AuthorityCapabilities, ConsensusTransaction, ConsensusTransactionKey, ConsensusTransactionKind,
@@ -2217,8 +2190,6 @@
 
     <span class="doccomment">/// Execution state that has to restart at each epoch change
     </span>execution_component: ExecutionComponents,
-    <span class="doccomment">/// Fast cache for EpochFlag::InMemoryCheckpointRoots
-    </span><span class="kw">pub</span>(<span class="kw">crate</span>) in_memory_checkpoint_roots: bool,
 }
 
 <span class="doccomment">/// AuthorityEpochTables contains tables that contain data that is only valid within an epoch.
@@ -2275,12 +2246,8 @@
     </span><span class="attr">#[default_options_override_fn = <span class="string">&quot;pending_consensus_transactions_table_default_config&quot;</span>]
     </span>pending_consensus_transactions: DBMap&lt;ConsensusTransactionKey, ConsensusTransaction&gt;,
 
-    <span class="comment">// todo - this table will be deleted after switch to EpochFlag::InMemoryCheckpointRoots
-    </span><span class="doccomment">/// This is an inverse index for consensus_message_processed - it allows to select
-    /// all transactions at the specific consensus range
-    ///
-    /// The consensus position for the transaction is defined as first position at which valid
-    /// certificate for this transaction is seen in consensus
+    <span class="doccomment">/// this table is not used
+    </span><span class="attr">#[allow(dead_code)]
     </span>consensus_message_order: DBMap&lt;ExecutionIndices, TransactionDigest&gt;,
 
     <span class="doccomment">/// The following table is used to store a single value (the corresponding key is a constant). The value
@@ -2289,11 +2256,8 @@
     /// every message output by consensus (and in the right order).
     </span>last_consensus_index: DBMap&lt;u64, ExecutionIndicesWithHash&gt;,
 
-    <span class="comment">// todo - this table will be deleted after switch to EpochFlag::InMemoryCheckpointRoots
-    </span><span class="doccomment">/// This table lists all checkpoint boundaries in the consensus sequence
-    ///
-    /// The key in this table is incremental index and value is corresponding narwhal
-    /// consensus output index
+    <span class="doccomment">/// this table is not used
+    </span><span class="attr">#[allow(dead_code)]
     </span>checkpoint_boundary: DBMap&lt;u64, u64&gt;,
 
     <span class="doccomment">/// This table contains current reconfiguration state for validator for current epoch
@@ -2407,7 +2371,7 @@
 
     <span class="kw">pub fn </span>get_all_pending_consensus_transactions(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;ConsensusTransaction&gt; {
         <span class="self">self</span>.pending_consensus_transactions
-            .iter()
+            .unbounded_iter()
             .map(|(_k, v)| v)
             .collect()
     }
@@ -2432,7 +2396,7 @@
         <span class="kw">let </span>epoch_id = committee.epoch;
         <span class="kw">let </span>tables = AuthorityEpochTables::open(epoch_id, parent_path, db_options.clone());
         <span class="kw">let </span>end_of_publish =
-            StakeAggregator::from_iter(committee.clone(), tables.end_of_publish.iter());
+            StakeAggregator::from_iter(committee.clone(), tables.end_of_publish.unbounded_iter());
         <span class="kw">let </span>reconfig_state = tables
             .load_reconfig_state()
             .expect(<span class="string">&quot;Load reconfig state at initialization cannot fail&quot;</span>);
@@ -2470,13 +2434,12 @@
         );
         <span class="kw">let </span>signature_verifier =
             SignatureVerifier::new(committee.clone(), signature_verifier_metrics);
-        <span class="kw">let </span>in_memory_checkpoint_roots = epoch_start_configuration
-            .flags()
-            .contains(<span class="kw-2">&amp;</span>EpochFlag::InMemoryCheckpointRoots);
-        <span class="macro">info!</span>(
-            <span class="string">&quot;in_memory_checkpoint_roots = {}&quot;</span>,
-            in_memory_checkpoint_roots
-        );
+        <span class="kw">let </span>is_validator = committee.authority_index(<span class="kw-2">&amp;</span>name).is_some();
+        <span class="kw">if </span>is_validator {
+            <span class="macro">assert!</span>(epoch_start_configuration
+                .flags()
+                .contains(<span class="kw-2">&amp;</span>EpochFlag::InMemoryCheckpointRoots));
+        }
         <span class="kw">let </span>s = Arc::new(<span class="self">Self </span>{
             committee,
             protocol_config,
@@ -2497,7 +2460,6 @@
             metrics,
             epoch_start_configuration,
             execution_component,
-            in_memory_checkpoint_roots,
         });
         s.update_buffer_stake_metric();
         s
@@ -2691,13 +2653,6 @@
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.tables.next_shared_object_versions.multi_get(ids)<span class="question-mark">?</span>)
     }
 
-    <span class="kw">pub fn </span>get_last_checkpoint_boundary(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (u64, <span class="prelude-ty">Option</span>&lt;u64&gt;) {
-        <span class="kw">match </span><span class="self">self</span>.tables.checkpoint_boundary.iter().skip_to_last().next() {
-            <span class="prelude-val">Some</span>((idx, height)) =&gt; (idx, <span class="prelude-val">Some</span>(height)),
-            <span class="prelude-val">None </span>=&gt; (<span class="number">0</span>, <span class="prelude-val">None</span>),
-        }
-    }
-
     <span class="kw">pub fn </span>get_last_consensus_index(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; SuiResult&lt;ExecutionIndicesWithHash&gt; {
         <span class="self">self</span>.tables
             .last_consensus_index
@@ -2714,31 +2669,10 @@
         <span class="prelude-val">Ok</span>(<span class="self">self
             </span>.tables
             .state_hash_by_checkpoint
-            .iter()
+            .unbounded_iter()
             .skip_to(<span class="kw-2">&amp;</span>from_checkpoint)<span class="question-mark">?
             </span>.take_while(|(checkpoint, <span class="kw">_</span>)| <span class="kw-2">*</span>checkpoint &lt;= to_checkpoint)
             .collect())
-    }
-
-    <span class="kw">pub fn </span>get_transactions_in_checkpoint_range(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        from_height_excluded: <span class="prelude-ty">Option</span>&lt;u64&gt;,
-        to_height_included: u64,
-    ) -&gt; SuiResult&lt;Vec&lt;TransactionDigest&gt;&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>iter = <span class="self">self</span>.tables.consensus_message_order.iter();
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(from_height_excluded) = from_height_excluded {
-            <span class="kw">let </span>last_previous = ExecutionIndices::end_for_commit(from_height_excluded);
-            iter = iter.skip_to(<span class="kw-2">&amp;</span>last_previous)<span class="question-mark">?</span>;
-        }
-        <span class="comment">// skip_to lands to key the last_key or key after it
-        // technically here we need to check if first item in stream has a key equal to last_previous
-        // however in practice this can not happen because number of batches in certificate is
-        // limited and is less then u64::MAX
-        </span><span class="kw">let </span>roots: Vec&lt;<span class="kw">_</span>&gt; = iter
-            .take_while(|(idx, _tx)| idx.last_committed_round &lt;= to_height_included)
-            .map(|(_idx, tx)| tx)
-            .collect();
-        <span class="prelude-val">Ok</span>(roots)
     }
 
     <span class="doccomment">/// Returns future containing the state digest for the given epoch
@@ -2779,7 +2713,7 @@
         <span class="prelude-val">Ok</span>(<span class="self">self
             </span>.tables
             .pending_execution
-            .iter()
+            .unbounded_iter()
             .map(|(<span class="kw">_</span>, cert)| cert.into())
             .collect())
     }
@@ -2838,10 +2772,10 @@
     // successfully for each affected object id.
     </span><span class="kw">async fn </span>get_or_init_next_object_versions(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        tx_data: <span class="kw-2">&amp;</span>TransactionData,
-        objects_to_init: <span class="kw">impl </span>Iterator&lt;Item = ObjectID&gt; + Clone,
+        objects_to_init: <span class="kw">impl </span>Iterator&lt;Item = (ObjectID, SequenceNumber)&gt; + Clone,
         parent_sync_store: <span class="kw">impl </span>ParentSync,
-    ) -&gt; SuiResult&lt;Vec&lt;SequenceNumber&gt;&gt; {
+    ) -&gt; SuiResult&lt;HashMap&lt;ObjectID, SequenceNumber&gt;&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>ret: HashMap&lt;<span class="kw">_</span>, <span class="kw">_</span>&gt;;
         <span class="comment">// Since this can be called from consensus task, we must retry forever - the only other
         // option is to panic. It is extremely unlikely that more than 2 retries will be needed, as
         // the only two writers are the consensus task and checkpoint execution.
@@ -2850,16 +2784,16 @@
             // convince myself of that.
             </span><span class="kw">let </span><span class="kw-2">mut </span>db_transaction = <span class="self">self</span>.tables.next_shared_object_versions.transaction()<span class="question-mark">?</span>;
 
-            <span class="kw">let </span>next_versions = db_transaction.multi_get(
-                <span class="kw-2">&amp;</span><span class="self">self</span>.tables.next_shared_object_versions,
-                objects_to_init.clone(),
-            )<span class="question-mark">?</span>;
+            <span class="kw">let </span>ids = objects_to_init.clone().map(|(id, <span class="kw">_</span>)| id);
 
-            <span class="kw">let </span>uninitialized_objects: Vec&lt;ObjectID&gt; = next_versions
+            <span class="kw">let </span>next_versions =
+                db_transaction.multi_get(<span class="kw-2">&amp;</span><span class="self">self</span>.tables.next_shared_object_versions, ids.clone())<span class="question-mark">?</span>;
+
+            <span class="kw">let </span>uninitialized_objects: Vec&lt;(ObjectID, SequenceNumber)&gt; = next_versions
                 .iter()
                 .zip(objects_to_init.clone())
-                .filter_map(|(next_version, id)| <span class="kw">match </span>next_version {
-                    <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Some</span>(id),
+                .filter_map(|(next_version, id_and_version)| <span class="kw">match </span>next_version {
+                    <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Some</span>(id_and_version),
                     <span class="prelude-val">Some</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>,
                 })
                 .collect();
@@ -2868,34 +2802,31 @@
             // happen every time except the first time an object is used in an epoch.
             </span><span class="kw">if </span>uninitialized_objects.is_empty() {
                 <span class="comment">// unwrap ok - we already verified that next_versions is not missing any keys.
-                </span><span class="kw">return </span><span class="prelude-val">Ok</span>(next_versions.into_iter().map(|v| v.unwrap()).collect());
+                </span><span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="macro">izip!</span>(ids, next_versions.into_iter().map(|v| v.unwrap())).collect());
             }
 
-            <span class="comment">// if the object has never been used before (in any epoch) the initial version comes
-            // from the cert.
-            </span><span class="kw">let </span>initial_versions: HashMap&lt;<span class="kw">_</span>, <span class="kw">_</span>&gt; = tx_data
-                .shared_input_objects()
-                .into_iter()
-                .map(SharedInputObject::into_id_and_version)
+            <span class="kw">let </span>versions_to_write: Vec&lt;<span class="kw">_</span>&gt; = uninitialized_objects
+                .iter()
+                .map(|(id, initial_version)| {
+                    <span class="comment">// Note: we don&#39;t actually need to read from the transaction here, as no writer
+                    // can update parent_sync_store until after get_or_init_next_object_versions
+                    // completes.
+                    </span><span class="kw">match </span>parent_sync_store
+                        .get_latest_parent_entry_ref(<span class="kw-2">*</span>id)
+                        .expect(<span class="string">&quot;read cannot fail&quot;</span>)
+                    {
+                        <span class="prelude-val">Some</span>(objref) =&gt; (<span class="kw-2">*</span>id, objref.<span class="number">1</span>),
+                        <span class="prelude-val">None </span>=&gt; (<span class="kw-2">*</span>id, <span class="kw-2">*</span>initial_version),
+                    }
+                })
                 .collect();
 
-            <span class="kw">let </span>versions_to_write = uninitialized_objects.iter().map(|id| {
-                <span class="comment">// Note: we don&#39;t actually need to read from the transaction here, as no writer
-                // can update parent_sync_store until after get_or_init_next_object_versions
-                // completes.
-                </span><span class="kw">match </span>parent_sync_store
-                    .get_latest_parent_entry_ref(<span class="kw-2">*</span>id)
-                    .expect(<span class="string">&quot;read cannot fail&quot;</span>)
-                {
-                    <span class="prelude-val">Some</span>(objref) =&gt; (<span class="kw-2">*</span>id, objref.<span class="number">1</span>),
-                    <span class="prelude-val">None </span>=&gt; (
-                        <span class="kw-2">*</span>id,
-                        <span class="kw-2">*</span>initial_versions
-                            .get(id)
-                            .expect(<span class="string">&quot;object cannot be missing from shared_input_objects&quot;</span>),
-                    ),
-                }
-            });
+            ret = <span class="macro">izip!</span>(ids.clone(), next_versions.into_iter(),)
+                <span class="comment">// take all the previously initialized versions
+                </span>.filter_map(|(id, next_version)| next_version.map(|v| (id, v)))
+                <span class="comment">// add all the versions we&#39;re going to write
+                </span>.chain(versions_to_write.iter().cloned())
+                .collect();
 
             <span class="macro">debug!</span>(
                 <span class="question-mark">?</span>versions_to_write,
@@ -2906,18 +2837,7 @@
             db_transaction.commit()
         })<span class="question-mark">?</span>;
 
-        <span class="comment">// this case only occurs when there were uninitialized versions, which is rare, so its much
-        // simpler to just re-read all the ids here.
-        </span><span class="kw">let </span>next_versions = <span class="self">self
-            </span>.tables
-            .next_shared_object_versions
-            .multi_get(objects_to_init)<span class="question-mark">?
-            </span>.into_iter()
-            <span class="comment">// unwrap ok - we just finished initializing all versions.
-            </span>.map(|v| v.unwrap())
-            .collect();
-
-        <span class="prelude-val">Ok</span>(next_versions)
+        <span class="prelude-val">Ok</span>(ret)
     }
 
     <span class="kw">async fn </span>set_assigned_shared_object_versions(
@@ -2933,12 +2853,18 @@
             <span class="question-mark">?</span>assigned_versions,
             <span class="string">&quot;set_assigned_shared_object_versions&quot;
         </span>);
-        <span class="self">self</span>.get_or_init_next_object_versions(
-            certificate.data().transaction_data(),
-            assigned_versions.iter().map(|(id, <span class="kw">_</span>)| <span class="kw-2">*</span>id),
-            parent_sync_store,
-        )
-        .<span class="kw">await</span><span class="question-mark">?</span>;
+
+        <span class="attr">#[allow(clippy::needless_collect)]
+        </span><span class="kw">let </span>shared_input_objects: Vec&lt;<span class="kw">_</span>&gt; = certificate
+            .data()
+            .transaction_data()
+            .kind()
+            .shared_input_objects()
+            .map(SharedInputObject::into_id_and_version)
+            .collect();
+
+        <span class="self">self</span>.get_or_init_next_object_versions(shared_input_objects.into_iter(), parent_sync_store)
+            .<span class="kw">await</span><span class="question-mark">?</span>;
         <span class="self">self</span>.tables
             .assigned_shared_object_versions
             .insert(tx_digest, assigned_versions)<span class="question-mark">?</span>;
@@ -2965,11 +2891,6 @@
         )
         .<span class="kw">await
     </span>}
-
-    <span class="kw">pub fn </span>insert_checkpoint_boundary(<span class="kw-2">&amp;</span><span class="self">self</span>, index: u64, height: u64) -&gt; SuiResult {
-        <span class="self">self</span>.tables.checkpoint_boundary.insert(<span class="kw-2">&amp;</span>index, <span class="kw-2">&amp;</span>height)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
-    }
 
     <span class="doccomment">/// When submitting a certificate caller **must** provide a ReconfigState lock guard
     /// and verify that it allows new user certificates
@@ -3157,65 +3078,16 @@
         <span class="self">self</span>.tables.authority_capabilities.values().collect()
     }
 
-    <span class="doccomment">/// Returns Ok(true) if 2f+1 end of publish messages were recorded at this point
-    </span><span class="kw">pub fn </span>record_end_of_publish(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        authority: AuthorityName,
-        key: SequencedConsensusTransactionKey,
-        consensus_index: ExecutionIndicesWithHash,
-    ) -&gt; SuiResult {
-        <span class="kw">let </span><span class="kw-2">mut </span>write_batch = <span class="self">self</span>.tables.last_consensus_index.batch();
-        <span class="comment">// It is ok to just release lock here as this function is the only place that transition into RejectAllCerts state
-        // And this function itself is always executed from consensus task
-        </span><span class="kw">let </span>collected_end_of_publish = <span class="kw">if </span><span class="self">self
-            </span>.get_reconfig_state_read_lock_guard()
-            .should_accept_consensus_certs()
-        {
-            write_batch.insert_batch(<span class="kw-2">&amp;</span><span class="self">self</span>.tables.end_of_publish, [(authority, ())])<span class="question-mark">?</span>;
-            <span class="self">self</span>.end_of_publish.try_lock()
-                .expect(<span class="string">&quot;No contention on Authority::end_of_publish as it is only accessed from consensus handler&quot;</span>)
-                .insert_generic(authority, ()).is_quorum_reached()
-        } <span class="kw">else </span>{
-            <span class="comment">// If we past the stage where we are accepting consensus certificates we also don&#39;t record end of publish messages
-            </span><span class="macro">debug!</span>(<span class="string">&quot;Ignoring end of publish message from validator {:?} as we already collected enough end of publish messages&quot;</span>, authority.concise());
-            <span class="bool-val">false
-        </span>};
-        <span class="kw">let </span>_lock = <span class="kw">if </span>collected_end_of_publish {
-            <span class="macro">debug!</span>(
-                <span class="string">&quot;Collected enough end_of_publish messages with last message from validator {:?}&quot;</span>,
-                authority.concise()
-            );
-            <span class="kw">let </span><span class="kw-2">mut </span>lock = <span class="self">self</span>.get_reconfig_state_write_lock_guard();
-            lock.close_all_certs();
-            <span class="comment">// We store reconfig_state and end_of_publish in same batch to avoid dealing with inconsistency here on restart
-            </span><span class="self">self</span>.store_reconfig_state_batch(<span class="kw-2">&amp;</span>lock, <span class="kw-2">&amp;mut </span>write_batch)<span class="question-mark">?</span>;
-            write_batch.insert_batch(
-                <span class="kw-2">&amp;</span><span class="self">self</span>.tables.final_epoch_checkpoint,
-                [(
-                    <span class="kw-2">&amp;</span>FINAL_EPOCH_CHECKPOINT_INDEX,
-                    <span class="kw-2">&amp;</span>consensus_index.index.last_committed_round,
-                )],
-            )<span class="question-mark">?</span>;
-            <span class="comment">// Holding this lock until end of this function where we write batch to DB
-            </span><span class="prelude-val">Some</span>(lock)
-        } <span class="kw">else </span>{
-            <span class="prelude-val">None
-        </span>};
-        <span class="comment">// Important: we actually rely here on fact that ConsensusHandler panics if it&#39;s operation returns error
-        // If some day we won&#39;t panic in ConsensusHandler on error we need to figure out here how
-        // to revert in-memory state of .end_of_publish and .reconfig_state when write fails
-        </span><span class="self">self</span>.finish_consensus_transaction_process_with_batch(write_batch, key, consensus_index)
-    }
-
     <span class="doccomment">/// Caller is responsible to call consensus_message_processed before this method
     </span><span class="kw">pub async fn </span>record_owned_object_cert_from_consensus(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
+        batch: <span class="kw-2">&amp;mut </span>DBBatch,
         transaction: <span class="kw-2">&amp;</span>SequencedConsensusTransactionKind,
         certificate: <span class="kw-2">&amp;</span>VerifiedExecutableTransaction,
-        consensus_index: ExecutionIndicesWithHash,
+        consensus_index: <span class="kw-2">&amp;</span>ExecutionIndicesWithHash,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;(), SuiError&gt; {
         <span class="kw">let </span>key = transaction.key();
-        <span class="self">self</span>.finish_consensus_certificate_process(key, certificate, consensus_index)
+        <span class="self">self</span>.finish_consensus_certificate_process(batch, key, certificate, consensus_index)
     }
 
     <span class="doccomment">/// Locks a sequence number for the shared objects of the input transaction. Also updates the
@@ -3225,34 +3097,24 @@
     /// Caller is responsible to call consensus_message_processed before this method
     </span><span class="kw">pub async fn </span>record_shared_object_cert_from_consensus(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
+        batch: <span class="kw-2">&amp;mut </span>DBBatch,
+        shared_input_next_versions: <span class="kw-2">&amp;mut </span>HashMap&lt;ObjectID, SequenceNumber&gt;,
         transaction: <span class="kw-2">&amp;</span>SequencedConsensusTransactionKind,
         certificate: <span class="kw-2">&amp;</span>VerifiedExecutableTransaction,
-        consensus_index: ExecutionIndicesWithHash,
-        parent_sync_store: <span class="kw">impl </span>ParentSync,
+        consensus_index: <span class="kw-2">&amp;</span>ExecutionIndicesWithHash,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;(), SuiError&gt; {
         <span class="comment">// Make an iterator to save the certificate.
         </span><span class="kw">let </span>transaction_digest = <span class="kw-2">*</span>certificate.digest();
 
         <span class="comment">// Make an iterator to update the locks of the transaction&#39;s shared objects.
         </span><span class="kw">let </span>shared_input_objects: Vec&lt;<span class="kw">_</span>&gt; = certificate.shared_input_objects().collect();
-        <span class="kw">let </span>ids: Vec&lt;<span class="kw">_</span>&gt; = shared_input_objects
-            .iter()
-            .map(SharedInputObject::id)
-            .collect();
-
-        <span class="kw">let </span>versions = <span class="self">self
-            </span>.get_or_init_next_object_versions(
-                certificate.data().transaction_data(),
-                ids.iter().copied(),
-                <span class="kw-2">&amp;</span>parent_sync_store,
-            )
-            .<span class="kw">await</span><span class="question-mark">?</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>input_object_keys = transaction_input_object_keys(certificate)<span class="question-mark">?</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>assigned_versions = Vec::with_capacity(shared_input_objects.len());
         <span class="kw">let </span><span class="kw-2">mut </span>is_mutable_input = Vec::with_capacity(shared_input_objects.len());
-        <span class="kw">for </span>(SharedInputObject { id, mutable, .. }, version) <span class="kw">in
-            </span>shared_input_objects.iter().zip(versions.into_iter())
+        <span class="kw">for </span>(SharedInputObject { id, mutable, .. }, version) <span class="kw">in </span>shared_input_objects
+            .iter()
+            .map(|obj| (obj, <span class="kw-2">*</span>shared_input_next_versions.get(<span class="kw-2">&amp;</span>obj.id()).unwrap()))
         {
             assigned_versions.push((<span class="kw-2">*</span>id, version));
             input_object_keys.push(ObjectKey(<span class="kw-2">*</span>id, version));
@@ -3261,7 +3123,9 @@
 
         <span class="kw">let </span>next_version =
             SequenceNumber::lamport_increment(input_object_keys.iter().map(|obj| obj.<span class="number">1</span>));
-        <span class="kw">let </span>next_versions: Vec&lt;<span class="kw">_</span>&gt; = assigned_versions
+
+        <span class="comment">// Update the next version for the shared objects.
+        </span>assigned_versions
             .iter()
             .zip(is_mutable_input.into_iter())
             .filter_map(|((id, <span class="kw">_</span>), mutable)| {
@@ -3271,59 +3135,60 @@
                     <span class="prelude-val">None
                 </span>}
             })
-            .collect();
+            .for_each(|(id, version)| {
+                shared_input_next_versions.insert(id, version);
+            });
 
         <span class="macro">trace!</span>(tx_digest = <span class="question-mark">?</span>transaction_digest,
                <span class="question-mark">?</span>assigned_versions, <span class="question-mark">?</span>next_version,
                <span class="string">&quot;locking shared objects&quot;</span>);
 
         <span class="self">self</span>.finish_assign_shared_object_versions(
+            batch,
             transaction.key(),
             certificate,
             consensus_index,
             assigned_versions,
-            next_versions,
         )
     }
 
     <span class="kw">pub fn </span>record_consensus_transaction_processed(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
+        write_batch: <span class="kw-2">&amp;mut </span>DBBatch,
         transaction: <span class="kw-2">&amp;</span>SequencedConsensusTransactionKind,
-        consensus_index: ExecutionIndicesWithHash,
+        consensus_index: <span class="kw-2">&amp;</span>ExecutionIndicesWithHash,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;(), SuiError&gt; {
         <span class="comment">// executable transactions need to use record_(shared|owned)_object_cert_from_consensus
         </span><span class="macro">assert!</span>(!transaction.is_executable_transaction());
         <span class="kw">let </span>key = transaction.key();
-        <span class="kw">let </span>write_batch = <span class="self">self</span>.tables.last_consensus_index.batch();
-        <span class="self">self</span>.finish_consensus_transaction_process_with_batch(write_batch, key, consensus_index)
+        <span class="self">self</span>.finish_consensus_transaction_process_with_batch(write_batch, key, consensus_index)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">pub fn </span>finish_consensus_certificate_process(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
+        write_batch: <span class="kw-2">&amp;mut </span>DBBatch,
         key: SequencedConsensusTransactionKey,
         certificate: <span class="kw-2">&amp;</span>VerifiedExecutableTransaction,
-        consensus_index: ExecutionIndicesWithHash,
+        consensus_index: <span class="kw-2">&amp;</span>ExecutionIndicesWithHash,
     ) -&gt; SuiResult {
-        <span class="kw">let </span>write_batch = <span class="self">self</span>.tables.last_consensus_index.batch();
         <span class="self">self</span>.finish_consensus_certificate_process_with_batch(
             write_batch,
             key,
             certificate,
             consensus_index,
-        )
+        )<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">fn </span>finish_assign_shared_object_versions(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
+        write_batch: <span class="kw-2">&amp;mut </span>DBBatch,
         key: SequencedConsensusTransactionKey,
         certificate: <span class="kw-2">&amp;</span>VerifiedExecutableTransaction,
-        consensus_index: ExecutionIndicesWithHash,
+        consensus_index: <span class="kw-2">&amp;</span>ExecutionIndicesWithHash,
         assigned_versions: Vec&lt;(ObjectID, SequenceNumber)&gt;,
-        next_versions: Vec&lt;(ObjectID, SequenceNumber)&gt;,
     ) -&gt; SuiResult {
-        <span class="comment">// Atomically store all elements.
-        </span><span class="kw">let </span><span class="kw-2">mut </span>write_batch = <span class="self">self</span>.tables.assigned_shared_object_versions.batch();
-
         <span class="kw">let </span>tx_digest = <span class="kw-2">*</span>certificate.digest();
 
         <span class="macro">debug!</span>(
@@ -3336,35 +3201,31 @@
             iter::once((tx_digest, assigned_versions)),
         )<span class="question-mark">?</span>;
 
-        write_batch.insert_batch(<span class="kw-2">&amp;</span><span class="self">self</span>.tables.next_shared_object_versions, next_versions)<span class="question-mark">?</span>;
-
         <span class="self">self</span>.finish_consensus_certificate_process_with_batch(
             write_batch,
             key,
             certificate,
             consensus_index,
-        )
+        )<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="doccomment">/// When we finish processing certificate from consensus we record this information.
     /// Tables updated:
     ///  * consensus_message_processed - indicate that this certificate was processed by consensus
     ///  * last_consensus_index - records last processed position in consensus stream
-    ///  * consensus_message_order - records at what position this transaction was first seen in consensus
     /// Self::consensus_message_processed returns true after this call for given certificate
     </span><span class="kw">fn </span>finish_consensus_transaction_process_with_batch(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="kw-2">mut </span>batch: DBBatch,
+        batch: <span class="kw-2">&amp;mut </span>DBBatch,
         key: SequencedConsensusTransactionKey,
-        consensus_index: ExecutionIndicesWithHash,
+        consensus_index: <span class="kw-2">&amp;</span>ExecutionIndicesWithHash,
     ) -&gt; SuiResult {
         batch.insert_batch(
             <span class="kw-2">&amp;</span><span class="self">self</span>.tables.last_consensus_index,
             [(LAST_CONSENSUS_INDEX_ADDR, consensus_index)],
         )<span class="question-mark">?</span>;
         batch.insert_batch(<span class="kw-2">&amp;</span><span class="self">self</span>.tables.consensus_message_processed, [(key, <span class="bool-val">true</span>)])<span class="question-mark">?</span>;
-        batch.write()<span class="question-mark">?</span>;
-        <span class="self">self</span>.consensus_notify_read.notify(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>());
         <span class="prelude-val">Ok</span>(())
     }
 
@@ -3388,18 +3249,11 @@
 
     <span class="kw">fn </span>finish_consensus_certificate_process_with_batch(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="kw-2">mut </span>batch: DBBatch,
+        batch: <span class="kw-2">&amp;mut </span>DBBatch,
         key: SequencedConsensusTransactionKey,
         certificate: <span class="kw-2">&amp;</span>VerifiedExecutableTransaction,
-        consensus_index: ExecutionIndicesWithHash,
+        consensus_index: <span class="kw-2">&amp;</span>ExecutionIndicesWithHash,
     ) -&gt; SuiResult {
-        <span class="kw">if </span>!<span class="self">self</span>.in_memory_checkpoint_roots {
-            <span class="kw">let </span>transaction_digest = <span class="kw-2">*</span>certificate.digest();
-            batch.insert_batch(
-                <span class="kw-2">&amp;</span><span class="self">self</span>.tables.consensus_message_order,
-                [(consensus_index.index, transaction_digest)],
-            )<span class="question-mark">?</span>;
-        }
         batch.insert_batch(
             <span class="kw-2">&amp;</span><span class="self">self</span>.tables.pending_execution,
             [(<span class="kw-2">*</span>certificate.digest(), certificate.clone().serializable())],
@@ -3414,7 +3268,8 @@
             <span class="kw-2">&amp;</span><span class="self">self</span>.tables.user_signatures_for_checkpoints,
             [(<span class="kw-2">*</span>certificate.digest(), certificate.tx_signatures().to_vec())],
         )<span class="question-mark">?</span>;
-        <span class="self">self</span>.finish_consensus_transaction_process_with_batch(batch, key, consensus_index)
+        <span class="self">self</span>.finish_consensus_transaction_process_with_batch(batch, key, consensus_index)<span class="question-mark">?</span>;
+        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="kw">pub fn </span>final_epoch_checkpoint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; SuiResult&lt;<span class="prelude-ty">Option</span>&lt;u64&gt;&gt; {
@@ -3424,72 +3279,17 @@
             .get(<span class="kw-2">&amp;</span>FINAL_EPOCH_CHECKPOINT_INDEX)<span class="question-mark">?</span>)
     }
 
-    <span class="doccomment">/// Returns transaction digests from consensus_message_order table in the &quot;checkpoint range&quot;.
-    ///
-    /// Checkpoint range is defined from the last seen checkpoint(excluded) to the provided
-    /// to_height (included)
-    </span><span class="kw">pub fn </span>last_checkpoint(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        to_height_included: u64,
-    ) -&gt; SuiResult&lt;<span class="prelude-ty">Option</span>&lt;(u64, Vec&lt;TransactionDigest&gt;)&gt;&gt; {
-        <span class="kw">let </span>(index, from_height_excluded) = <span class="self">self</span>.get_last_checkpoint_boundary();
-
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(from_height_excluded) = from_height_excluded {
-            <span class="kw">if </span>from_height_excluded &gt;= to_height_included {
-                <span class="comment">// Due to crash recovery we might enter this function twice for same boundary
-                </span><span class="macro">debug!</span>(<span class="string">&quot;Not returning last checkpoint - already processed&quot;</span>);
-                <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
-            }
-        }
-
-        <span class="kw">let </span>roots =
-            <span class="self">self</span>.get_transactions_in_checkpoint_range(from_height_excluded, to_height_included)<span class="question-mark">?</span>;
-
-        <span class="macro">debug!</span>(
-            <span class="string">&quot;Selected {} roots between narwhal commit rounds {:?} and {}&quot;</span>,
-            roots.len(),
-            from_height_excluded,
-            to_height_included
-        );
-
-        <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>((index, roots)))
-    }
-    <span class="kw">pub fn </span>record_checkpoint_boundary(<span class="kw-2">&amp;</span><span class="self">self</span>, commit_round: u64) -&gt; SuiResult {
-        <span class="kw">let </span>(index, height) = <span class="self">self</span>.get_last_checkpoint_boundary();
-
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(height) = height {
-            <span class="kw">if </span>height &gt;= commit_round {
-                <span class="comment">// Due to crash recovery we might see same boundary twice
-                </span><span class="macro">debug!</span>(<span class="string">&quot;Not recording checkpoint boundary - already updated&quot;</span>);
-                <span class="kw">return </span><span class="prelude-val">Ok</span>(());
-            }
-        }
-
-        <span class="kw">let </span>index = index + <span class="number">1</span>;
-        <span class="macro">debug!</span>(
-            <span class="string">&quot;Recording checkpoint boundary {} at {}&quot;</span>,
-            index, commit_round
-        );
-        <span class="self">self</span>.insert_checkpoint_boundary(index, commit_round)<span class="question-mark">?</span>;
-        <span class="prelude-val">Ok</span>(())
-    }
-
     <span class="kw">pub fn </span>get_reconfig_state_read_lock_guard(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
     ) -&gt; parking_lot::RwLockReadGuard&lt;ReconfigState&gt; {
         <span class="self">self</span>.reconfig_state_mem.read()
     }
 
-    <span class="kw">pub fn </span>get_reconfig_state_write_lock_guard(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-    ) -&gt; parking_lot::RwLockWriteGuard&lt;ReconfigState&gt; {
+    <span class="kw">pub fn </span>get_reconfig_state_write_lock_guard(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RwLockWriteGuard&lt;ReconfigState&gt; {
         <span class="self">self</span>.reconfig_state_mem.write()
     }
 
-    <span class="kw">pub fn </span>close_user_certs(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="kw-2">mut </span>lock_guard: parking_lot::RwLockWriteGuard&lt;<span class="lifetime">&#39;_</span>, ReconfigState&gt;,
-    ) {
+    <span class="kw">pub fn </span>close_user_certs(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>lock_guard: RwLockWriteGuard&lt;<span class="lifetime">&#39;_</span>, ReconfigState&gt;) {
         lock_guard.close_user_certs();
         <span class="self">self</span>.store_reconfig_state(<span class="kw-2">&amp;</span>lock_guard)
             .expect(<span class="string">&quot;Updating reconfig state cannot fail&quot;</span>);
@@ -3610,33 +3410,224 @@
         <span class="prelude-val">Ok</span>(VerifiedSequencedConsensusTransaction(transaction))
     }
 
+    <span class="kw">fn </span>db_batch(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; DBBatch {
+        <span class="self">self</span>.tables.last_consensus_index.batch()
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async fn </span>process_consensus_transactions_and_commit_boundary&lt;
+        C: CheckpointServiceNotify,
+    &gt;(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        transactions: <span class="kw-2">&amp;</span>[VerifiedSequencedConsensusTransaction],
+        end_of_publish_transactions: <span class="kw-2">&amp;</span>[VerifiedSequencedConsensusTransaction],
+        checkpoint_service: <span class="kw-2">&amp;</span>Arc&lt;C&gt;,
+        parent_sync_store: <span class="kw">impl </span>ParentSync,
+    ) -&gt; SuiResult&lt;Vec&lt;VerifiedExecutableTransaction&gt;&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>batch = <span class="self">self</span>.db_batch();
+        <span class="kw">let </span>(executable_txns, _lock) = <span class="self">self
+            </span>.process_consensus_transactions(
+                <span class="kw-2">&amp;mut </span>batch,
+                transactions,
+                end_of_publish_transactions,
+                checkpoint_service,
+                parent_sync_store,
+            )
+            .<span class="kw">await</span><span class="question-mark">?</span>;
+        batch.write()<span class="question-mark">?</span>;
+
+        <span class="kw">for </span>tx <span class="kw">in </span>transactions
+            .iter()
+            .chain(end_of_publish_transactions.iter())
+        {
+            <span class="kw">let </span>key = tx.<span class="number">0</span>.transaction.key();
+            <span class="self">self</span>.consensus_notify_read.notify(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>());
+        }
+
+        <span class="prelude-val">Ok</span>(executable_txns)
+    }
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async fn </span>process_consensus_transactions_for_tests&lt;C: CheckpointServiceNotify&gt;(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        transactions: Vec&lt;VerifiedSequencedConsensusTransaction&gt;,
+        checkpoint_service: <span class="kw-2">&amp;</span>Arc&lt;C&gt;,
+        parent_sync_store: <span class="kw">impl </span>ParentSync,
+    ) -&gt; SuiResult&lt;Vec&lt;VerifiedExecutableTransaction&gt;&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>batch = <span class="self">self</span>.db_batch();
+
+        <span class="kw">let </span>(transactions, end_of_publish_transactions): (Vec&lt;<span class="kw">_</span>&gt;, Vec&lt;<span class="kw">_</span>&gt;) = transactions
+            .into_iter()
+            .partition(|txn| !txn.<span class="number">0</span>.is_end_of_publish());
+
+        <span class="kw">let </span>(certs, _lock) = <span class="self">self
+            </span>.process_consensus_transactions(
+                <span class="kw-2">&amp;mut </span>batch,
+                <span class="kw-2">&amp;</span>transactions,
+                <span class="kw-2">&amp;</span>end_of_publish_transactions,
+                checkpoint_service,
+                parent_sync_store,
+            )
+            .<span class="kw">await</span><span class="question-mark">?</span>;
+        batch.write()<span class="question-mark">?</span>;
+
+        <span class="kw">for </span>tx <span class="kw">in </span>transactions
+            .iter()
+            .chain(end_of_publish_transactions.iter())
+        {
+            <span class="kw">let </span>key = tx.<span class="number">0</span>.transaction.key();
+            <span class="self">self</span>.consensus_notify_read.notify(<span class="kw-2">&amp;</span>key, <span class="kw-2">&amp;</span>());
+        }
+
+        <span class="prelude-val">Ok</span>(certs)
+    }
+
     <span class="doccomment">/// Depending on the type of the VerifiedSequencedConsensusTransaction wrappers,
     /// - Verify and initialize the state to execute the certificates.
     ///   Return VerifiedCertificates for each executable certificate
     /// - Or update the state for checkpoint or epoch change protocol.
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async fn </span>process_consensus_transactions&lt;C: CheckpointServiceNotify&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        transactions: Vec&lt;VerifiedSequencedConsensusTransaction&gt;,
+        batch: <span class="kw-2">&amp;mut </span>DBBatch,
+        transactions: <span class="kw-2">&amp;</span>[VerifiedSequencedConsensusTransaction],
+        end_of_publish_transactions: <span class="kw-2">&amp;</span>[VerifiedSequencedConsensusTransaction],
         checkpoint_service: <span class="kw-2">&amp;</span>Arc&lt;C&gt;,
         parent_sync_store: <span class="kw">impl </span>ParentSync,
-    ) -&gt; SuiResult&lt;Vec&lt;VerifiedExecutableTransaction&gt;&gt; {
+    ) -&gt; SuiResult&lt;(
+        Vec&lt;VerifiedExecutableTransaction&gt;,
+        <span class="prelude-ty">Option</span>&lt;parking_lot::RwLockWriteGuard&lt;ReconfigState&gt;&gt;,
+    )&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>verified_certificates = Vec::new();
+
+        <span class="comment">// get the current next versions for each shared object in transactions
+        </span><span class="kw">let </span><span class="kw-2">mut </span>shared_input_next_versions = {
+            <span class="kw">let </span>unique_shared_input_objects = {
+                <span class="kw">let </span><span class="kw-2">mut </span>shared_input_objects: Vec&lt;<span class="kw">_</span>&gt; = transactions
+                    .iter()
+                    .filter_map(|tx| tx.<span class="number">0</span>.as_shared_object_txn())
+                    .flat_map(|tx| {
+                        tx.transaction_data()
+                            .shared_input_objects()
+                            .into_iter()
+                            .map(|so| so.into_id_and_version())
+                    })
+                    .collect();
+
+                shared_input_objects.sort();
+                shared_input_objects.dedup();
+                shared_input_objects
+            };
+
+            <span class="self">self</span>.get_or_init_next_object_versions(
+                unique_shared_input_objects.into_iter(),
+                <span class="kw-2">&amp;</span>parent_sync_store,
+            )
+            .<span class="kw">await</span><span class="question-mark">?
+        </span>};
+
         <span class="kw">for </span>tx <span class="kw">in </span>transactions {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(cert) = <span class="self">self
-                </span>.process_consensus_transaction(tx, checkpoint_service, <span class="kw-2">&amp;</span>parent_sync_store)
+                </span>.process_consensus_transaction(
+                    batch,
+                    <span class="kw-2">&amp;mut </span>shared_input_next_versions,
+                    tx,
+                    checkpoint_service,
+                )
                 .<span class="kw">await</span><span class="question-mark">?
             </span>{
                 verified_certificates.push(cert);
             }
         }
-        <span class="prelude-val">Ok</span>(verified_certificates)
+
+        batch.insert_batch(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.tables.next_shared_object_versions,
+            shared_input_next_versions.into_iter(),
+        )<span class="question-mark">?</span>;
+
+        <span class="kw">let </span>lock = <span class="self">self</span>.process_end_of_publish_transactions(batch, end_of_publish_transactions)<span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>((verified_certificates, lock))
+    }
+
+    <span class="kw">fn </span>process_end_of_publish_transactions(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        write_batch: <span class="kw-2">&amp;mut </span>DBBatch,
+        transactions: <span class="kw-2">&amp;</span>[VerifiedSequencedConsensusTransaction],
+    ) -&gt; SuiResult&lt;<span class="prelude-ty">Option</span>&lt;parking_lot::RwLockWriteGuard&lt;ReconfigState&gt;&gt;&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>write_lock = <span class="prelude-val">None</span>;
+
+        <span class="kw">for </span>transaction <span class="kw">in </span>transactions {
+            <span class="kw">let </span>VerifiedSequencedConsensusTransaction(SequencedConsensusTransaction {
+                consensus_index,
+                transaction,
+                ..
+            }) = transaction;
+
+            <span class="kw">if let </span>SequencedConsensusTransactionKind::External(ConsensusTransaction {
+                kind: ConsensusTransactionKind::EndOfPublish(authority),
+                ..
+            }) = transaction
+            {
+                <span class="macro">debug!</span>(<span class="string">&quot;Received EndOfPublish from {:?}&quot;</span>, authority.concise());
+
+                <span class="comment">// It is ok to just release lock here as this function is the only place that transition into RejectAllCerts state
+                // And this function itself is always executed from consensus task
+                </span><span class="kw">let </span>collected_end_of_publish = <span class="kw">if </span>write_lock.is_none()
+                    &amp;&amp; <span class="self">self
+                        </span>.get_reconfig_state_read_lock_guard()
+                        .should_accept_consensus_certs()
+                {
+                    write_batch.insert_batch(<span class="kw-2">&amp;</span><span class="self">self</span>.tables.end_of_publish, [(authority, ())])<span class="question-mark">?</span>;
+                    <span class="self">self</span>.end_of_publish.try_lock()
+                        .expect(<span class="string">&quot;No contention on Authority::end_of_publish as it is only accessed from consensus handler&quot;</span>)
+                        .insert_generic(<span class="kw-2">*</span>authority, ()).is_quorum_reached()
+                } <span class="kw">else </span>{
+                    <span class="comment">// If we past the stage where we are accepting consensus certificates we also don&#39;t record end of publish messages
+                    </span><span class="macro">debug!</span>(<span class="string">&quot;Ignoring end of publish message from validator {:?} as we already collected enough end of publish messages&quot;</span>, authority.concise());
+                    <span class="bool-val">false
+                </span>};
+
+                <span class="kw">if </span>collected_end_of_publish {
+                    <span class="macro">assert!</span>(write_lock.is_none());
+                    <span class="macro">debug!</span>(
+                        <span class="string">&quot;Collected enough end_of_publish messages with last message from validator {:?}&quot;</span>,
+                        authority.concise()
+                    );
+                    <span class="kw">let </span><span class="kw-2">mut </span>lock = <span class="self">self</span>.get_reconfig_state_write_lock_guard();
+                    lock.close_all_certs();
+                    <span class="comment">// We store reconfig_state and end_of_publish in same batch to avoid dealing with inconsistency here on restart
+                    </span><span class="self">self</span>.store_reconfig_state_batch(<span class="kw-2">&amp;</span>lock, write_batch)<span class="question-mark">?</span>;
+                    write_batch.insert_batch(
+                        <span class="kw-2">&amp;</span><span class="self">self</span>.tables.final_epoch_checkpoint,
+                        [(
+                            <span class="kw-2">&amp;</span>FINAL_EPOCH_CHECKPOINT_INDEX,
+                            <span class="kw-2">&amp;</span>consensus_index.index.last_committed_round,
+                        )],
+                    )<span class="question-mark">?</span>;
+                    <span class="comment">// Holding this lock until end of this function where we write batch to DB
+                    </span>write_lock = <span class="prelude-val">Some</span>(lock);
+                };
+                <span class="comment">// Important: we actually rely here on fact that ConsensusHandler panics if it&#39;s operation returns error
+                // If some day we won&#39;t panic in ConsensusHandler on error we need to figure out here how
+                // to revert in-memory state of .end_of_publish and .reconfig_state when write fails
+                </span><span class="self">self</span>.finish_consensus_transaction_process_with_batch(
+                    write_batch,
+                    transaction.key(),
+                    consensus_index,
+                )<span class="question-mark">?</span>;
+            } <span class="kw">else </span>{
+                <span class="macro">panic!</span>(
+                    <span class="string">&quot;process_end_of_publish_transaction called with non-end-of-publish transaction&quot;
+                </span>);
+            }
+        }
+        <span class="prelude-val">Ok</span>(write_lock)
     }
 
     <span class="kw">async fn </span>process_consensus_transaction&lt;C: CheckpointServiceNotify&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        transaction: VerifiedSequencedConsensusTransaction,
+        batch: <span class="kw-2">&amp;mut </span>DBBatch,
+        shared_input_next_versions: <span class="kw-2">&amp;mut </span>HashMap&lt;ObjectID, SequenceNumber&gt;,
+        transaction: <span class="kw-2">&amp;</span>VerifiedSequencedConsensusTransaction,
         checkpoint_service: <span class="kw-2">&amp;</span>Arc&lt;C&gt;,
-        parent_sync_store: <span class="kw">impl </span>ParentSync,
     ) -&gt; SuiResult&lt;<span class="prelude-ty">Option</span>&lt;VerifiedExecutableTransaction&gt;&gt; {
         <span class="kw">let </span>_scope = monitored_scope(<span class="string">&quot;HandleConsensusTransaction&quot;</span>);
         <span class="kw">let </span>VerifiedSequencedConsensusTransaction(SequencedConsensusTransaction {
@@ -3646,6 +3637,7 @@
             transaction,
         }) = transaction;
         <span class="kw">let </span>tracking_id = transaction.get_tracking_id();
+
         <span class="kw">match </span><span class="kw-2">&amp;</span>transaction {
             SequencedConsensusTransactionKind::External(ConsensusTransaction {
                 kind: ConsensusTransactionKind::UserTransaction(certificate),
@@ -3660,7 +3652,7 @@
                     );
                     <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
                 }
-                <span class="kw">if </span><span class="self">self</span>.has_sent_end_of_publish(<span class="kw-2">&amp;</span>certificate_author)<span class="question-mark">? </span>{
+                <span class="kw">if </span><span class="self">self</span>.has_sent_end_of_publish(certificate_author)<span class="question-mark">? </span>{
                     <span class="comment">// This can not happen with valid authority
                     // With some edge cases narwhal might sometimes resend previously seen certificate after EndOfPublish
                     // However this certificate will be filtered out before this line by `consensus_message_processed` call in `verify_consensus_transaction`
@@ -3690,15 +3682,17 @@
 
                 <span class="kw">if </span>certificate.contains_shared_object() {
                     <span class="self">self</span>.record_shared_object_cert_from_consensus(
-                        <span class="kw-2">&amp;</span>transaction,
+                        batch,
+                        shared_input_next_versions,
+                        transaction,
                         <span class="kw-2">&amp;</span>certificate,
                         consensus_index,
-                        parent_sync_store,
                     )
                     .<span class="kw">await</span><span class="question-mark">?</span>;
                 } <span class="kw">else </span>{
                     <span class="self">self</span>.record_owned_object_cert_from_consensus(
-                        <span class="kw-2">&amp;</span>transaction,
+                        batch,
+                        transaction,
                         <span class="kw-2">&amp;</span>certificate,
                         consensus_index,
                     )
@@ -3712,16 +3706,15 @@
                 ..
             }) =&gt; {
                 checkpoint_service.notify_checkpoint_signature(<span class="self">self</span>, info)<span class="question-mark">?</span>;
-                <span class="self">self</span>.record_consensus_transaction_processed(<span class="kw-2">&amp;</span>transaction, consensus_index)<span class="question-mark">?</span>;
+                <span class="self">self</span>.record_consensus_transaction_processed(batch, transaction, consensus_index)<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
             }
             SequencedConsensusTransactionKind::External(ConsensusTransaction {
-                kind: ConsensusTransactionKind::EndOfPublish(authority),
+                kind: ConsensusTransactionKind::EndOfPublish(<span class="kw">_</span>),
                 ..
             }) =&gt; {
-                <span class="macro">debug!</span>(<span class="string">&quot;Received EndOfPublish from {:?}&quot;</span>, authority.concise());
-                <span class="self">self</span>.record_end_of_publish(<span class="kw-2">*</span>authority, transaction.key(), consensus_index)<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
+                <span class="comment">// these are partitioned earlier
+                </span><span class="macro">panic!</span>(<span class="string">&quot;process_consensus_transaction called with end-of-publish transaction&quot;</span>);
             }
             SequencedConsensusTransactionKind::External(ConsensusTransaction {
                 kind: ConsensusTransactionKind::CapabilityNotification(capabilities),
@@ -3743,7 +3736,7 @@
                         authority.concise()
                     );
                 }
-                <span class="self">self</span>.record_consensus_transaction_processed(<span class="kw-2">&amp;</span>transaction, consensus_index)<span class="question-mark">?</span>;
+                <span class="self">self</span>.record_consensus_transaction_processed(batch, transaction, consensus_index)<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
             }
             SequencedConsensusTransactionKind::System(system_transaction) =&gt; {
@@ -3761,10 +3754,11 @@
                 <span class="comment">// If needed we can support owned object system transactions as well...
                 </span><span class="macro">assert!</span>(system_transaction.contains_shared_object());
                 <span class="self">self</span>.record_shared_object_cert_from_consensus(
-                    <span class="kw-2">&amp;</span>transaction,
+                    batch,
+                    shared_input_next_versions,
+                    transaction,
                     system_transaction,
                     consensus_index,
-                    parent_sync_store,
                 )
                 .<span class="kw">await</span><span class="question-mark">?</span>;
 
@@ -3773,55 +3767,11 @@
         }
     }
 
-    <span class="kw">pub fn </span>handle_commit_boundary&lt;C: CheckpointServiceNotify&gt;(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        round: Round,
-        timestamp_ms: CheckpointTimestamp,
-        checkpoint_service: <span class="kw-2">&amp;</span>Arc&lt;C&gt;,
-    ) -&gt; SuiResult {
-        <span class="macro">debug!</span>(<span class="string">&quot;Commit boundary at {}&quot;</span>, round);
-        <span class="comment">// This exchange is restart safe because of following:
-        //
-        // We try to read last checkpoint content and send it to the checkpoint service
-        // CheckpointService::notify_checkpoint is idempotent in case you send same last checkpoint multiple times
-        //
-        // Only after CheckpointService::notify_checkpoint stores checkpoint in it&#39;s store we update checkpoint boundary
-        </span><span class="kw">if let </span><span class="prelude-val">Some</span>((index, roots)) = <span class="self">self</span>.last_checkpoint(round)<span class="question-mark">? </span>{
-            <span class="kw">let </span>final_checkpoint_round = <span class="self">self</span>.final_epoch_checkpoint()<span class="question-mark">?</span>;
-            <span class="kw">let </span>final_checkpoint = <span class="kw">match </span>final_checkpoint_round.map(|r| r.cmp(<span class="kw-2">&amp;</span>round)) {
-                <span class="prelude-val">Some</span>(CmpOrdering::Less) =&gt; {
-                    <span class="macro">debug!</span>(
-                        <span class="string">&quot;Not forming checkpoint for round {} above final checkpoint round {:?}&quot;</span>,
-                        round, final_checkpoint_round
-                    );
-                    <span class="kw">return </span><span class="prelude-val">Ok</span>(());
-                }
-                <span class="prelude-val">Some</span>(CmpOrdering::Equal) =&gt; <span class="bool-val">true</span>,
-                <span class="prelude-val">Some</span>(CmpOrdering::Greater) =&gt; <span class="bool-val">false</span>,
-                <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
-            };
-            <span class="kw">let </span>checkpoint = PendingCheckpoint {
-                roots,
-                details: PendingCheckpointInfo {
-                    timestamp_ms,
-                    last_of_epoch: final_checkpoint,
-                    commit_height: index,
-                },
-            };
-            checkpoint_service.notify_checkpoint(<span class="self">self</span>, checkpoint)<span class="question-mark">?</span>;
-            <span class="kw">if </span>final_checkpoint {
-                <span class="macro">info!</span>(epoch=<span class="question-mark">?</span><span class="self">self</span>.epoch(), <span class="string">&quot;Received 2f+1 EndOfPublish messages, notifying last checkpoint&quot;</span>);
-                <span class="self">self</span>.record_end_of_message_quorum_time_metric();
-            }
-        }
-        <span class="self">self</span>.record_checkpoint_boundary(round)
-    }
-
     <span class="kw">pub fn </span>get_pending_checkpoints(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         last: <span class="prelude-ty">Option</span>&lt;CheckpointCommitHeight&gt;,
     ) -&gt; Vec&lt;(CheckpointCommitHeight, PendingCheckpoint)&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>iter = <span class="self">self</span>.tables.pending_checkpoints.iter();
+        <span class="kw">let </span><span class="kw-2">mut </span>iter = <span class="self">self</span>.tables.pending_checkpoints.unbounded_iter();
         <span class="kw">if let </span><span class="prelude-val">Some</span>(last_processed_height) = last {
             iter = iter
                 .skip_to(<span class="kw-2">&amp;</span>(last_processed_height + <span class="number">1</span>))
@@ -3907,7 +3857,7 @@
     <span class="kw">pub fn </span>last_built_checkpoint_commit_height(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;CheckpointCommitHeight&gt; {
         <span class="self">self</span>.tables
             .builder_checkpoint_summary_v2
-            .iter()
+            .unbounded_iter()
             .skip_to_last()
             .next()
             .and_then(|(<span class="kw">_</span>, b)| b.commit_height)
@@ -3919,7 +3869,7 @@
         <span class="prelude-val">Ok</span>(<span class="self">self
             </span>.tables
             .builder_checkpoint_summary_v2
-            .iter()
+            .unbounded_iter()
             .skip_to_last()
             .next()
             .map(|(seq, s)| (seq, s.summary)))
@@ -3957,14 +3907,14 @@
         <span class="macro">debug!</span>(<span class="string">&quot;Scanning pending checkpoint signatures from {:?}&quot;</span>, key);
         <span class="self">self</span>.tables
             .pending_checkpoint_signatures
-            .iter()
+            .unbounded_iter()
             .skip_to(<span class="kw-2">&amp;</span>key)
     }
 
     <span class="kw">pub fn </span>get_last_checkpoint_signature_index(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
         <span class="self">self</span>.tables
             .pending_checkpoint_signatures
-            .iter()
+            .unbounded_iter()
             .skip_to_last()
             .next()
             .map(|((<span class="kw">_</span>, index), <span class="kw">_</span>)| index)

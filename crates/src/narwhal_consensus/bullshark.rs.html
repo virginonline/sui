@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `narwhal/consensus/src/bullshark.rs`."><title>bullshark.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="narwhal_consensus" data-themes="" data-resource-suffix="" data-rustdoc-version="1.71.0-nightly (2f6bc5d25 2023-05-09)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-6f6ffb5395b17c6e.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../narwhal_consensus/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `narwhal/consensus/src/bullshark.rs`."><title>bullshark.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="narwhal_consensus" data-themes="" data-resource-suffix="" data-rustdoc-version="1.72.0-nightly (1c53407e8 2023-05-28)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../source-files.js"></script><script defer src="../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../narwhal_consensus/index.html"><img class="rust-logo" src="../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -355,16 +355,12 @@
 <a href="#355" id="355">355</a>
 <a href="#356" id="356">356</a>
 <a href="#357" id="357">357</a>
-<a href="#358" id="358">358</a>
-<a href="#359" id="359">359</a>
-<a href="#360" id="360">360</a>
-<a href="#361" id="361">361</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) 2021, Facebook, Inc. and its affiliates
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 </span><span class="kw">use </span><span class="kw">crate</span>::metrics::ConsensusMetrics;
 <span class="kw">use crate</span>::{
-    consensus::{ConsensusProtocol, ConsensusState, Dag},
+    consensus::{ConsensusState, Dag},
     utils, ConsensusError, Outcome,
 };
 <span class="kw">use </span>config::{AuthorityIdentifier, Committee, Stake};
@@ -419,8 +415,125 @@
     </span><span class="kw">pub </span>num_sub_dags_per_schedule: u64,
 }
 
-<span class="kw">impl </span>ConsensusProtocol <span class="kw">for </span>Bullshark {
-    <span class="kw">fn </span>process_certificate(
+<span class="kw">impl </span>Bullshark {
+    <span class="doccomment">/// Create a new Bullshark consensus instance.
+    </span><span class="kw">pub fn </span>new(
+        committee: Committee,
+        store: Arc&lt;ConsensusStore&gt;,
+        metrics: Arc&lt;ConsensusMetrics&gt;,
+        num_sub_dags_per_schedule: u64,
+    ) -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            committee,
+            store,
+            last_successful_leader_election_timestamp: Instant::now(),
+            last_leader_election: LastRound::default(),
+            max_inserted_certificate_round: <span class="number">0</span>,
+            metrics,
+            num_sub_dags_per_schedule,
+        }
+    }
+
+    <span class="comment">// Returns the PublicKey of the authority which is the leader for the provided `round`.
+    // Pay attention that this method will return always the first authority as the leader
+    // when used under a test environment.
+    </span><span class="kw">pub fn </span>leader_authority(committee: <span class="kw-2">&amp;</span>Committee, round: Round) -&gt; AuthorityIdentifier {
+        <span class="macro">assert_eq!</span>(
+            round % <span class="number">2</span>,
+            <span class="number">0</span>,
+            <span class="string">&quot;We should never attempt to do a leader election for odd rounds&quot;
+        </span>);
+
+        <span class="macro">cfg_if::cfg_if! </span>{
+            <span class="kw">if </span><span class="attr">#[cfg(test)] </span>{
+                <span class="comment">// We apply round robin in leader election. Since we expect round to be an even number,
+                // 2, 4, 6, 8... it can&#39;t work well for leader election as we&#39;ll omit leaders. Thus
+                // we can always divide by 2 to get a monotonically incremented sequence,
+                // 2/2 = 1, 4/2 = 2, 6/2 = 3, 8/2 = 4  etc, and then do minus 1 so we can always
+                // start with base zero 0.
+                </span><span class="kw">let </span>next_leader = (round/<span class="number">2 </span>- <span class="number">1</span>) <span class="kw">as </span>usize % committee.size();
+                <span class="kw">let </span>authorities = committee.authorities().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+
+                authorities.get(next_leader).unwrap().id()
+            } <span class="kw">else </span>{
+                <span class="comment">// Elect the leader in a stake-weighted choice seeded by the round
+                </span>committee.leader(round).id()
+            }
+        }
+    }
+
+    <span class="doccomment">/// Returns the certificate (and the certificate&#39;s digest) originated by the leader of the
+    /// specified round (if any).
+    </span><span class="kw">fn </span>leader&lt;<span class="lifetime">&#39;a</span>&gt;(
+        committee: <span class="kw-2">&amp;</span>Committee,
+        round: Round,
+        dag: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Dag,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>(CertificateDigest, Certificate)&gt; {
+        <span class="comment">// Note: this function is often called with even rounds only. While we do not aim at random selection
+        // yet (see issue #10), repeated calls to this function should still pick from the whole roster of leaders.
+        </span><span class="kw">let </span>leader = <span class="self">Self</span>::leader_authority(committee, round);
+
+        <span class="comment">// Return its certificate and the certificate&#39;s digest.
+        </span>dag.get(<span class="kw-2">&amp;</span>round).and_then(|x| x.get(<span class="kw-2">&amp;</span>leader))
+    }
+
+    <span class="doccomment">/// Calculates the reputation score for the current commit by taking into account the reputation
+    /// scores from the previous commit (assuming that exists). It returns the updated reputation score.
+    </span><span class="kw">fn </span>resolve_reputation_score(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        state: <span class="kw-2">&amp;mut </span>ConsensusState,
+        committed_sequence: <span class="kw-2">&amp;</span>[Certificate],
+        sub_dag_index: u64,
+    ) -&gt; ReputationScores {
+        <span class="comment">// we reset the scores for every schedule change window, or initialise when it&#39;s the first
+        // sub dag we are going to create.
+        // TODO: when schedule change is implemented we should probably change a little bit
+        // this logic here.
+        </span><span class="kw">let </span><span class="kw-2">mut </span>reputation_score =
+            <span class="kw">if </span>sub_dag_index == <span class="number">1 </span>|| sub_dag_index % <span class="self">self</span>.num_sub_dags_per_schedule == <span class="number">0 </span>{
+                ReputationScores::new(<span class="kw-2">&amp;</span><span class="self">self</span>.committee)
+            } <span class="kw">else </span>{
+                state
+                    .last_committed_sub_dag
+                    .as_ref()
+                    .expect(<span class="string">&quot;Committed sub dag should always exist for sub_dag_index &gt; 1&quot;</span>)
+                    .reputation_score
+                    .clone()
+            };
+
+        <span class="comment">// update the score for the previous leader. If no previous leader exists,
+        // then this is the first time we commit a leader, so no score update takes place
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(last_committed_sub_dag) = state.last_committed_sub_dag.as_ref() {
+            <span class="kw">for </span>certificate <span class="kw">in </span>committed_sequence {
+                <span class="comment">// TODO: we could iterate only the certificates of the round above the previous leader&#39;s round
+                </span><span class="kw">if </span>certificate
+                    .header()
+                    .parents()
+                    .iter()
+                    .any(|digest| <span class="kw-2">*</span>digest == last_committed_sub_dag.leader.digest())
+                {
+                    reputation_score.add_score(certificate.origin(), <span class="number">1</span>);
+                }
+            }
+        }
+
+        <span class="comment">// we check if this is the last sub dag of the current schedule. If yes then we mark the
+        // scores as final_of_schedule = true so any downstream user can now that those are the last
+        // ones calculated for the current schedule.
+        </span>reputation_score.final_of_schedule =
+            (sub_dag_index + <span class="number">1</span>) % <span class="self">self</span>.num_sub_dags_per_schedule == <span class="number">0</span>;
+
+        <span class="comment">// Always ensure that all the authorities are present in the reputation scores - even
+        // when score is zero.
+        </span><span class="macro">assert_eq!</span>(
+            reputation_score.total_authorities() <span class="kw">as </span>usize,
+            <span class="self">self</span>.committee.size()
+        );
+
+        reputation_score
+    }
+
+    <span class="kw">pub fn </span>process_certificate(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         state: <span class="kw-2">&amp;mut </span>ConsensusState,
         certificate: Certificate,
@@ -512,8 +625,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>committed_sub_dags = Vec::new();
         <span class="kw">let </span><span class="kw-2">mut </span>total_committed_certificates = <span class="number">0</span>;
 
-        <span class="comment">// TODO: duplicated in tusk.rs
-        </span><span class="kw">for </span>leader <span class="kw">in </span>utils::order_leaders(<span class="kw-2">&amp;</span><span class="self">self</span>.committee, leader, state, <span class="self">Self</span>::leader)
+        <span class="kw">for </span>leader <span class="kw">in </span>utils::order_leaders(<span class="kw-2">&amp;</span><span class="self">self</span>.committee, leader, state, <span class="self">Self</span>::leader)
             .iter()
             .rev()
         {
@@ -598,126 +710,6 @@
             .report(total_committed_certificates <span class="kw">as </span>u64);
 
         <span class="prelude-val">Ok</span>((Outcome::Commit, committed_sub_dags))
-    }
-}
-
-<span class="kw">impl </span>Bullshark {
-    <span class="doccomment">/// Create a new Bullshark consensus instance.
-    </span><span class="kw">pub fn </span>new(
-        committee: Committee,
-        store: Arc&lt;ConsensusStore&gt;,
-        metrics: Arc&lt;ConsensusMetrics&gt;,
-        num_sub_dags_per_schedule: u64,
-    ) -&gt; <span class="self">Self </span>{
-        <span class="self">Self </span>{
-            committee,
-            store,
-            last_successful_leader_election_timestamp: Instant::now(),
-            last_leader_election: LastRound::default(),
-            max_inserted_certificate_round: <span class="number">0</span>,
-            metrics,
-            num_sub_dags_per_schedule,
-        }
-    }
-
-    <span class="comment">// Returns the PublicKey of the authority which is the leader for the provided `round`.
-    // Pay attention that this method will return always the first authority as the leader
-    // when used under a test environment.
-    </span><span class="kw">pub fn </span>leader_authority(committee: <span class="kw-2">&amp;</span>Committee, round: Round) -&gt; AuthorityIdentifier {
-        <span class="macro">assert_eq!</span>(
-            round % <span class="number">2</span>,
-            <span class="number">0</span>,
-            <span class="string">&quot;We should never attempt to do a leader election for odd rounds&quot;
-        </span>);
-
-        <span class="macro">cfg_if::cfg_if! </span>{
-            <span class="kw">if </span><span class="attr">#[cfg(test)] </span>{
-                <span class="comment">// We apply round robin in leader election. Since we expect round to be an even number,
-                // 2, 4, 6, 8... it can&#39;t work well for leader election as we&#39;ll omit leaders. Thus
-                // we can always divide by 2 to get a monotonically incremented sequence,
-                // 2/2 = 1, 4/2 = 2, 6/2 = 3, 8/2 = 4  etc, and then do minus 1 so we can always
-                // start with base zero 0.
-                </span><span class="kw">let </span>next_leader = (round/<span class="number">2 </span>- <span class="number">1</span>) <span class="kw">as </span>usize % committee.size();
-                <span class="kw">let </span>authorities = committee.authorities().collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-
-                authorities.get(next_leader).unwrap().id()
-            } <span class="kw">else </span>{
-                <span class="comment">// Elect the leader in a stake-weighted choice seeded by the round
-                </span>committee.leader(round).id()
-            }
-        }
-    }
-
-    <span class="comment">// TODO: duplicated in tusk.rs
-    </span><span class="doccomment">/// Returns the certificate (and the certificate&#39;s digest) originated by the leader of the
-    /// specified round (if any).
-    </span><span class="kw">fn </span>leader&lt;<span class="lifetime">&#39;a</span>&gt;(
-        committee: <span class="kw-2">&amp;</span>Committee,
-        round: Round,
-        dag: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>Dag,
-    ) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">&#39;a </span>(CertificateDigest, Certificate)&gt; {
-        <span class="comment">// Note: this function is often called with even rounds only. While we do not aim at random selection
-        // yet (see issue #10), repeated calls to this function should still pick from the whole roster of leaders.
-        </span><span class="kw">let </span>leader = <span class="self">Self</span>::leader_authority(committee, round);
-
-        <span class="comment">// Return its certificate and the certificate&#39;s digest.
-        </span>dag.get(<span class="kw-2">&amp;</span>round).and_then(|x| x.get(<span class="kw-2">&amp;</span>leader))
-    }
-
-    <span class="doccomment">/// Calculates the reputation score for the current commit by taking into account the reputation
-    /// scores from the previous commit (assuming that exists). It returns the updated reputation score.
-    </span><span class="kw">fn </span>resolve_reputation_score(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        state: <span class="kw-2">&amp;mut </span>ConsensusState,
-        committed_sequence: <span class="kw-2">&amp;</span>[Certificate],
-        sub_dag_index: u64,
-    ) -&gt; ReputationScores {
-        <span class="comment">// we reset the scores for every schedule change window, or initialise when it&#39;s the first
-        // sub dag we are going to create.
-        // TODO: when schedule change is implemented we should probably change a little bit
-        // this logic here.
-        </span><span class="kw">let </span><span class="kw-2">mut </span>reputation_score =
-            <span class="kw">if </span>sub_dag_index == <span class="number">1 </span>|| sub_dag_index % <span class="self">self</span>.num_sub_dags_per_schedule == <span class="number">0 </span>{
-                ReputationScores::new(<span class="kw-2">&amp;</span><span class="self">self</span>.committee)
-            } <span class="kw">else </span>{
-                state
-                    .last_committed_sub_dag
-                    .as_ref()
-                    .expect(<span class="string">&quot;Committed sub dag should always exist for sub_dag_index &gt; 1&quot;</span>)
-                    .reputation_score
-                    .clone()
-            };
-
-        <span class="comment">// update the score for the previous leader. If no previous leader exists,
-        // then this is the first time we commit a leader, so no score update takes place
-        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(last_committed_sub_dag) = state.last_committed_sub_dag.as_ref() {
-            <span class="kw">for </span>certificate <span class="kw">in </span>committed_sequence {
-                <span class="comment">// TODO: we could iterate only the certificates of the round above the previous leader&#39;s round
-                </span><span class="kw">if </span>certificate
-                    .header()
-                    .parents()
-                    .iter()
-                    .any(|digest| <span class="kw-2">*</span>digest == last_committed_sub_dag.leader.digest())
-                {
-                    reputation_score.add_score(certificate.origin(), <span class="number">1</span>);
-                }
-            }
-        }
-
-        <span class="comment">// we check if this is the last sub dag of the current schedule. If yes then we mark the
-        // scores as final_of_schedule = true so any downstream user can now that those are the last
-        // ones calculated for the current schedule.
-        </span>reputation_score.final_of_schedule =
-            (sub_dag_index + <span class="number">1</span>) % <span class="self">self</span>.num_sub_dags_per_schedule == <span class="number">0</span>;
-
-        <span class="comment">// Always ensure that all the authorities are present in the reputation scores - even
-        // when score is zero.
-        </span><span class="macro">assert_eq!</span>(
-            reputation_score.total_authorities() <span class="kw">as </span>usize,
-            <span class="self">self</span>.committee.size()
-        );
-
-        reputation_score
     }
 }
 </code></pre></div></section></main></body></html>
