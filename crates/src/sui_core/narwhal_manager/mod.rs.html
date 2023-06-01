@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-core/src/narwhal_manager/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="sui_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.72.0-nightly (498553fc0 2023-05-29)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../sui_core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/sui-core/src/narwhal_manager/mod.rs`."><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-f3501f0f5ae15dfb.css" id="mainThemeStyle"><div id="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="sui_core" data-themes="" data-resource-suffix="" data-rustdoc-version="1.72.0-nightly (871b59520 2023-05-31)" data-search-js="search-4926e5fc22a5646a.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-0f8c037637f9eb3e.css" data-theme-dark-css="dark-1097f8e92a01e3cf.css" data-theme-ayu-css="ayu-614652228113ac93.css" ></div><script src="../../../static.files/storage-62ce34ea385b278a.js"></script><script defer src="../../../static.files/source-script-11255107d0a65077.js"></script><script defer src="../../../source-files.js"></script><script defer src="../../../static.files/main-f0540c1d82cde29b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../../../static.files/light-0f8c037637f9eb3e.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../../../static.files/dark-1097f8e92a01e3cf.css"><link rel="stylesheet" href="../../../static.files/noscript-13285aec31fa243e.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"></nav><main><nav class="sub"><a class="sub-logo-container" href="../../../sui_core/index.html"><img class="rust-logo" src="../../../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../../../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -279,6 +279,22 @@
 <a href="#279" id="279">279</a>
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
 </pre></div><pre class="rust"><code><span class="comment">// Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
@@ -299,12 +315,13 @@
 <span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::sync::Arc;
 <span class="kw">use </span>std::time::Instant;
+<span class="kw">use </span>sui_protocol_config::{ProtocolConfig, ProtocolVersion};
 <span class="kw">use </span>sui_types::crypto::{AuthorityKeyPair, NetworkKeyPair};
 <span class="kw">use </span>tokio::sync::Mutex;
 
 <span class="attr">#[derive(PartialEq)]
 </span><span class="kw">enum </span>Running {
-    True(Epoch),
+    True(Epoch, ProtocolVersion),
     False,
 }
 
@@ -398,9 +415,17 @@
     }
 
     <span class="comment">// Starts the Narwhal (primary &amp; worker(s)) - if not already running.
+    // Note: After a binary is updated with the new protocol version and the node
+    // is restarted, the protocol config does not take effect until we have a quorum
+    // of validators have updated the binary. Because of this the protocol upgrade
+    // will happen in the following epoch after quorum is reached. In this case NarwhalManager
+    // is not recreated which is why we pass protocol config in at start and not at creation.
+    // To ensure correct behavior an updated protocol config must be passed in at the
+    // start of EACH epoch.
     </span><span class="kw">pub async fn </span>start&lt;State, TxValidator: TransactionValidator&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         committee: Committee,
+        protocol_config: ProtocolConfig,
         worker_cache: WorkerCache,
         execution_state: Arc&lt;State&gt;,
         tx_validator: TxValidator,
@@ -409,10 +434,9 @@
     {
         <span class="kw">let </span><span class="kw-2">mut </span>running = <span class="self">self</span>.running.lock().<span class="kw">await</span>;
 
-        <span class="kw">if let </span>Running::True(epoch) = <span class="kw-2">*</span>running {
+        <span class="kw">if let </span>Running::True(epoch, version) = <span class="kw-2">*</span>running {
             <span class="macro">tracing::warn!</span>(
-                <span class="string">&quot;Narwhal node is already Running at epoch {:?} - shutdown first before starting&quot;</span>,
-                epoch
+                <span class="string">&quot;Narwhal node is already Running for epoch {epoch:?} &amp; protocol version {version:?} - shutdown first before starting&quot;</span>,
             );
             <span class="kw">return</span>;
         }
@@ -428,7 +452,11 @@
 
         <span class="kw">let </span>name = <span class="self">self</span>.primary_keypair.public().clone();
 
-        <span class="macro">tracing::info!</span>(<span class="string">&quot;Starting up Narwhal for epoch {}&quot;</span>, committee.epoch());
+        <span class="macro">tracing::info!</span>(
+            <span class="string">&quot;Starting up Narwhal for epoch {} &amp; protocol version {:?}&quot;</span>,
+            committee.epoch(),
+            protocol_config.version
+        );
 
         <span class="comment">// start primary
         </span><span class="kw">const </span>MAX_PRIMARY_RETRIES: u32 = <span class="number">2</span>;
@@ -440,6 +468,7 @@
                     <span class="self">self</span>.primary_keypair.copy(),
                     <span class="self">self</span>.network_keypair.copy(),
                     committee.clone(),
+                    protocol_config.clone(),
                     worker_cache.clone(),
                     network_client.clone(),
                     <span class="kw-2">&amp;</span>store,
@@ -478,6 +507,7 @@
                     name.clone(),
                     id_keypair_copy,
                     committee.clone(),
+                    protocol_config.clone(),
                     worker_cache.clone(),
                     network_client.clone(),
                     <span class="kw-2">&amp;</span>store,
@@ -500,8 +530,9 @@
         }
 
         <span class="macro">tracing::info!</span>(
-            <span class="string">&quot;Starting up Narwhal for epoch {} is complete - took {} seconds&quot;</span>,
+            <span class="string">&quot;Starting up Narwhal for epoch {} &amp; protocol version {:?} is complete - took {} seconds&quot;</span>,
             committee.epoch(),
+            protocol_config.version,
             now.elapsed().as_secs_f64()
         );
 
@@ -514,7 +545,7 @@
             .set(primary_retries <span class="kw">as </span>i64);
         <span class="self">self</span>.metrics.start_worker_retries.set(worker_retries <span class="kw">as </span>i64);
 
-        <span class="kw-2">*</span>running = Running::True(committee.epoch());
+        <span class="kw-2">*</span>running = Running::True(committee.epoch(), protocol_config.version);
     }
 
     <span class="comment">// Shuts down whole Narwhal (primary &amp; worker(s)) and waits until nodes
@@ -523,16 +554,17 @@
         <span class="kw">let </span><span class="kw-2">mut </span>running = <span class="self">self</span>.running.lock().<span class="kw">await</span>;
 
         <span class="kw">match </span><span class="kw-2">*</span>running {
-            Running::True(epoch) =&gt; {
+            Running::True(epoch, version) =&gt; {
                 <span class="kw">let </span>now = Instant::now();
-                <span class="macro">tracing::info!</span>(<span class="string">&quot;Shutting down Narwhal epoch {:?}&quot;</span>, epoch);
+                <span class="macro">tracing::info!</span>(
+                    <span class="string">&quot;Shutting down Narwhal for epoch {epoch:?} &amp; protocol version {version:?}&quot;
+                </span>);
 
                 <span class="self">self</span>.primary_node.shutdown().<span class="kw">await</span>;
                 <span class="self">self</span>.worker_nodes.shutdown().<span class="kw">await</span>;
 
                 <span class="macro">tracing::info!</span>(
-                    <span class="string">&quot;Narwhal shutdown for epoch {:?} is complete - took {} seconds&quot;</span>,
-                    epoch,
+                    <span class="string">&quot;Narwhal shutdown for epoch {epoch:?} &amp; protocol version {version:?} is complete - took {} seconds&quot;</span>,
                     now.elapsed().as_secs_f64()
                 );
 
