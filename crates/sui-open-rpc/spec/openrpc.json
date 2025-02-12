@@ -12,7 +12,7 @@
       "name": "Apache-2.0",
       "url": "https://raw.githubusercontent.com/MystenLabs/sui/main/LICENSE"
     },
-    "version": "1.4.0"
+    "version": "1.43.0"
   },
   "methods": [
     {
@@ -52,6 +52,13 @@
           "schema": {
             "$ref": "#/components/schemas/BigInt_for_uint64"
           }
+        },
+        {
+          "name": "additional_args",
+          "description": "Additional arguments including gas_budget, gas_objects, gas_sponsor and skip_checks.",
+          "schema": {
+            "$ref": "#/components/schemas/DevInspectArgs"
+          }
         }
       ],
       "result": {
@@ -71,7 +78,7 @@
             },
             {
               "name": "tx_bytes",
-              "value": "AAACACBnxtMcbJcOVn8D72fYEaT4Q2ZbjePygvpIs+AQO6m77QEAagYVO5/EhuEB8OnicDrIZm0GrsxN3355JqNhlwxlpbECAAAAAAAAACDoQ3EipycU+/EOvBcDPFtMkZiSbdzWAw3CwdmQCAtBWAEBAQEBAAEAAC9cVD1xauQ9RT3rOxmbva8bxwMMdoL4dwPc5DEkj+3gASxDgF0Nb1QCp60Npb3sVJx83qBrxKHTOaIlIe6pM7iJAgAAAAAAAAAgnvsgc1pPauyCE27/c+aBnHN3fSsxRAWdEJYzYFOryNAvXFQ9cWrkPUU96zsZm72vG8cDDHaC+HcD3OQxJI/t4AoAAAAAAAAAAC0xAQAAAAAA"
+              "value": "AAACACBnxtMcbJcOVn8D72fYEaT4Q2ZbjePygvpIs+AQO6m77QEAagYVO5/EhuEB8OnicDrIZm0GrsxN3355JqNhlwxlpbECAAAAAAAAACDoQ3EipycU+/EOvBcDPFtMkZiSbdzWAw3CwdmQCAtBWAEBAQEBAAEAAC9cVD1xauQ9RT3rOxmbva8bxwMMdoL4dwPc5DEkj+3gASxDgF0Nb1QCp60Npb3sVJx83qBrxKHTOaIlIe6pM7iJAgAAAAAAAAAgnvsgc1pPauyCE27/c+aBnHN3fSsxRAWdEJYzYFOryNAvXFQ9cWrkPUU96zsZm72vG8cDDHaC+HcD3OQxJI/t4AoAAAAAAAAAoIYBAAAAAAAA"
             },
             {
               "name": "gas_price",
@@ -80,6 +87,10 @@
             {
               "name": "epoch",
               "value": 8888
+            },
+            {
+              "name": "additional_args",
+              "value": null
             }
           ],
           "result": {
@@ -168,13 +179,13 @@
           "params": [
             {
               "name": "tx_bytes",
-              "value": "AAACACB7qR3cfnF89wjJNwYPBASHNuwz+xdG2Zml5YzVxnftgAEAT4LxyFh7mNZMAL+0bDhDvYv2zPp8ZahhOGmM0f3Kw9wCAAAAAAAAACCxDABG4pPAjOwPQHg9msS/SrtNf4IGR/2F0ZGD3ufH/wEBAQEBAAEAAGH7tbTzQqQL2/h/5KlGueONGM+P/HsAALl1F1x7apV2AejYx86GPzE9o9vZKoPvJtEouI/ma/JuDg0Jza9yfR2EAgAAAAAAAAAgzMqpegLMOpgEFnDhYJ23FOmFjJbp5GmFXxzzv9+X6GVh+7W080KkC9v4f+SpRrnjjRjPj/x7AAC5dRdce2qVdgoAAAAAAAAAAC0xAQAAAAAA"
+              "value": "AAACACB7qR3cfnF89wjJNwYPBASHNuwz+xdG2Zml5YzVxnftgAEAT4LxyFh7mNZMAL+0bDhDvYv2zPp8ZahhOGmM0f3Kw9wCAAAAAAAAACCxDABG4pPAjOwPQHg9msS/SrtNf4IGR/2F0ZGD3ufH/wEBAQEBAAEAAGH7tbTzQqQL2/h/5KlGueONGM+P/HsAALl1F1x7apV2AejYx86GPzE9o9vZKoPvJtEouI/ma/JuDg0Jza9yfR2EAgAAAAAAAAAgzMqpegLMOpgEFnDhYJ23FOmFjJbp5GmFXxzzv9+X6GVh+7W080KkC9v4f+SpRrnjjRjPj/x7AAC5dRdce2qVdgoAAAAAAAAAoIYBAAAAAAAA"
             }
           ],
           "result": {
             "name": "Result",
             "value": {
-              "digest": "Gm54bTY5F9KjiCw3kfKpkXPaEE3kx8ToJkYqTsuQDZ7q",
+              "digest": "DNtx7EmGqSywGbnSC1CKoqmBFEXGvApXpRVt6bU855xP",
               "transaction": {
                 "data": {
                   "messageVersion": "v1",
@@ -220,14 +231,14 @@
                     ],
                     "owner": "0x61fbb5b4f342a40bdbf87fe4a946b9e38d18cf8ffc7b0000b975175c7b6a9576",
                     "price": "10",
-                    "budget": "20000000"
+                    "budget": "100000"
                   }
                 },
                 "txSignatures": [
-                  "AGLsaLe6fSvGG/YgrxirjhKqE21kVCcveOW9h0IiCZ1Ei/oAOmu95EnKjoBhLHcS2/2Ga2Ljw0BVnGrY6reYkwVDij1TvBYKLcfLNo8fq6GASb9yfo6uvuwNUBGkTf54wQ=="
+                  "AG+AHZMT7BZWQVagaGfENXyiFQ2nYRkG4XdnwqwToeJEmZ4J1IxKw0xKzTATGiUzFedY/nxKVuHikFibNlZ3wg9Dij1TvBYKLcfLNo8fq6GASb9yfo6uvuwNUBGkTf54wQ=="
                 ]
               },
-              "rawTransaction": "AQAAAAAAAgAge6kd3H5xfPcIyTcGDwQEhzbsM/sXRtmZpeWM1cZ37YABAE+C8chYe5jWTAC/tGw4Q72L9sz6fGWoYThpjNH9ysPcAgAAAAAAAAAgsQwARuKTwIzsD0B4PZrEv0q7TX+CBkf9hdGRg97nx/8BAQEBAQABAABh+7W080KkC9v4f+SpRrnjjRjPj/x7AAC5dRdce2qVdgHo2MfOhj8xPaPb2SqD7ybRKLiP5mvybg4NCc2vcn0dhAIAAAAAAAAAIMzKqXoCzDqYBBZw4WCdtxTphYyW6eRphV8c87/fl+hlYfu1tPNCpAvb+H/kqUa5440Yz4/8ewAAuXUXXHtqlXYKAAAAAAAAAAAtMQEAAAAAAAFhAGLsaLe6fSvGG/YgrxirjhKqE21kVCcveOW9h0IiCZ1Ei/oAOmu95EnKjoBhLHcS2/2Ga2Ljw0BVnGrY6reYkwVDij1TvBYKLcfLNo8fq6GASb9yfo6uvuwNUBGkTf54wQ==",
+              "rawTransaction": "AQAAAAAAAgAge6kd3H5xfPcIyTcGDwQEhzbsM/sXRtmZpeWM1cZ37YABAE+C8chYe5jWTAC/tGw4Q72L9sz6fGWoYThpjNH9ysPcAgAAAAAAAAAgsQwARuKTwIzsD0B4PZrEv0q7TX+CBkf9hdGRg97nx/8BAQEBAQABAABh+7W080KkC9v4f+SpRrnjjRjPj/x7AAC5dRdce2qVdgHo2MfOhj8xPaPb2SqD7ybRKLiP5mvybg4NCc2vcn0dhAIAAAAAAAAAIMzKqXoCzDqYBBZw4WCdtxTphYyW6eRphV8c87/fl+hlYfu1tPNCpAvb+H/kqUa5440Yz4/8ewAAuXUXXHtqlXYKAAAAAAAAAKCGAQAAAAAAAAFhAG+AHZMT7BZWQVagaGfENXyiFQ2nYRkG4XdnwqwToeJEmZ4J1IxKw0xKzTATGiUzFedY/nxKVuHikFibNlZ3wg9Dij1TvBYKLcfLNo8fq6GASb9yfo6uvuwNUBGkTf54wQ==",
               "effects": {
                 "messageVersion": "v1",
                 "status": {
@@ -349,12 +360,12 @@
           "params": [
             {
               "name": "tx_bytes",
-              "value": "AAACACBqEB6aOvXIBwES+Ahkizbvv43uihqC3kbZUE6WoRCKFwEAjvdvVsOZYzousxC8qRJOXy84znOeqsu2YAaIgE4HhEgCAAAAAAAAACB9w3+ufZMpihJFwxtCBojBaGy00TVtFxgN2C6TpIPFqwEBAQEBAAEAAAS0l6kWtGVmCaf6gnoJGE1vR2gdO6dM4NejbGSysfiHAZ+Q9/hmzCnfsdpjc86U+dldylpA9OF2mRjuv5+64AvTAgAAAAAAAAAgjleHL0UiRGjh/BfIFHCJ3EMY/dQA22c2TvNQyVJnbYUEtJepFrRlZgmn+oJ6CRhNb0doHTunTODXo2xksrH4hwoAAAAAAAAAAC0xAQAAAAAA"
+              "value": "AAACACBqEB6aOvXIBwES+Ahkizbvv43uihqC3kbZUE6WoRCKFwEAjvdvVsOZYzousxC8qRJOXy84znOeqsu2YAaIgE4HhEgCAAAAAAAAACB9w3+ufZMpihJFwxtCBojBaGy00TVtFxgN2C6TpIPFqwEBAQEBAAEAAAS0l6kWtGVmCaf6gnoJGE1vR2gdO6dM4NejbGSysfiHAZ+Q9/hmzCnfsdpjc86U+dldylpA9OF2mRjuv5+64AvTAgAAAAAAAAAgjleHL0UiRGjh/BfIFHCJ3EMY/dQA22c2TvNQyVJnbYUEtJepFrRlZgmn+oJ6CRhNb0doHTunTODXo2xksrH4hwoAAAAAAAAAoIYBAAAAAAAA"
             },
             {
               "name": "signatures",
               "value": [
-                "AEZc4UMAoxzWtp+i1dvyOgmy+Eeb/5ZNwO5dpHBqX5Rt36+HhYnBby8asFU4b0i7TjQZGgLahT8w3NQUfk0NUQnqvbuA0Q1Bqu4RHV3JPpqmH+C527hWJGUBOZN1j9sg8w=="
+                "AKD4XdltkCyBi1Heb4EJJ3lzuV3F4u7+CYeaE+Fd7qXpaT17yd4tHWjMf4CWq3TuXBLxTpkc2MV39P6p7eMV8QnqvbuA0Q1Bqu4RHV3JPpqmH+C527hWJGUBOZN1j9sg8w=="
               ]
             },
             {
@@ -365,7 +376,8 @@
                 "showEffects": true,
                 "showEvents": true,
                 "showObjectChanges": true,
-                "showBalanceChanges": true
+                "showBalanceChanges": true,
+                "showRawEffects": false
               }
             },
             {
@@ -376,7 +388,7 @@
           "result": {
             "name": "Result",
             "value": {
-              "digest": "BgSFSEFYbCrVUJJtHFeoLmLJi8jDf1CpC2o8S33HjeDJ",
+              "digest": "Gx7V6EteEAqSsptc1kbi1nUEMP7mhr4qV2cYS7JjzbBd",
               "transaction": {
                 "data": {
                   "messageVersion": "v1",
@@ -422,14 +434,14 @@
                     ],
                     "owner": "0x04b497a916b4656609a7fa827a09184d6f47681d3ba74ce0d7a36c64b2b1f887",
                     "price": "10",
-                    "budget": "20000000"
+                    "budget": "100000"
                   }
                 },
                 "txSignatures": [
-                  "AEZc4UMAoxzWtp+i1dvyOgmy+Eeb/5ZNwO5dpHBqX5Rt36+HhYnBby8asFU4b0i7TjQZGgLahT8w3NQUfk0NUQnqvbuA0Q1Bqu4RHV3JPpqmH+C527hWJGUBOZN1j9sg8w=="
+                  "AKD4XdltkCyBi1Heb4EJJ3lzuV3F4u7+CYeaE+Fd7qXpaT17yd4tHWjMf4CWq3TuXBLxTpkc2MV39P6p7eMV8QnqvbuA0Q1Bqu4RHV3JPpqmH+C527hWJGUBOZN1j9sg8w=="
                 ]
               },
-              "rawTransaction": "AQAAAAAAAgAgahAemjr1yAcBEvgIZIs277+N7ooagt5G2VBOlqEQihcBAI73b1bDmWM6LrMQvKkSTl8vOM5znqrLtmAGiIBOB4RIAgAAAAAAAAAgfcN/rn2TKYoSRcMbQgaIwWhstNE1bRcYDdguk6SDxasBAQEBAQABAAAEtJepFrRlZgmn+oJ6CRhNb0doHTunTODXo2xksrH4hwGfkPf4Zswp37HaY3POlPnZXcpaQPThdpkY7r+fuuAL0wIAAAAAAAAAII5Xhy9FIkRo4fwXyBRwidxDGP3UANtnNk7zUMlSZ22FBLSXqRa0ZWYJp/qCegkYTW9HaB07p0zg16NsZLKx+IcKAAAAAAAAAAAtMQEAAAAAAAFhAEZc4UMAoxzWtp+i1dvyOgmy+Eeb/5ZNwO5dpHBqX5Rt36+HhYnBby8asFU4b0i7TjQZGgLahT8w3NQUfk0NUQnqvbuA0Q1Bqu4RHV3JPpqmH+C527hWJGUBOZN1j9sg8w==",
+              "rawTransaction": "AQAAAAAAAgAgahAemjr1yAcBEvgIZIs277+N7ooagt5G2VBOlqEQihcBAI73b1bDmWM6LrMQvKkSTl8vOM5znqrLtmAGiIBOB4RIAgAAAAAAAAAgfcN/rn2TKYoSRcMbQgaIwWhstNE1bRcYDdguk6SDxasBAQEBAQABAAAEtJepFrRlZgmn+oJ6CRhNb0doHTunTODXo2xksrH4hwGfkPf4Zswp37HaY3POlPnZXcpaQPThdpkY7r+fuuAL0wIAAAAAAAAAII5Xhy9FIkRo4fwXyBRwidxDGP3UANtnNk7zUMlSZ22FBLSXqRa0ZWYJp/qCegkYTW9HaB07p0zg16NsZLKx+IcKAAAAAAAAAKCGAQAAAAAAAAFhAKD4XdltkCyBi1Heb4EJJ3lzuV3F4u7+CYeaE+Fd7qXpaT17yd4tHWjMf4CWq3TuXBLxTpkc2MV39P6p7eMV8QnqvbuA0Q1Bqu4RHV3JPpqmH+C527hWJGUBOZN1j9sg8w==",
               "effects": {
                 "messageVersion": "v1",
                 "status": {
@@ -502,7 +514,7 @@
           "name": "Read API"
         }
       ],
-      "description": "Return the chain's identifier",
+      "description": "Return the first four bytes of the chain's genesis checkpoint digest.",
       "params": [],
       "result": {
         "name": "String",
@@ -510,7 +522,17 @@
         "schema": {
           "type": "string"
         }
-      }
+      },
+      "examples": [
+        {
+          "name": "Gets the identifier for the chain receiving the POST.",
+          "params": [],
+          "result": {
+            "name": "Result",
+            "value": "4c78adac"
+          }
+        }
+      ]
     },
     {
       "name": "sui_getCheckpoint",
@@ -770,6 +792,7 @@
                   "parsedJson": {
                     "test": "example value"
                   },
+                  "bcsEncoding": "base64",
                   "bcs": ""
                 }
               ],
@@ -806,72 +829,6 @@
           "result": {
             "name": "Result",
             "value": "507021"
-          }
-        }
-      ]
-    },
-    {
-      "name": "sui_getLoadedChildObjects",
-      "tags": [
-        {
-          "name": "Read API"
-        }
-      ],
-      "params": [
-        {
-          "name": "digest",
-          "required": true,
-          "schema": {
-            "$ref": "#/components/schemas/TransactionDigest"
-          }
-        }
-      ],
-      "result": {
-        "name": "SuiLoadedChildObjectsResponse",
-        "required": true,
-        "schema": {
-          "$ref": "#/components/schemas/LoadedChildObjectsResponse"
-        }
-      },
-      "examples": [
-        {
-          "name": "Gets loaded child objects associated with the transaction the request provides.",
-          "params": [
-            {
-              "name": "digest",
-              "value": "6hpz6Qxv6t5VkNT5rcBKQS2Jootr6WHuSuRMLmmN13Jg"
-            }
-          ],
-          "result": {
-            "name": "Result",
-            "value": {
-              "loadedChildObjects": [
-                {
-                  "objectId": "0xb6a23efeb7298cf0a8d0b837b78749c2cfc711c42036cc6b76211639f3606a53",
-                  "sequenceNumber": "2462820"
-                },
-                {
-                  "objectId": "0xf61f3a566963b3eac49fe3bb57d304a454ed2f4859b44f4e49180047d5fa0a82",
-                  "sequenceNumber": "2462820"
-                },
-                {
-                  "objectId": "0xd55c32b09995a0ae1eedfee9c7b1354e805ed10ee3d0800105867da4655eca6d",
-                  "sequenceNumber": "2164186"
-                },
-                {
-                  "objectId": "0x258bfd1ad92af329a07781ee71e60065e00f2de961630d3505f8905a0f4d42c6",
-                  "sequenceNumber": "3350147"
-                },
-                {
-                  "objectId": "0xa78a6ba2b28f68a3299ec3417bbabc6717dcc95b9e341bc3aba1654bdbad707d",
-                  "sequenceNumber": "3560717"
-                },
-                {
-                  "objectId": "0xcd773bd6309363447ef3fe58a960de92aa9377b3482580ee8d5bdc5b824808df",
-                  "sequenceNumber": "3560717"
-                }
-              ]
-            }
           }
         }
       ]
@@ -923,7 +880,7 @@
           "params": [
             {
               "name": "package",
-              "value": "0x007efb0f94f1e64d2e8090c619a39299d87ee8070b5f56bb10bafa0e2261d819"
+              "value": "0xa0a7b108f5023b7356f2c6a4be6f058e267aae38e08260c7d519d8641897490c"
             },
             {
               "name": "module",
@@ -1003,7 +960,7 @@
           "params": [
             {
               "name": "package",
-              "value": "0xb2582f82ab308bf9c96dfb22ec7345db1b5f14fdb2b9538efb160d31842e3a17"
+              "value": "0x9c4eb6769ca8b6a23efeb7298cf0a8d0b837b78749c2cfc711c42036cc6b7621"
             },
             {
               "name": "module_name",
@@ -1075,7 +1032,7 @@
           "params": [
             {
               "name": "package",
-              "value": "0x16dc6797cf787c839a07edc03e633842109123618df6438d21a48040e6bb568c"
+              "value": "0x0047d5fa0a823e7d0ff4d55c32b09995a0ae1eedfee9c7b1354e805ed10ee3d0"
             },
             {
               "name": "module_name",
@@ -1086,7 +1043,7 @@
             "name": "Result",
             "value": {
               "fileFormatVersion": 6,
-              "address": "0x43cc4c24010dafad05b12619b275649741cc9060d87664c26a3f9a509228c21b",
+              "address": "0x1639f3606a53f61f3a566963b3eac49fe3bb57d304a454ed2f4859b44f4e4918",
               "name": "module",
               "friends": [],
               "structs": {},
@@ -1129,14 +1086,14 @@
           "params": [
             {
               "name": "package",
-              "value": "0xece356d10d89e75f565b0934851ba8d5bc59462a46078b90f1f508a1e4fd4eed"
+              "value": "0x61630d3505f8905a0f4d42c6ff39a78a6ba2b28f68a3299ec3417bbabc6717dc"
             }
           ],
           "result": {
             "name": "Result",
             "value": {
               "fileFormatVersion": 6,
-              "address": "0xafc13246bd847c60448160e0358cac4a11345594d02890c986dbf328d28d21ac",
+              "address": "0x800105867da4655eca6d9eb1258bfd1ad92af329a07781ee71e60065e00f2de9",
               "name": "module",
               "friends": [],
               "structs": {},
@@ -1190,7 +1147,7 @@
           "params": [
             {
               "name": "package",
-              "value": "0x46c25c211cb35c05d801c769b78770474957b37379c527753c5c8ab783f697e7"
+              "value": "0xc95b9e341bc3aba1654bdbad707dcd773bd6309363447ef3fe58a960de92aa93"
             },
             {
               "name": "module_name",
@@ -1337,24 +1294,80 @@
             "name": "Result",
             "value": {
               "minSupportedProtocolVersion": "1",
-              "maxSupportedProtocolVersion": "12",
+              "maxSupportedProtocolVersion": "74",
               "protocolVersion": "6",
               "featureFlags": {
+                "accept_zklogin_in_multisig": false,
                 "advance_epoch_start_time_in_safe_mode": true,
                 "advance_to_highest_supported_protocol_version": false,
+                "allow_receiving_object_id": false,
+                "authority_capabilities_v2": false,
                 "ban_entry_init": false,
+                "bridge": false,
                 "commit_root_state_digest": false,
+                "consensus_distributed_vote_scoring_strategy": false,
+                "consensus_linearize_subdag_v2": false,
                 "consensus_order_end_of_epoch_last": true,
+                "consensus_round_prober": false,
+                "consensus_round_prober_probe_accepted_rounds": false,
+                "consensus_smart_ancestor_selection": false,
+                "consensus_zstd_compression": false,
+                "convert_type_argument_error": false,
                 "disable_invariant_violation_check_in_swap_loc": false,
                 "disallow_adding_abilities_on_upgrade": false,
                 "disallow_change_struct_type_params_on_upgrade": false,
+                "disallow_new_modules_in_deps_only_packages": false,
+                "enable_coin_deny_list": false,
+                "enable_coin_deny_list_v2": false,
+                "enable_effects_v2": false,
+                "enable_group_ops_native_function_msm": false,
+                "enable_group_ops_native_functions": false,
+                "enable_jwk_consensus_updates": false,
+                "enable_nitro_attestation": false,
+                "enable_poseidon": false,
+                "enable_vdf": false,
+                "end_of_epoch_transaction_supported": false,
+                "fresh_vm_on_framework_upgrade": false,
+                "hardened_otw_check": false,
+                "include_consensus_digest_in_prologue": false,
+                "loaded_child_object_format": false,
+                "loaded_child_object_format_type": false,
                 "loaded_child_objects_fixed": true,
                 "missing_type_is_compatibility_error": true,
+                "mysticeti_fastpath": false,
+                "mysticeti_leader_scoring_and_schedule": false,
+                "mysticeti_use_committed_subdag_digest": false,
+                "narwhal_certificate_v2": false,
+                "narwhal_new_leader_election_schedule": false,
                 "narwhal_versioned_metadata": false,
+                "native_charging_v2": false,
                 "no_extraneous_module_bytes": false,
                 "package_digest_hash_module": false,
                 "package_upgrades": true,
+                "passkey_auth": false,
+                "prepend_prologue_tx_in_consensus_commit_in_checkpoints": false,
+                "random_beacon": false,
+                "receive_objects": false,
+                "recompute_has_public_transfer_in_execution": false,
+                "record_consensus_determined_version_assignments_in_prologue": false,
+                "record_consensus_determined_version_assignments_in_prologue_v2": false,
+                "reject_mutable_random_on_entry_functions": false,
+                "relocate_event_module": false,
+                "reshare_at_same_initial_version": false,
+                "resolve_abort_locations_to_package_id": false,
+                "rethrow_serialization_type_layout_errors": false,
                 "scoring_decision_with_validity_cutoff": true,
+                "shared_object_deletion": false,
+                "simple_conservation_checks": false,
+                "simplified_unwrap_then_delete": false,
+                "soft_bundle": false,
+                "throughput_aware_consensus_submission": false,
+                "txn_base_cost_as_multiplier": false,
+                "uncompressed_g1_group_elements": false,
+                "upgraded_multisig_supported": false,
+                "validate_identifier_inputs": false,
+                "variant_nodes": false,
+                "verify_legacy_zklogin_address": false,
                 "zklogin_auth": false
               },
               "attributes": {
@@ -1367,12 +1380,34 @@
                 "address_to_u256_cost_base": {
                   "u64": "52"
                 },
+                "allowed_txn_cost_overage_burst_per_object_in_commit": null,
                 "base_tx_cost_fixed": {
                   "u64": "2000"
                 },
                 "base_tx_cost_per_byte": {
                   "u64": "0"
                 },
+                "bcs_failure_cost": null,
+                "bcs_legacy_min_output_size_cost": null,
+                "bcs_per_byte_serialized_cost": null,
+                "binary_address_identifiers": null,
+                "binary_constant_pool": null,
+                "binary_enum_def_instantiations": null,
+                "binary_enum_defs": null,
+                "binary_field_handles": null,
+                "binary_field_instantiations": null,
+                "binary_friend_decls": null,
+                "binary_function_defs": null,
+                "binary_function_handles": null,
+                "binary_function_instantiations": null,
+                "binary_identifiers": null,
+                "binary_module_handles": null,
+                "binary_signatures": null,
+                "binary_struct_def_instantiations": null,
+                "binary_struct_defs": null,
+                "binary_struct_handles": null,
+                "binary_variant_handles": null,
+                "binary_variant_instantiation_handles": null,
                 "bls12381_bls12381_min_pk_verify_cost_base": {
                   "u64": "52"
                 },
@@ -1391,12 +1426,26 @@
                 "bls12381_bls12381_min_sig_verify_msg_cost_per_byte": {
                   "u64": "2"
                 },
+                "bridge_should_try_to_finalize_committee": null,
                 "buffer_stake_for_protocol_upgrade_bps": {
                   "u64": "5000"
                 },
+                "check_zklogin_id_cost_base": null,
+                "check_zklogin_issuer_cost_base": null,
+                "checkpoint_summary_version_specific_data": null,
+                "config_read_setting_impl_cost_base": null,
+                "config_read_setting_impl_cost_per_byte": null,
+                "consensus_bad_nodes_stake_threshold": null,
+                "consensus_gc_depth": null,
+                "consensus_max_num_transactions_in_block": null,
+                "consensus_max_transaction_size_bytes": null,
+                "consensus_max_transactions_in_block_bytes": null,
+                "consensus_voting_rounds": null,
                 "crypto_invalid_arguments_cost": {
                   "u64": "100"
                 },
+                "debug_print_base_cost": null,
+                "debug_print_stack_trace_base_cost": null,
                 "dynamic_field_add_child_object_cost_base": {
                   "u64": "100"
                 },
@@ -1556,9 +1605,13 @@
                 "event_emit_value_size_derivation_cost_per_byte": {
                   "u64": "2"
                 },
+                "execution_version": null,
+                "gas_budget_based_txn_cost_absolute_cap_commit_count": null,
+                "gas_budget_based_txn_cost_cap_factor": null,
                 "gas_model_version": {
                   "u64": "5"
                 },
+                "gas_rounding_step": null,
                 "groth16_prepare_verifying_key_bls12381_cost_base": {
                   "u64": "52"
                 },
@@ -1580,6 +1633,41 @@
                 "groth16_verify_groth16_proof_internal_public_input_cost_per_byte": {
                   "u64": "2"
                 },
+                "group_ops_bls12381_decode_g1_cost": null,
+                "group_ops_bls12381_decode_g2_cost": null,
+                "group_ops_bls12381_decode_gt_cost": null,
+                "group_ops_bls12381_decode_scalar_cost": null,
+                "group_ops_bls12381_g1_add_cost": null,
+                "group_ops_bls12381_g1_div_cost": null,
+                "group_ops_bls12381_g1_hash_to_base_cost": null,
+                "group_ops_bls12381_g1_hash_to_cost_per_byte": null,
+                "group_ops_bls12381_g1_msm_base_cost": null,
+                "group_ops_bls12381_g1_msm_base_cost_per_input": null,
+                "group_ops_bls12381_g1_mul_cost": null,
+                "group_ops_bls12381_g1_sub_cost": null,
+                "group_ops_bls12381_g1_to_uncompressed_g1_cost": null,
+                "group_ops_bls12381_g2_add_cost": null,
+                "group_ops_bls12381_g2_div_cost": null,
+                "group_ops_bls12381_g2_hash_to_base_cost": null,
+                "group_ops_bls12381_g2_hash_to_cost_per_byte": null,
+                "group_ops_bls12381_g2_msm_base_cost": null,
+                "group_ops_bls12381_g2_msm_base_cost_per_input": null,
+                "group_ops_bls12381_g2_mul_cost": null,
+                "group_ops_bls12381_g2_sub_cost": null,
+                "group_ops_bls12381_gt_add_cost": null,
+                "group_ops_bls12381_gt_div_cost": null,
+                "group_ops_bls12381_gt_mul_cost": null,
+                "group_ops_bls12381_gt_sub_cost": null,
+                "group_ops_bls12381_msm_max_len": null,
+                "group_ops_bls12381_pairing_cost": null,
+                "group_ops_bls12381_scalar_add_cost": null,
+                "group_ops_bls12381_scalar_div_cost": null,
+                "group_ops_bls12381_scalar_mul_cost": null,
+                "group_ops_bls12381_scalar_sub_cost": null,
+                "group_ops_bls12381_uncompressed_g1_sum_base_cost": null,
+                "group_ops_bls12381_uncompressed_g1_sum_cost_per_term": null,
+                "group_ops_bls12381_uncompressed_g1_sum_max_terms": null,
+                "group_ops_bls12381_uncompressed_g1_to_g1_cost": null,
                 "hash_blake2b256_cost_base": {
                   "u64": "52"
                 },
@@ -1598,6 +1686,12 @@
                 "hash_keccak256_data_cost_per_byte": {
                   "u64": "2"
                 },
+                "hash_sha2_256_base_cost": null,
+                "hash_sha2_256_legacy_min_input_len_cost": null,
+                "hash_sha2_256_per_byte_cost": null,
+                "hash_sha3_256_base_cost": null,
+                "hash_sha3_256_legacy_min_input_len_cost": null,
+                "hash_sha3_256_per_byte_cost": null,
                 "hmac_hmac_sha3_256_cost_base": {
                   "u64": "52"
                 },
@@ -1607,6 +1701,10 @@
                 "hmac_hmac_sha3_256_input_cost_per_byte": {
                   "u64": "2"
                 },
+                "max_accumulated_randomness_txn_cost_per_object_in_mysticeti_commit": null,
+                "max_accumulated_txn_cost_per_object_in_mysticeti_commit": null,
+                "max_accumulated_txn_cost_per_object_in_narwhal_commit": null,
+                "max_age_of_jwk_in_epochs": null,
                 "max_arguments": {
                   "u32": "512"
                 },
@@ -1622,12 +1720,14 @@
                 "max_checkpoint_size_bytes": {
                   "u64": "31457280"
                 },
+                "max_deferral_rounds_for_congestion_control": null,
                 "max_dependency_depth": {
                   "u64": "100"
                 },
                 "max_event_emit_size": {
                   "u64": "256000"
                 },
+                "max_event_emit_size_total": null,
                 "max_fields_in_struct": {
                   "u64": "32"
                 },
@@ -1652,15 +1752,18 @@
                 "max_input_objects": {
                   "u64": "2048"
                 },
+                "max_jwk_votes_per_validator_per_epoch": null,
                 "max_loop_depth": {
                   "u64": "5"
                 },
                 "max_meter_ticks_per_module": {
                   "u64": "6000000"
                 },
+                "max_meter_ticks_per_package": null,
                 "max_modules_in_publish": {
                   "u32": "128"
                 },
+                "max_move_enum_variants": null,
                 "max_move_identifier_len": null,
                 "max_move_object_size": {
                   "u64": "256000"
@@ -1693,9 +1796,11 @@
                 "max_num_transferred_move_object_ids_system_tx": {
                   "u64": "32768"
                 },
+                "max_package_dependencies": null,
                 "max_programmable_tx_commands": {
                   "u32": "1024"
                 },
+                "max_publish_or_upgrade_per_ptb": null,
                 "max_pure_argument_size": {
                   "u32": "16384"
                 },
@@ -1714,6 +1819,7 @@
                 "max_size_written_objects_system_tx": {
                   "u64": "50000000"
                 },
+                "max_soft_bundle_size": null,
                 "max_struct_definitions": {
                   "u64": "200"
                 },
@@ -1726,6 +1832,7 @@
                 "max_tx_size_bytes": {
                   "u64": "131072"
                 },
+                "max_txn_cost_overage_per_object_in_commit": null,
                 "max_type_argument_depth": {
                   "u32": "16"
                 },
@@ -1735,15 +1842,22 @@
                 "max_type_nodes": {
                   "u64": "256"
                 },
+                "max_type_to_layout_nodes": null,
                 "max_value_stack_size": {
                   "u64": "1024"
                 },
                 "max_verifier_meter_ticks_per_function": {
                   "u64": "6000000"
                 },
+                "min_checkpoint_interval_ms": null,
+                "min_move_binary_format_version": null,
                 "move_binary_format_version": {
                   "u32": "6"
                 },
+                "nitro_attestation_parse_base_cost": null,
+                "nitro_attestation_parse_cost_per_byte": null,
+                "nitro_attestation_verify_base_cost": null,
+                "nitro_attestation_verify_cost_per_cert": null,
                 "obj_access_cost_delete_per_byte": {
                   "u64": "40"
                 },
@@ -1789,15 +1903,17 @@
                 "package_publish_cost_per_byte": {
                   "u64": "80"
                 },
+                "poseidon_bn254_cost_base": null,
+                "poseidon_bn254_cost_per_block": null,
+                "random_beacon_dkg_timeout_round": null,
+                "random_beacon_dkg_version": null,
+                "random_beacon_min_round_interval_ms": null,
+                "random_beacon_reduction_allowed_delta": null,
+                "random_beacon_reduction_lower_bound": null,
                 "reward_slashing_rate": {
                   "u64": "10000"
                 },
-                "scoring_decision_cutoff_value": {
-                  "f64": "2.5"
-                },
-                "scoring_decision_mad_divisor": {
-                  "f64": "2.3"
-                },
+                "sip_45_consensus_amplification_threshold": null,
                 "storage_fund_reinvest_rate": {
                   "u64": "500"
                 },
@@ -1807,9 +1923,18 @@
                 "storage_rebate_rate": {
                   "u64": "9900"
                 },
+                "string_check_utf8_base_cost": null,
+                "string_check_utf8_per_byte_cost": null,
+                "string_index_of_base_cost": null,
+                "string_index_of_per_byte_pattern_cost": null,
+                "string_index_of_per_byte_searched_cost": null,
+                "string_is_char_boundary_base_cost": null,
+                "string_sub_string_base_cost": null,
+                "string_sub_string_per_byte_cost": null,
                 "transfer_freeze_object_cost_base": {
                   "u64": "52"
                 },
+                "transfer_receive_object_cost_base": null,
                 "transfer_share_object_cost_base": {
                   "u64": "52"
                 },
@@ -1819,6 +1944,8 @@
                 "tx_context_derive_id_cost_base": {
                   "u64": "52"
                 },
+                "type_name_get_base_cost": null,
+                "type_name_get_per_byte_cost": null,
                 "types_is_one_time_witness_cost_base": {
                   "u64": "52"
                 },
@@ -1828,12 +1955,23 @@
                 "types_is_one_time_witness_type_tag_cost_per_byte": {
                   "u64": "2"
                 },
+                "use_object_per_epoch_marker_table_v2": null,
                 "validator_validate_metadata_cost_base": {
                   "u64": "52"
                 },
                 "validator_validate_metadata_data_cost_per_byte": {
                   "u64": "2"
-                }
+                },
+                "vdf_hash_to_input_cost": null,
+                "vdf_verify_vdf_cost": null,
+                "vector_borrow_base_cost": null,
+                "vector_destroy_empty_base_cost": null,
+                "vector_empty_base_cost": null,
+                "vector_length_base_cost": null,
+                "vector_pop_back_base_cost": null,
+                "vector_push_back_base_cost": null,
+                "vector_push_back_legacy_per_abstract_memory_unit_cost": null,
+                "vector_swap_base_cost": null
               }
             }
           }
@@ -1847,7 +1985,7 @@
           "name": "Read API"
         }
       ],
-      "description": "Return the total number of transactions known to the server.",
+      "description": "Return the total number of transaction blocks known to the server.",
       "params": [],
       "result": {
         "name": "BigInt<u64>",
@@ -1905,7 +2043,7 @@
           "params": [
             {
               "name": "digest",
-              "value": "oKtFZjL99EZ2K3TLPRarpZN8gz9xReMkiNf4Tjja2no"
+              "value": "Hay2tj3GcDYcE3AMHrej5WDsHGPVAYsegcubixLUvXUF"
             },
             {
               "name": "options",
@@ -1915,14 +2053,15 @@
                 "showEffects": true,
                 "showEvents": true,
                 "showObjectChanges": false,
-                "showBalanceChanges": false
+                "showBalanceChanges": false,
+                "showRawEffects": false
               }
             }
           ],
           "result": {
             "name": "Result",
             "value": {
-              "digest": "oKtFZjL99EZ2K3TLPRarpZN8gz9xReMkiNf4Tjja2no",
+              "digest": "Hay2tj3GcDYcE3AMHrej5WDsHGPVAYsegcubixLUvXUF",
               "transaction": {
                 "data": {
                   "messageVersion": "v1",
@@ -1968,14 +2107,14 @@
                     ],
                     "owner": "0x82179c57d5895babfb655cd62e8e886a53334b5e7be9be658eb759cc35e3fc66",
                     "price": "10",
-                    "budget": "20000000"
+                    "budget": "100000"
                   }
                 },
                 "txSignatures": [
-                  "ABTTP4JUSxqOQTlysdS30HzkMc3DOwJqlBJstqn2EwW0SKtvoGIoxFEbmTqIS+UYSemveVGJ+S6BijQQVS97cwxtCxWrqsEEHAdxoMDwblU5hyWJ8H3zFvk20E2fO5bzHA=="
+                  "AMU7cJTEsJ5WoVlKZ2zsVuGMk9linDuNqLV9eGIIrqarP2x4R9riuvmmMgXfdxMm7jTzYxbHrsDNMwlxpTbbFghtCxWrqsEEHAdxoMDwblU5hyWJ8H3zFvk20E2fO5bzHA=="
                 ]
               },
-              "rawTransaction": "AQAAAAAAAgAggZbQSLem0EyO3IlXnYb9P8kMUvmhTGuBK5T+YTxbzrsBAF7rHUSeJRYWbVfXH96xVNDcns23swBX0KkyaEysNSzcAgAAAAAAAAAg43+UGkUe+CCaD7+/G1SbK7Jrjq7giJUUbfJ7w88mEMEBAQEBAQABAACCF5xX1Ylbq/tlXNYujohqUzNLXnvpvmWOt1nMNeP8ZgEaPomAKdAk7sHUTGr14vrN7YTQO1NzUU8W49ZuAAgQUQIAAAAAAAAAIGS7c6HtWLLBiwy/N3eS4gbmuA1NXupk4ucFY7FYkCbEghecV9WJW6v7ZVzWLo6IalMzS1576b5ljrdZzDXj/GYKAAAAAAAAAAAtMQEAAAAAAAFhABTTP4JUSxqOQTlysdS30HzkMc3DOwJqlBJstqn2EwW0SKtvoGIoxFEbmTqIS+UYSemveVGJ+S6BijQQVS97cwxtCxWrqsEEHAdxoMDwblU5hyWJ8H3zFvk20E2fO5bzHA==",
+              "rawTransaction": "AQAAAAAAAgAggZbQSLem0EyO3IlXnYb9P8kMUvmhTGuBK5T+YTxbzrsBAF7rHUSeJRYWbVfXH96xVNDcns23swBX0KkyaEysNSzcAgAAAAAAAAAg43+UGkUe+CCaD7+/G1SbK7Jrjq7giJUUbfJ7w88mEMEBAQEBAQABAACCF5xX1Ylbq/tlXNYujohqUzNLXnvpvmWOt1nMNeP8ZgEaPomAKdAk7sHUTGr14vrN7YTQO1NzUU8W49ZuAAgQUQIAAAAAAAAAIGS7c6HtWLLBiwy/N3eS4gbmuA1NXupk4ucFY7FYkCbEghecV9WJW6v7ZVzWLo6IalMzS1576b5ljrdZzDXj/GYKAAAAAAAAAKCGAQAAAAAAAAFhAMU7cJTEsJ5WoVlKZ2zsVuGMk9linDuNqLV9eGIIrqarP2x4R9riuvmmMgXfdxMm7jTzYxbHrsDNMwlxpTbbFghtCxWrqsEEHAdxoMDwblU5hyWJ8H3zFvk20E2fO5bzHA==",
               "effects": {
                 "messageVersion": "v1",
                 "status": {
@@ -2086,11 +2225,11 @@
             {
               "name": "object_ids",
               "value": [
-                "0xb61439368cd75ebe63d633af32ffb4a022d18b95b4eaa9fd3b22b43f6b2c8e92",
-                "0x6ea7bed8f6c3d80f2a595c2305e12dd6d07c3fbbd3ebef7dbcc7b02346cdf056",
-                "0x75da5e934f672d3da3e003d989075efaecc79b5cd5df0df2a168259b7115a41c",
-                "0x38554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c67a8e9a0d074f",
-                "0xe74d1b250d5df2cb5170782a8a438fbf681eded4d1e0a2cd7dfb27e784493fb1"
+                "0x77b3482580ee8d5bdc5b824808df54bfec4fc817622e5add0e48f749f01def98",
+                "0x9060d87664c26a3f9a509228c21b16dc6797cf787c839a07edc03e6338421091",
+                "0xb37379c527753c5c8ab783f697e7b61439368cd75ebe63d633af32ffb4a022d1",
+                "0xee309e94ff5c9f6b02c5637f018f6ea7bed8f6c3d80f2a595c2305e12dd6d07c",
+                "0x29bc7c8d230db3b417edb1184cf075da5e934f672d3da3e003d989075efaecc7"
               ]
             },
             {
@@ -2111,14 +2250,14 @@
             "value": [
               {
                 "data": {
-                  "objectId": "0xb61439368cd75ebe63d633af32ffb4a022d18b95b4eaa9fd3b22b43f6b2c8e92",
+                  "objectId": "0x77b3482580ee8d5bdc5b824808df54bfec4fc817622e5add0e48f749f01def98",
                   "version": "1",
-                  "digest": "6D2MGzZN1DnALrbg6y9nQWwuipCa6fJERLXAwNGuGtKQ",
+                  "digest": "2QwXW3qzMEZPAyyP9VHtXbC2tp7iomypQc5XnkyPsu5d",
                   "type": "0x2::coin::Coin<0x2::sui::SUI>",
                   "owner": {
-                    "AddressOwner": "0x090bd6d16522a6fd4fa83ec70a5f197ad656da104dde1de9880be827a1a753e5"
+                    "AddressOwner": "0x504d411325e3c7f89d412044fe99007efb0f94f1e64d2e8090c619a39299d87e"
                   },
-                  "previousTransaction": "CQN1aMpZRYrVHByFfPFceCXzv5kT7bNM4Uzoe2jbZvM",
+                  "previousTransaction": "GcjpL3GJBoiqc7RNwfV1R4411dFPYz4hTNyXQchsq6Sa",
                   "storageRebate": "100",
                   "content": {
                     "dataType": "moveObject",
@@ -2127,7 +2266,7 @@
                     "fields": {
                       "balance": "100000000",
                       "id": {
-                        "id": "0xb61439368cd75ebe63d633af32ffb4a022d18b95b4eaa9fd3b22b43f6b2c8e92"
+                        "id": "0x77b3482580ee8d5bdc5b824808df54bfec4fc817622e5add0e48f749f01def98"
                       }
                     }
                   }
@@ -2135,14 +2274,14 @@
               },
               {
                 "data": {
-                  "objectId": "0x6ea7bed8f6c3d80f2a595c2305e12dd6d07c3fbbd3ebef7dbcc7b02346cdf056",
+                  "objectId": "0x9060d87664c26a3f9a509228c21b16dc6797cf787c839a07edc03e6338421091",
                   "version": "1",
-                  "digest": "HCvnds5SSF8Tn2kANyZDeAJuKa7bY6mf1ykzD8nQY42b",
+                  "digest": "5itvhMFvtJcV6fY2VY4x7F9Ex18q2N4Rr5WU4FXTJsFU",
                   "type": "0x2::coin::Coin<0x2::sui::SUI>",
                   "owner": {
-                    "AddressOwner": "0x74452cc61f316af5d5d7c02b94b02324268500a65bf5fdccb50582333b61721e"
+                    "AddressOwner": "0x23618df6438d21a48040e6bb568cafc13246bd847c60448160e0358cac4a1134"
                   },
-                  "previousTransaction": "86PvfkkGKweeE3TRmQDL9azrkyU9yqiVcRpWMNsqcWTK",
+                  "previousTransaction": "6m5GPm6XurdzRcEBd7epcnn4rDv8s3fVUK7dN6vYiYk8",
                   "storageRebate": "100",
                   "content": {
                     "dataType": "moveObject",
@@ -2151,7 +2290,7 @@
                     "fields": {
                       "balance": "100000000",
                       "id": {
-                        "id": "0x6ea7bed8f6c3d80f2a595c2305e12dd6d07c3fbbd3ebef7dbcc7b02346cdf056"
+                        "id": "0x9060d87664c26a3f9a509228c21b16dc6797cf787c839a07edc03e6338421091"
                       }
                     }
                   }
@@ -2159,14 +2298,14 @@
               },
               {
                 "data": {
-                  "objectId": "0x75da5e934f672d3da3e003d989075efaecc79b5cd5df0df2a168259b7115a41c",
+                  "objectId": "0xb37379c527753c5c8ab783f697e7b61439368cd75ebe63d633af32ffb4a022d1",
                   "version": "1",
-                  "digest": "7AVTCGjWUFNAZYmcxtKQvAWbyzbFVn9cbr1fMvngbs9S",
+                  "digest": "8rsTRNPs13DZvD2xneZEtf2nAAipep6uHXPXWVXfzDBr",
                   "type": "0x2::coin::Coin<0x2::sui::SUI>",
                   "owner": {
-                    "AddressOwner": "0xcc0a372b6fd0026e0c63043492ce4d0c19a63e7f360c51d035a6470f09c8d237"
+                    "AddressOwner": "0x8b95b4eaa9fd3b22b43f6b2c8e92090bd6d16522a6fd4fa83ec70a5f197ad656"
                   },
-                  "previousTransaction": "2YMeG7z6fPbqT6Sk7K4DQ7qqd2zBC1zAn2SuEXq4wJgY",
+                  "previousTransaction": "FgEJG8uwH2z3e5e4d2QGeVDYH5tdhbR3vKyXsXWf2zqY",
                   "storageRebate": "100",
                   "content": {
                     "dataType": "moveObject",
@@ -2175,7 +2314,7 @@
                     "fields": {
                       "balance": "100000000",
                       "id": {
-                        "id": "0x75da5e934f672d3da3e003d989075efaecc79b5cd5df0df2a168259b7115a41c"
+                        "id": "0xb37379c527753c5c8ab783f697e7b61439368cd75ebe63d633af32ffb4a022d1"
                       }
                     }
                   }
@@ -2183,14 +2322,14 @@
               },
               {
                 "data": {
-                  "objectId": "0x38554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c67a8e9a0d074f",
+                  "objectId": "0xee309e94ff5c9f6b02c5637f018f6ea7bed8f6c3d80f2a595c2305e12dd6d07c",
                   "version": "1",
-                  "digest": "DumsSGokTELtJXW54HKCRLjFKBeHkaySUZ86DDo8QwvR",
+                  "digest": "3w6ars2tmgBST4ozGxPWzSpEGyn4AdxMBv3K9sdkCWfR",
                   "type": "0x2::coin::Coin<0x2::sui::SUI>",
                   "owner": {
-                    "AddressOwner": "0x90fddb42cd928f74b986c6f539a734f3d7c9a75a9cb227ec315724962ee4193c"
+                    "AddressOwner": "0x3fbbd3ebef7dbcc7b02346cdf05674452cc61f316af5d5d7c02b94b023242685"
                   },
-                  "previousTransaction": "ARhjuTpfA6H8EM8bpBuJ5vFGALmMrMcbSZDiTTF8nxCp",
+                  "previousTransaction": "13Y8Ukebq34DkeL6dKEdr6ySSzeRMUpqhQXtZC9KmtTQ",
                   "storageRebate": "100",
                   "content": {
                     "dataType": "moveObject",
@@ -2199,7 +2338,7 @@
                     "fields": {
                       "balance": "100000000",
                       "id": {
-                        "id": "0x38554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c67a8e9a0d074f"
+                        "id": "0xee309e94ff5c9f6b02c5637f018f6ea7bed8f6c3d80f2a595c2305e12dd6d07c"
                       }
                     }
                   }
@@ -2207,14 +2346,14 @@
               },
               {
                 "data": {
-                  "objectId": "0xe74d1b250d5df2cb5170782a8a438fbf681eded4d1e0a2cd7dfb27e784493fb1",
+                  "objectId": "0x29bc7c8d230db3b417edb1184cf075da5e934f672d3da3e003d989075efaecc7",
                   "version": "1",
-                  "digest": "94nQ4Tz4nyqcVJmbLMUShkucx3eVfhLXGTCR4d1KP6gL",
+                  "digest": "BE9GoMd7Mr8fGte3EdsXxUMwYjcErW71n6Gsm4iPvDmv",
                   "type": "0x2::coin::Coin<0x2::sui::SUI>",
                   "owner": {
-                    "AddressOwner": "0xdccde7893a3ac5c67cd2c4e27540b52ee828096b2aa5fe50a7effd8c23976147"
+                    "AddressOwner": "0x9b5cd5df0df2a168259b7115a41ccc0a372b6fd0026e0c63043492ce4d0c19a6"
                   },
-                  "previousTransaction": "3rqeFGm86S2ZKWXPF2HHP8zdpRRqb7WZLDkquE2KHetA",
+                  "previousTransaction": "5CxnSSi2hCEo7beFke1fCp23W1rCKKRfPJrAELCpxiHc",
                   "storageRebate": "100",
                   "content": {
                     "dataType": "moveObject",
@@ -2223,7 +2362,7 @@
                     "fields": {
                       "balance": "100000000",
                       "id": {
-                        "id": "0xe74d1b250d5df2cb5170782a8a438fbf681eded4d1e0a2cd7dfb27e784493fb1"
+                        "id": "0x29bc7c8d230db3b417edb1184cf075da5e934f672d3da3e003d989075efaecc7"
                       }
                     }
                   }
@@ -2279,9 +2418,9 @@
             {
               "name": "digests",
               "value": [
-                "Gd2vRA1pRwWu8j7KQe6fzHS4mMChq1JHJpi9KGnVJMtV",
-                "73FjSYzymaz1UWPu4bMW191cyxSxziKXJm2MyTQMjeur",
-                "7TxdfBqwTPYgG4hztwiQdeQcdWgeqpZKF7EJpyjDojFd"
+                "EMqJqkQip6UaTkdff493ewAQNHGQFJwXDDn6m9CTgZzo",
+                "Hn3B25vTQNTFAdThFkWvfkiAAUZxzwTaj4uEengu1ACX",
+                "9vLSG9a4QcLcMdG1xCu6FRdXAjWWqvJHoHBCJfPMKkR9"
               ]
             },
             {
@@ -2292,7 +2431,8 @@
                 "showEffects": true,
                 "showEvents": true,
                 "showObjectChanges": false,
-                "showBalanceChanges": false
+                "showBalanceChanges": false,
+                "showRawEffects": false
               }
             }
           ],
@@ -2300,7 +2440,7 @@
             "name": "Result",
             "value": [
               {
-                "digest": "Gd2vRA1pRwWu8j7KQe6fzHS4mMChq1JHJpi9KGnVJMtV",
+                "digest": "EMqJqkQip6UaTkdff493ewAQNHGQFJwXDDn6m9CTgZzo",
                 "transaction": {
                   "data": {
                     "messageVersion": "v1",
@@ -2310,14 +2450,14 @@
                         {
                           "type": "pure",
                           "valueType": "address",
-                          "value": "0x0ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797c3e4f846a282"
+                          "value": "0x751b2dd4de1138554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c6"
                         },
                         {
                           "type": "object",
                           "objectType": "immOrOwnedObject",
-                          "objectId": "0x754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e232fac1a70e20e",
+                          "objectId": "0x7a8e9a0d074f90fddb42cd928f74b986c6f539a734f3d7c9a75a9cb227ec3157",
                           "version": "2",
-                          "digest": "21hjAvY5LZAy2dc72b3nPgJTsbmtRYaTfqMn2a2sdnkB"
+                          "digest": "JAgYeYMPm5VLzBYcYxxQUEatfG9gHdFqSNwmBBS41Bri"
                         }
                       ],
                       "transactions": [
@@ -2335,25 +2475,25 @@
                         }
                       ]
                     },
-                    "sender": "0x0a3f57ac1ee741463bc97744050f1af4d570d8b8d0f203b67d09cd82fdb21e13",
+                    "sender": "0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5",
                     "gasData": {
                       "payment": [
                         {
-                          "objectId": "0x146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601bbdabf2828ee",
+                          "objectId": "0x24962ee4193c8c0d2fb28bbe0eb4ba5fc87a2c6d1a7c12c9454872c5ea06d5e1",
                           "version": 2,
-                          "digest": "BYX5uiUfQkTJrNSnH3mj8Cs8mz1ppQKWBXi4y3Xi6y8D"
+                          "digest": "B4g7NgvgmCFYzG2BPH6nT6kM5bPaRMD76LVJ4LWysq5w"
                         }
                       ],
-                      "owner": "0x0a3f57ac1ee741463bc97744050f1af4d570d8b8d0f203b67d09cd82fdb21e13",
+                      "owner": "0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5",
                       "price": "10",
-                      "budget": "20000000"
+                      "budget": "100000"
                     }
                   },
                   "txSignatures": [
-                    "ABWZkYviOekutE6mrOgoq7d2q5fx3xlmo0qWTyQSa+jDFzePlm+RPZm1zkOedq3TlQcYiMKaw+jqNYIYerHujAg34HWK6fGd/e11nJeO7UMQFVm4jiZjwDYb8XNiqcCJOQ=="
+                    "ADCkpLtz9B6h6by9gst01e1ap3M9XyCjZ75pT59rvq6esYIxNzb7+KWZb+L5uZ7xsmzUtxR9ayYrSkXO99Rj5gkHrX7t0yuVOWkkiOMuz7HdUZsfbMy0efpXac3VZ8UVmA=="
                   ]
                 },
-                "rawTransaction": "AQAAAAAAAgAgCtLDHow2gapPfTVIjPa/ETXS/IcDaQ4IV5fD5PhGooIBAHVJRuGB4A9DQaU7Xole+Ow8c9I3igoRgl4jL6wacOIOAgAAAAAAAAAgDwm8uJB3PRHBq9cXZ7H2eoBAJneIID85dyL8J2rqpzwBAQEBAQABAAAKP1esHudBRjvJd0QFDxr01XDYuNDyA7Z9Cc2C/bIeEwEUb7EwO9YOtL6pvUU+UGkLQjJB8OLpvqvWAbvavygo7gIAAAAAAAAAIJyn5CJ6Yc/4Uf75+2oIrkRMlvmBAnXWr5c8DQItueIaCj9XrB7nQUY7yXdEBQ8a9NVw2LjQ8gO2fQnNgv2yHhMKAAAAAAAAAAAtMQEAAAAAAAFhABWZkYviOekutE6mrOgoq7d2q5fx3xlmo0qWTyQSa+jDFzePlm+RPZm1zkOedq3TlQcYiMKaw+jqNYIYerHujAg34HWK6fGd/e11nJeO7UMQFVm4jiZjwDYb8XNiqcCJOQ==",
+                "rawTransaction": "AQAAAAAAAgAgdRst1N4ROFVKn/e09rWflCbDIcgBOv7Qk0gd1O8SZ8YBAHqOmg0HT5D920LNko90uYbG9TmnNPPXyadanLIn7DFXAgAAAAAAAAAg/xGekvV6500bJQ1d8stRcHgqikOPv2ge3tTR4KLNffsBAQEBAQABAABeUve8quH9cqfEIMHmhTfkhdIVsejqRVcrGymAQI/5tQEkli7kGTyMDS+yi74OtLpfyHosbRp8EslFSHLF6gbV4QIAAAAAAAAAIJWF1VkVIb/RLew6Ny79U5EIuoB6Davtbl2g8XTvw/WOXlL3vKrh/XKnxCDB5oU35IXSFbHo6kVXKxspgECP+bUKAAAAAAAAAKCGAQAAAAAAAAFhADCkpLtz9B6h6by9gst01e1ap3M9XyCjZ75pT59rvq6esYIxNzb7+KWZb+L5uZ7xsmzUtxR9ayYrSkXO99Rj5gkHrX7t0yuVOWkkiOMuz7HdUZsfbMy0efpXac3VZ8UVmA==",
                 "effects": {
                   "messageVersion": "v1",
                   "status": {
@@ -2366,57 +2506,57 @@
                     "storageRebate": "10",
                     "nonRefundableStorageFee": "0"
                   },
-                  "transactionDigest": "CVLsRJgJKde8RVNLtkZCBGWxEmCninDQaBb5V4tz9sZ8",
+                  "transactionDigest": "J4k64LwycebB7TQhKrPaZ954yCK64rwbDJMSrSUW4Ba4",
                   "mutated": [
                     {
                       "owner": {
-                        "AddressOwner": "0x0a3f57ac1ee741463bc97744050f1af4d570d8b8d0f203b67d09cd82fdb21e13"
+                        "AddressOwner": "0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5"
                       },
                       "reference": {
-                        "objectId": "0x146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601bbdabf2828ee",
+                        "objectId": "0x24962ee4193c8c0d2fb28bbe0eb4ba5fc87a2c6d1a7c12c9454872c5ea06d5e1",
                         "version": 2,
-                        "digest": "BYX5uiUfQkTJrNSnH3mj8Cs8mz1ppQKWBXi4y3Xi6y8D"
+                        "digest": "B4g7NgvgmCFYzG2BPH6nT6kM5bPaRMD76LVJ4LWysq5w"
                       }
                     },
                     {
                       "owner": {
-                        "AddressOwner": "0x0ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797c3e4f846a282"
+                        "AddressOwner": "0x751b2dd4de1138554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c6"
                       },
                       "reference": {
-                        "objectId": "0x754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e232fac1a70e20e",
+                        "objectId": "0x7a8e9a0d074f90fddb42cd928f74b986c6f539a734f3d7c9a75a9cb227ec3157",
                         "version": 2,
-                        "digest": "21hjAvY5LZAy2dc72b3nPgJTsbmtRYaTfqMn2a2sdnkB"
+                        "digest": "JAgYeYMPm5VLzBYcYxxQUEatfG9gHdFqSNwmBBS41Bri"
                       }
                     }
                   ],
                   "gasObject": {
                     "owner": {
-                      "ObjectOwner": "0x0a3f57ac1ee741463bc97744050f1af4d570d8b8d0f203b67d09cd82fdb21e13"
+                      "ObjectOwner": "0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5"
                     },
                     "reference": {
-                      "objectId": "0x146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601bbdabf2828ee",
+                      "objectId": "0x24962ee4193c8c0d2fb28bbe0eb4ba5fc87a2c6d1a7c12c9454872c5ea06d5e1",
                       "version": 2,
-                      "digest": "BYX5uiUfQkTJrNSnH3mj8Cs8mz1ppQKWBXi4y3Xi6y8D"
+                      "digest": "B4g7NgvgmCFYzG2BPH6nT6kM5bPaRMD76LVJ4LWysq5w"
                     }
                   },
-                  "eventsDigest": "Hwdei4TM2C5h2gpRiUQfS8roKsKgTUzx883qTuy7ASdt"
+                  "eventsDigest": "2SY11dmdTQv6JLD2wqcsMiJNqXbXUkn87Rzw5NHib8Mf"
                 },
                 "objectChanges": [
                   {
                     "type": "transferred",
-                    "sender": "0x0a3f57ac1ee741463bc97744050f1af4d570d8b8d0f203b67d09cd82fdb21e13",
+                    "sender": "0x5e52f7bcaae1fd72a7c420c1e68537e485d215b1e8ea45572b1b2980408ff9b5",
                     "recipient": {
-                      "AddressOwner": "0x0ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797c3e4f846a282"
+                      "AddressOwner": "0x751b2dd4de1138554a9ff7b4f6b59f9426c321c8013afed093481dd4ef1267c6"
                     },
                     "objectType": "0x2::example::Object",
-                    "objectId": "0x754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e232fac1a70e20e",
+                    "objectId": "0x7a8e9a0d074f90fddb42cd928f74b986c6f539a734f3d7c9a75a9cb227ec3157",
                     "version": "2",
-                    "digest": "zbXdxaWUbmKnKQfLLwiCVYe2nQyreC7JoKHrk8vY9aA"
+                    "digest": "3gmeyj5oEdE8A4PvjWsDSHchC6tb6YQj18gnD7xnDqGz"
                   }
                 ]
               },
               {
-                "digest": "73FjSYzymaz1UWPu4bMW191cyxSxziKXJm2MyTQMjeur",
+                "digest": "Hn3B25vTQNTFAdThFkWvfkiAAUZxzwTaj4uEengu1ACX",
                 "transaction": {
                   "data": {
                     "messageVersion": "v1",
@@ -2426,14 +2566,14 @@
                         {
                           "type": "pure",
                           "valueType": "address",
-                          "value": "0x2e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d10388c28ddd59"
+                          "value": "0x7cbab4983e180ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797"
                         },
                         {
                           "type": "object",
                           "objectType": "immOrOwnedObject",
-                          "objectId": "0x77a58e206acd19639c875a4fbecf3342b825c8384300ac7e3badc820a75b5742",
+                          "objectId": "0xc3e4f846a282754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e23",
                           "version": "2",
-                          "digest": "6ozDx8La5rgu5zSoxaMseRjcX169ZBEjSyQeD2RGoa44"
+                          "digest": "snEA8RNnDvsYjKJx2NMUP49TMjoAuQXx3LJgwe4qo9B"
                         }
                       ],
                       "transactions": [
@@ -2451,25 +2591,25 @@
                         }
                       ]
                     },
-                    "sender": "0x028d636e74862991ed521dcc9c6cb7ab860b449e3f4f7b8520b582325bcda4f6",
+                    "sender": "0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925",
                     "gasData": {
                       "payment": [
                         {
-                          "objectId": "0x24b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5cd8024b4b39a7",
+                          "objectId": "0x2fac1a70e20e146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601",
                           "version": 2,
-                          "digest": "J9ifwZ2hbL5Tg7fbbta3CXybtaabdaN8BmKudP7R8sBU"
+                          "digest": "DeJhcQ3CmMPwyhVct22PP7hYaVny6zbz8V7gnTw3yoAT"
                         }
                       ],
-                      "owner": "0x028d636e74862991ed521dcc9c6cb7ab860b449e3f4f7b8520b582325bcda4f6",
+                      "owner": "0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925",
                       "price": "10",
-                      "budget": "20000000"
+                      "budget": "100000"
                     }
                   },
                   "txSignatures": [
-                    "ANFMDxz+6lExShcHA/qG/j2jZk6y9+5k65x6u8JGJP/dyxkfrihDdFxtOt3fvaoJ/OvEZ4eo123n/momyGQuFgahtxyxD8zwVSmWjSVhhtf+UKhpW2mTgOA1Wn2xxsedmg=="
+                    "AND+G9umCSLK1La6UWAgniuJWhkB3BNqVfk66Fj+f2hK1qIT2uJUWRYSwWYky6TO0unNN8egfzwvLJjFCMXU9gRy3O9A+7GacyYQAw/at8erjWXdUi4gR/xfdp6t5wPBDg=="
                   ]
                 },
-                "rawTransaction": "AQAAAAAAAgAgLoToH4ccR8MUniexJQDaiEr99cMLGcAXoNEDiMKN3VkBAHeljiBqzRljnIdaT77PM0K4Jcg4QwCsfjutyCCnW1dCAgAAAAAAAAAgVlPau21sld3X01pC0x86m+u7aD22booGcGhVRnLhN7UBAQEBAQABAAACjWNudIYpke1SHcycbLerhgtEnj9Pe4UgtYIyW82k9gEkuSCqmwBQk7gg3yTvi0NxVJn0//TgVsDNXNgCS0s5pwIAAAAAAAAAIP7ScTSwc9qGOEVBETllGTeeiIyDq68OYAUEeeRW/wE/Ao1jbnSGKZHtUh3MnGy3q4YLRJ4/T3uFILWCMlvNpPYKAAAAAAAAAAAtMQEAAAAAAAFhANFMDxz+6lExShcHA/qG/j2jZk6y9+5k65x6u8JGJP/dyxkfrihDdFxtOt3fvaoJ/OvEZ4eo123n/momyGQuFgahtxyxD8zwVSmWjSVhhtf+UKhpW2mTgOA1Wn2xxsedmg==",
+                "rawTransaction": "AQAAAAAAAgAgfLq0mD4YCtLDHow2gapPfTVIjPa/ETXS/IcDaQ4IV5cBAMPk+EaignVJRuGB4A9DQaU7Xole+Ow8c9I3igoRgl4jAgAAAAAAAAAgDQItueIaDwm8uJB3PRHBq9cXZ7H2eoBAJneIID85dyIBAQEBAQABAABi1Nr25QaYm6eiWw2JFRQugSUshZ6M0i21MK4hPuwZJQEvrBpw4g4Ub7EwO9YOtL6pvUU+UGkLQjJB8OLpvqvWAQIAAAAAAAAAILvavygo7pyn5CJ6Yc/4Uf75+2oIrkRMlvmBAnXWr5c8YtTa9uUGmJunolsNiRUULoElLIWejNIttTCuIT7sGSUKAAAAAAAAAKCGAQAAAAAAAAFhAND+G9umCSLK1La6UWAgniuJWhkB3BNqVfk66Fj+f2hK1qIT2uJUWRYSwWYky6TO0unNN8egfzwvLJjFCMXU9gRy3O9A+7GacyYQAw/at8erjWXdUi4gR/xfdp6t5wPBDg==",
                 "effects": {
                   "messageVersion": "v1",
                   "status": {
@@ -2482,57 +2622,57 @@
                     "storageRebate": "10",
                     "nonRefundableStorageFee": "0"
                   },
-                  "transactionDigest": "6gAPDZyrAYmnm5zGDhc3LF3Ae2PT6ABP6xSC1dfRRoXp",
+                  "transactionDigest": "CHia3BiES8mt5kqMYhzBpjAeLRpjcsMNDMFakBAdcVAg",
                   "mutated": [
                     {
                       "owner": {
-                        "AddressOwner": "0x028d636e74862991ed521dcc9c6cb7ab860b449e3f4f7b8520b582325bcda4f6"
+                        "AddressOwner": "0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925"
                       },
                       "reference": {
-                        "objectId": "0x24b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5cd8024b4b39a7",
+                        "objectId": "0x2fac1a70e20e146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601",
                         "version": 2,
-                        "digest": "J9ifwZ2hbL5Tg7fbbta3CXybtaabdaN8BmKudP7R8sBU"
+                        "digest": "DeJhcQ3CmMPwyhVct22PP7hYaVny6zbz8V7gnTw3yoAT"
                       }
                     },
                     {
                       "owner": {
-                        "AddressOwner": "0x2e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d10388c28ddd59"
+                        "AddressOwner": "0x7cbab4983e180ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797"
                       },
                       "reference": {
-                        "objectId": "0x77a58e206acd19639c875a4fbecf3342b825c8384300ac7e3badc820a75b5742",
+                        "objectId": "0xc3e4f846a282754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e23",
                         "version": 2,
-                        "digest": "6ozDx8La5rgu5zSoxaMseRjcX169ZBEjSyQeD2RGoa44"
+                        "digest": "snEA8RNnDvsYjKJx2NMUP49TMjoAuQXx3LJgwe4qo9B"
                       }
                     }
                   ],
                   "gasObject": {
                     "owner": {
-                      "ObjectOwner": "0x028d636e74862991ed521dcc9c6cb7ab860b449e3f4f7b8520b582325bcda4f6"
+                      "ObjectOwner": "0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925"
                     },
                     "reference": {
-                      "objectId": "0x24b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5cd8024b4b39a7",
+                      "objectId": "0x2fac1a70e20e146fb1303bd60eb4bea9bd453e50690b423241f0e2e9beabd601",
                       "version": 2,
-                      "digest": "J9ifwZ2hbL5Tg7fbbta3CXybtaabdaN8BmKudP7R8sBU"
+                      "digest": "DeJhcQ3CmMPwyhVct22PP7hYaVny6zbz8V7gnTw3yoAT"
                     }
                   },
-                  "eventsDigest": "8ju2GtaGc2UB3vFu9Pmjwze8LcUh37izem5NsGcstgtx"
+                  "eventsDigest": "69bh3Q9RhRgMFKwmQn8LYE8vYujFTpYyUSVBht3oYkm6"
                 },
                 "objectChanges": [
                   {
                     "type": "transferred",
-                    "sender": "0x028d636e74862991ed521dcc9c6cb7ab860b449e3f4f7b8520b582325bcda4f6",
+                    "sender": "0x62d4daf6e506989ba7a25b0d8915142e81252c859e8cd22db530ae213eec1925",
                     "recipient": {
-                      "AddressOwner": "0x2e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d10388c28ddd59"
+                      "AddressOwner": "0x7cbab4983e180ad2c31e8c3681aa4f7d35488cf6bf1135d2fc8703690e085797"
                     },
                     "objectType": "0x2::example::Object",
-                    "objectId": "0x77a58e206acd19639c875a4fbecf3342b825c8384300ac7e3badc820a75b5742",
+                    "objectId": "0xc3e4f846a282754946e181e00f4341a53b5e895ef8ec3c73d2378a0a11825e23",
                     "version": "2",
-                    "digest": "kLukTF3HAHvTW17s8ZHtVKZyWf4bSJb7SjZ5HuNeELk"
+                    "digest": "HyJbrm9Th6ox4oU9vrrRzgZSaCu1n3omMJ1fAcHswvvo"
                   }
                 ]
               },
               {
-                "digest": "7TxdfBqwTPYgG4hztwiQdeQcdWgeqpZKF7EJpyjDojFd",
+                "digest": "9vLSG9a4QcLcMdG1xCu6FRdXAjWWqvJHoHBCJfPMKkR9",
                 "transaction": {
                   "data": {
                     "messageVersion": "v1",
@@ -2542,14 +2682,14 @@
                         {
                           "type": "pure",
                           "valueType": "address",
-                          "value": "0xdcc85bada4a729d650f7762226432129780927838b06db0346808ffb0676099d"
+                          "value": "0x385b00a1a8902e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d1"
                         },
                         {
                           "type": "object",
                           "objectType": "immOrOwnedObject",
-                          "objectId": "0xe0408b31759f57b69c52e09410a66f9a23c34be9913b6697a5e83e02e2a0fc74",
+                          "objectId": "0x0388c28ddd5977a58e206acd19639c875a4fbecf3342b825c8384300ac7e3bad",
                           "version": "2",
-                          "digest": "GP1ZYjdAR42yCiTAvnQgqPtc5bG9i7BzetfWeAo6ewgN"
+                          "digest": "9CpH2aW4XPVxaZBGHRwHueXEQUvN3Pf7JQpASHiEsNCw"
                         }
                       ],
                       "transactions": [
@@ -2567,25 +2707,25 @@
                         }
                       ]
                     },
-                    "sender": "0xb30fdd73db52c4eb06754bdb50fec3ea0e19a7851f2383d764fcb3d6eb7f8c82",
+                    "sender": "0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5",
                     "gasData": {
                       "payment": [
                         {
-                          "objectId": "0x7057ba0901e4d9b1e04de75ea2699a4413215612581eba57ebe7e594b809ccce",
+                          "objectId": "0xc820a75b574224b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5c",
                           "version": 2,
-                          "digest": "Gtv38WbTUCw2KoAv9S5db8oTXn8ZdgkX7gGCrfU3Zvms"
+                          "digest": "FYD6KHzkQnbwS52WA8rYS9WbJza1K583ootS5MK9BR2T"
                         }
                       ],
-                      "owner": "0xb30fdd73db52c4eb06754bdb50fec3ea0e19a7851f2383d764fcb3d6eb7f8c82",
+                      "owner": "0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5",
                       "price": "10",
-                      "budget": "20000000"
+                      "budget": "100000"
                     }
                   },
                   "txSignatures": [
-                    "AKM1jt3XaQUsZ9Pe77tb2tGgmJvI8GLE2P3kdaQ1I4oglYnu9TrBds27Zbm0KP0tayMvhoDRBQc2a3mdbfPsVA/WnfBR88qs+c/GcHXhsNtHEECK8vIjfFKQvXV+9IXwAw=="
+                    "AIPB1qErFsOHPUI/MJO9d5n2tTpG6fhxRumDT54vvkGYqtiHX9nlqhyujSbprdl0Th2qM/n3z18p/tLCmnjWMgR0l3KzifzaD4mmOjFLz1qKIB/e8f9eE9s+E+w2jwNGDQ=="
                   ]
                 },
-                "rawTransaction": "AQAAAAAAAgAg3MhbraSnKdZQ93YiJkMhKXgJJ4OLBtsDRoCP+wZ2CZ0BAOBAizF1n1e2nFLglBCmb5ojw0vpkTtml6XoPgLioPx0AgAAAAAAAAAg5IK3WMI5kDnbvt1dskOF6TTWgrL9ZzRGkavQ78dxlBsBAQEBAQABAACzD91z21LE6wZ1S9tQ/sPqDhmnhR8jg9dk/LPW63+MggFwV7oJAeTZseBN516iaZpEEyFWElgeulfr5+WUuAnMzgIAAAAAAAAAIOwr5NrG/2lF1Js+zAQ9BJYR9s/RC8pNUX6UUq1Uhtaesw/dc9tSxOsGdUvbUP7D6g4Zp4UfI4PXZPyz1ut/jIIKAAAAAAAAAAAtMQEAAAAAAAFhAKM1jt3XaQUsZ9Pe77tb2tGgmJvI8GLE2P3kdaQ1I4oglYnu9TrBds27Zbm0KP0tayMvhoDRBQc2a3mdbfPsVA/WnfBR88qs+c/GcHXhsNtHEECK8vIjfFKQvXV+9IXwAw==",
+                "rawTransaction": "AQAAAAAAAgAgOFsAoaiQLoToH4ccR8MUniexJQDaiEr99cMLGcAXoNEBAAOIwo3dWXeljiBqzRljnIdaT77PM0K4Jcg4QwCsfjutAgAAAAAAAAAgeeRW/wE/VlPau21sld3X01pC0x86m+u7aD22booGcGgBAQEBAQABAACbdImsy1WpKBkM+of1ICLXIsBobtp2d7NZXc1hZ6S05QHIIKdbV0IkuSCqmwBQk7gg3yTvi0NxVJn0//TgVsDNXAIAAAAAAAAAINgCS0s5p/7ScTSwc9qGOEVBETllGTeeiIyDq68OYAUEm3SJrMtVqSgZDPqH9SAi1yLAaG7adnezWV3NYWektOUKAAAAAAAAAKCGAQAAAAAAAAFhAIPB1qErFsOHPUI/MJO9d5n2tTpG6fhxRumDT54vvkGYqtiHX9nlqhyujSbprdl0Th2qM/n3z18p/tLCmnjWMgR0l3KzifzaD4mmOjFLz1qKIB/e8f9eE9s+E+w2jwNGDQ==",
                 "effects": {
                   "messageVersion": "v1",
                   "status": {
@@ -2598,52 +2738,52 @@
                     "storageRebate": "10",
                     "nonRefundableStorageFee": "0"
                   },
-                  "transactionDigest": "F2iA4tJuSYJhXArnKAhrUJVAvNdTuvA8VMj9zXj6PNDe",
+                  "transactionDigest": "HaFQHEJugXDGh95A9Ye1tp7GikbuAQNiEanrQuVLvpfz",
                   "mutated": [
                     {
                       "owner": {
-                        "AddressOwner": "0xb30fdd73db52c4eb06754bdb50fec3ea0e19a7851f2383d764fcb3d6eb7f8c82"
+                        "AddressOwner": "0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5"
                       },
                       "reference": {
-                        "objectId": "0x7057ba0901e4d9b1e04de75ea2699a4413215612581eba57ebe7e594b809ccce",
+                        "objectId": "0xc820a75b574224b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5c",
                         "version": 2,
-                        "digest": "Gtv38WbTUCw2KoAv9S5db8oTXn8ZdgkX7gGCrfU3Zvms"
+                        "digest": "FYD6KHzkQnbwS52WA8rYS9WbJza1K583ootS5MK9BR2T"
                       }
                     },
                     {
                       "owner": {
-                        "AddressOwner": "0xdcc85bada4a729d650f7762226432129780927838b06db0346808ffb0676099d"
+                        "AddressOwner": "0x385b00a1a8902e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d1"
                       },
                       "reference": {
-                        "objectId": "0xe0408b31759f57b69c52e09410a66f9a23c34be9913b6697a5e83e02e2a0fc74",
+                        "objectId": "0x0388c28ddd5977a58e206acd19639c875a4fbecf3342b825c8384300ac7e3bad",
                         "version": 2,
-                        "digest": "GP1ZYjdAR42yCiTAvnQgqPtc5bG9i7BzetfWeAo6ewgN"
+                        "digest": "9CpH2aW4XPVxaZBGHRwHueXEQUvN3Pf7JQpASHiEsNCw"
                       }
                     }
                   ],
                   "gasObject": {
                     "owner": {
-                      "ObjectOwner": "0xb30fdd73db52c4eb06754bdb50fec3ea0e19a7851f2383d764fcb3d6eb7f8c82"
+                      "ObjectOwner": "0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5"
                     },
                     "reference": {
-                      "objectId": "0x7057ba0901e4d9b1e04de75ea2699a4413215612581eba57ebe7e594b809ccce",
+                      "objectId": "0xc820a75b574224b920aa9b005093b820df24ef8b43715499f4fff4e056c0cd5c",
                       "version": 2,
-                      "digest": "Gtv38WbTUCw2KoAv9S5db8oTXn8ZdgkX7gGCrfU3Zvms"
+                      "digest": "FYD6KHzkQnbwS52WA8rYS9WbJza1K583ootS5MK9BR2T"
                     }
                   },
-                  "eventsDigest": "HQh9RPyW3hh7X3GYRXPvAQ2k7VmYWKKrZ5cMcvPypu3v"
+                  "eventsDigest": "DzJWHtFNHttaBdpECZGDMF7tcx5NYZfNfCk5NsaaRgmn"
                 },
                 "objectChanges": [
                   {
                     "type": "transferred",
-                    "sender": "0xb30fdd73db52c4eb06754bdb50fec3ea0e19a7851f2383d764fcb3d6eb7f8c82",
+                    "sender": "0x9b7489accb55a928190cfa87f52022d722c0686eda7677b3595dcd6167a4b4e5",
                     "recipient": {
-                      "AddressOwner": "0xdcc85bada4a729d650f7762226432129780927838b06db0346808ffb0676099d"
+                      "AddressOwner": "0x385b00a1a8902e84e81f871c47c3149e27b12500da884afdf5c30b19c017a0d1"
                     },
                     "objectType": "0x2::example::Object",
-                    "objectId": "0xe0408b31759f57b69c52e09410a66f9a23c34be9913b6697a5e83e02e2a0fc74",
+                    "objectId": "0x0388c28ddd5977a58e206acd19639c875a4fbecf3342b825c8384300ac7e3bad",
                     "version": "2",
-                    "digest": "Azr7oPHAo6LZ9iPfHYjguY2BoVTZ9zwVArvUEJSwXKWW"
+                    "digest": "6jsxetsBSZJ5ozgZuDmHXJzn9ZBp8emivfYHe6tnHg7C"
                   }
                 ]
               }
@@ -2674,7 +2814,7 @@
           "description": "the version of the queried object. If None, default to the latest known version",
           "required": true,
           "schema": {
-            "$ref": "#/components/schemas/SequenceNumber"
+            "$ref": "#/components/schemas/SequenceNumber2"
           }
         },
         {
@@ -2785,6 +2925,143 @@
             "$ref": "#/components/schemas/ObjectRead"
           }
         }
+      },
+      "examples": [
+        {
+          "name": "Gets Past Object data for a vector of objects.",
+          "params": [
+            {
+              "name": "past_objects",
+              "value": [
+                {
+                  "objectId": "0x38b3186a7bb26a1ab2c982a0a9b482aa70f5a010fffc60f20194ef0f597474e8",
+                  "version": "4"
+                },
+                {
+                  "objectId": "0xceaf9ee4582d3a233101e322a22cb2a5bea2e681ea5af4e59bd1abb0bb4fcb27",
+                  "version": "12"
+                }
+              ]
+            },
+            {
+              "name": "options",
+              "value": {
+                "showType": true,
+                "showOwner": true,
+                "showPreviousTransaction": true,
+                "showDisplay": false,
+                "showContent": true,
+                "showBcs": false,
+                "showStorageRebate": true
+              }
+            }
+          ],
+          "result": {
+            "name": "Result",
+            "value": [
+              {
+                "status": "VersionFound",
+                "details": {
+                  "objectId": "0x38b3186a7bb26a1ab2c982a0a9b482aa70f5a010fffc60f20194ef0f597474e8",
+                  "version": "4",
+                  "digest": "hvBGBXvKVhC7XYgVPujuiLjxASR6UGAkSFrCRtVxX1F",
+                  "type": "0x2::coin::Coin<0x2::sui::SUI>",
+                  "owner": {
+                    "AddressOwner": "0x47866ff92885a3c21a7703f564721c198308aa0c71b771ada6b96c16fc9c0fa7"
+                  },
+                  "previousTransaction": "6heEteheiLZcS8iVNXsNUnU7oVjzT7UHYzprGcuWQ4gG",
+                  "storageRebate": "100",
+                  "content": {
+                    "dataType": "moveObject",
+                    "type": "0x2::coin::Coin<0x2::sui::SUI>",
+                    "hasPublicTransfer": true,
+                    "fields": {
+                      "balance": "10000",
+                      "id": {
+                        "id": "0x38b3186a7bb26a1ab2c982a0a9b482aa70f5a010fffc60f20194ef0f597474e8"
+                      }
+                    }
+                  }
+                }
+              },
+              {
+                "status": "VersionFound",
+                "details": {
+                  "objectId": "0xceaf9ee4582d3a233101e322a22cb2a5bea2e681ea5af4e59bd1abb0bb4fcb27",
+                  "version": "12",
+                  "digest": "B5z4YkAgTi78fdxMbxG3fv2V4YBkhpc8PRCPz8MzLtbf",
+                  "type": "0x2::coin::Coin<0x2::sui::SUI>",
+                  "owner": {
+                    "AddressOwner": "0xa6ced287081357950315a8842c3870f2d83f980fe0996a92d351d6749a0a0b47"
+                  },
+                  "previousTransaction": "BLN2oUCHmwmaAXXCxbojTcozUqZYfvXx4Bkgi7xcgyVc",
+                  "storageRebate": "100",
+                  "content": {
+                    "dataType": "moveObject",
+                    "type": "0x2::coin::Coin<0x2::sui::SUI>",
+                    "hasPublicTransfer": true,
+                    "fields": {
+                      "balance": "20000",
+                      "id": {
+                        "id": "0x38b3186a7bb26a1ab2c982a0a9b482aa70f5a010fffc60f20194ef0f597474e8"
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "sui_verifyZkLoginSignature",
+      "tags": [
+        {
+          "name": "Read API"
+        }
+      ],
+      "description": "Verify a zklogin signature for the given bytes, intent scope and author.",
+      "params": [
+        {
+          "name": "bytes",
+          "description": "The Base64 string of bcs bytes for raw transaction data or personal message indicated by intent_scope.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "signature",
+          "description": "The Base64 string of the zklogin signature to verify.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "intent_scope",
+          "description": "The intent scope, either transaction data or personal message. Used to parse bytes.",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/ZkLoginIntentScope"
+          }
+        },
+        {
+          "name": "author",
+          "description": "The author of the signature.",
+          "required": true,
+          "schema": {
+            "$ref": "#/components/schemas/SuiAddress"
+          }
+        }
+      ],
+      "result": {
+        "name": "ZkLoginVerifyResult",
+        "required": true,
+        "schema": {
+          "$ref": "#/components/schemas/ZkLoginVerifyResult"
+        }
       }
     },
     {
@@ -2859,7 +3136,7 @@
           "name": "cursor",
           "description": "optional paging cursor",
           "schema": {
-            "$ref": "#/components/schemas/ObjectID"
+            "type": "string"
           }
         },
         {
@@ -2876,7 +3153,7 @@
         "name": "CoinPage",
         "required": true,
         "schema": {
-          "$ref": "#/components/schemas/Page_for_Coin_and_ObjectID"
+          "$ref": "#/components/schemas/Page_for_Coin_and_String"
         }
       },
       "examples": [
@@ -2902,30 +3179,30 @@
               "data": [
                 {
                   "coinType": "0x2::sui::SUI",
-                  "coinObjectId": "0x91825debff541cf4e08b5c5f7296ff9840e6f0b185af93984cde8cf3870302c0",
+                  "coinObjectId": "0x861c5e055605b2bb1199faf653a8771e448930bc95a0369fad43a9870a2e5878",
                   "version": "103626",
-                  "digest": "7dp5WtTmtGp83EXYYFMzjBJRFeSgR67AzqMETLrfgeFx",
+                  "digest": "Ao1QyN9UTmYzb2ead3D5xhSBk7TvACRvmnJW8gRbwP99",
                   "balance": "200000000",
-                  "previousTransaction": "9WfFUVhjbbh4tWkyUse1QxzbKX952cyXScH7xJNPB2vQ"
+                  "previousTransaction": "7dp5WtTmtGp83EXYYFMzjBJRFeSgR67AzqMETLrfgeFx"
                 },
                 {
                   "coinType": "0x2::sui::SUI",
-                  "coinObjectId": "0x48a53f22e2e901ea2a5bf44fdd5bb94a1d83b6efc4dd779f0890ca3b1f6ba997",
+                  "coinObjectId": "0x7e769678d059761bff8a8f3944642e4c33a6e4fb0b55f8face36fadaa22f2a0d",
                   "version": "103626",
-                  "digest": "9xLdMXezY8d1yRA2TtN6pYjapyy2EVKHWNriGPFGCFvd",
+                  "digest": "5taVxHU9QLQD5cNdqxt8kNGAab93GMG4vX7zYDxEaohx",
                   "balance": "200000000",
-                  "previousTransaction": "Byq9SyV7x6fvzaf88YRA9JM8vLbVLJAqUX8pESDmKcgw"
+                  "previousTransaction": "9xLdMXezY8d1yRA2TtN6pYjapyy2EVKHWNriGPFGCFvd"
                 },
                 {
                   "coinType": "0x2::sui::SUI",
-                  "coinObjectId": "0x6867fcc63161269c5c0c73b02229486bbaff319209dfb8299ced3b8609037997",
+                  "coinObjectId": "0xa323d541ba5cf9e34919d2644cda38a263f69f47ae954dec65295231e0d2c7c8",
                   "version": "103626",
-                  "digest": "5xexWFq6QpGHBQyC9P2cbAJXq9qm2EjzfuRM9NwS1uyG",
+                  "digest": "82ZNKSSueWUQkpFNbBZGHSr3sUL5Rxfr7ucVRsvgQzz2",
                   "balance": "200000000",
-                  "previousTransaction": "CEjwHmo98nAiYhSMfKoSDvUMtfKJ6ge6Uj4wKotK4MPZ"
+                  "previousTransaction": "5xexWFq6QpGHBQyC9P2cbAJXq9qm2EjzfuRM9NwS1uyG"
                 }
               ],
-              "nextCursor": "0x861c5e055605b2bb1199faf653a8771e448930bc95a0369fad43a9870a2e5878",
+              "nextCursor": "abcd",
               "hasNextPage": true
             }
           }
@@ -2970,7 +3247,7 @@
           "params": [
             {
               "name": "owner",
-              "value": "0x51ceab2edc89f74730e683ebee65578cb3bc9237ba6fca019438a9737cf156ae"
+              "value": "0xa6f5a7953a75dc632e696cabe60560522a017bf2fb0bd930d1ec22c06f1ee4e4"
             },
             {
               "name": "coin_type",
@@ -2996,7 +3273,7 @@
           "name": "Coin Query API"
         }
       ],
-      "description": "Return metadata(e.g., symbol, decimals) for a coin",
+      "description": "Return metadata (e.g., symbol, decimals) for a coin. Note that if the coin's metadata was wrapped in the transaction that published its marker type, or the latest version of the metadata object is wrapped or deleted, it will not be found.",
       "params": [
         {
           "name": "coin_type",
@@ -3025,14 +3302,12 @@
           "result": {
             "name": "Result",
             "value": {
-              "id": {
-                "id": "0x6d907beaa3a49db57bdfdb3557e6d405cbf01c293a53e01457d65e92b5d8dd68"
-              },
               "decimals": 9,
               "name": "Usdc",
               "symbol": "USDC",
               "description": "Stable coin.",
-              "icon_url": null
+              "iconUrl": null,
+              "id": "0x51ceab2edc89f74730e683ebee65578cb3bc9237ba6fca019438a9737cf156ae"
             }
           }
         }
@@ -3066,7 +3341,7 @@
           "name": "cursor",
           "description": "optional paging cursor",
           "schema": {
-            "$ref": "#/components/schemas/ObjectID"
+            "type": "string"
           }
         },
         {
@@ -3083,7 +3358,7 @@
         "name": "CoinPage",
         "required": true,
         "schema": {
-          "$ref": "#/components/schemas/Page_for_Coin_and_ObjectID"
+          "$ref": "#/components/schemas/Page_for_Coin_and_String"
         }
       },
       "examples": [
@@ -3092,7 +3367,7 @@
           "params": [
             {
               "name": "owner",
-              "value": "0xd62ca040aba24f862a763851c54908cd2a0ee7d709c11b93d4a2083747b76856"
+              "value": "0x6d907beaa3a49db57bdfdb3557e6d405cbf01c293a53e01457d65e92b5d8dd68"
             },
             {
               "name": "coin_type",
@@ -3100,7 +3375,7 @@
             },
             {
               "name": "cursor",
-              "value": "0xe5c651321915b06c81838c2e370109b554a448a78d3a56220f798398dde66eab"
+              "value": "0xee6b5173afedb35330f60397c2cbb48196ba41921246c304be7b490cee0904eb"
             },
             {
               "name": "limit",
@@ -3113,30 +3388,30 @@
               "data": [
                 {
                   "coinType": "0x2::sui::SUI",
-                  "coinObjectId": "0xa5a8e30db5a798a7354340b6ea78a66f50921841ab5359ec7a3dc01f282420ae",
+                  "coinObjectId": "0xd62ca040aba24f862a763851c54908cd2a0ee7d709c11b93d4a2083747b76856",
                   "version": "103626",
-                  "digest": "tw5DzJTfdxTn4f3rekFrhN7dQTUezBgsEhycDobTBLb",
+                  "digest": "C9fdokK19BpDCgUgWsJv3cfd4LDyk7WGYBeGhFHbEL2Z",
                   "balance": "200000000",
-                  "previousTransaction": "HSein75AFXgdsnbABWLQ5mvjFmPFWrBFi9CMVsNn7gJr"
+                  "previousTransaction": "tw5DzJTfdxTn4f3rekFrhN7dQTUezBgsEhycDobTBLb"
                 },
                 {
                   "coinType": "0x2::sui::SUI",
-                  "coinObjectId": "0x47dfa99496428c65b2054ad7db1872b87ff05b1047bb5e3adf5257cceb08ecb4",
+                  "coinObjectId": "0xf44d295a385dc3544d211411b865e8bc4f01f49186970c7cf61e1cc829cc0be7",
                   "version": "103626",
-                  "digest": "AfgFe7ZfjJ5dWV6VAy2LbtvBFhcABkvdvwEjLrRcFqtr",
+                  "digest": "5qZkmtN5J5uGHURtiy9BtBhnXATPR2Wa6BJBDLrMzCaf",
                   "balance": "200000000",
-                  "previousTransaction": "5WHnm9jUZEtDvSvsj7HBrP5BoxA3UY6R57qqumXJXboV"
+                  "previousTransaction": "AfgFe7ZfjJ5dWV6VAy2LbtvBFhcABkvdvwEjLrRcFqtr"
                 },
                 {
                   "coinType": "0x2::sui::SUI",
-                  "coinObjectId": "0xd4f062dbcfc3bf73f5861945592222ff7b090ac21c8a3cf840abdc5b743da778",
+                  "coinObjectId": "0x42ef9314ccc792dd4401a88e69c66b4c5e43f21e9e57f4abe3c702649d3a7dd0",
                   "version": "103626",
-                  "digest": "9er6jxigfuQEKsn9gtPV2oW1zGQRcFtKNijHVe88GUJD",
+                  "digest": "FLE2nB2Wio3oUyTx6HyzkrMsWiZxDg9Kk8s7ivvuoBbD",
                   "balance": "200000000",
-                  "previousTransaction": "H3gwoKE2FSLx3BwvNTTKqCsNHmg6ARzm345icHhXUAEW"
+                  "previousTransaction": "9er6jxigfuQEKsn9gtPV2oW1zGQRcFtKNijHVe88GUJD"
                 }
               ],
-              "nextCursor": "0xd4f062dbcfc3bf73f5861945592222ff7b090ac21c8a3cf840abdc5b743da778",
+              "nextCursor": "abcd",
               "hasNextPage": true
             }
           }
@@ -3242,7 +3517,7 @@
           "params": [
             {
               "name": "parent_object_id",
-              "value": "0xc8359b6b5e3bfeab524e5edaad3a204b4053745b2d45d1f00cd8d24e5b697607"
+              "value": "0x3ddea0f8c3da994d9ead562ce76e36fdef6a382da344930c73d1298b0e9644b8"
             },
             {
               "name": "name",
@@ -3256,14 +3531,14 @@
             "name": "Result",
             "value": {
               "data": {
-                "objectId": "0xc8359b6b5e3bfeab524e5edaad3a204b4053745b2d45d1f00cd8d24e5b697607",
+                "objectId": "0x3ddea0f8c3da994d9ead562ce76e36fdef6a382da344930c73d1298b0e9644b8",
                 "version": "1",
-                "digest": "2VivvkBoFVwEg8oXq3tK9r3d3ybvMACtk9QwpFnkM6v2",
+                "digest": "Faiv4yqGR4HjAW8WhMN1NHHNStxXgP3u22dVPyvLad2z",
                 "type": "0x0000000000000000000000000000000000000000000000000000000000000009::test::TestField",
                 "owner": {
-                  "AddressOwner": "0xc055d5c23e2f6c69e6aacf5b4664b570cb20d4feace07fc863a2eef286c3e95e"
+                  "AddressOwner": "0x5ea6f7a348f4a7bd1a9ab069eb7f63865de3075cc5a4e62432f634b50fd2bb2b"
                 },
-                "previousTransaction": "FJjAr8fdpuQvVZgd9VswXxz9jZcFGEAgKgdi8d6zXE3S",
+                "previousTransaction": "5qTpesGST3v9NmMTkzV7HHNZRJh52BSqUTErc6L6XGm",
                 "storageRebate": "100",
                 "content": {
                   "dataType": "moveObject",
@@ -3324,11 +3599,11 @@
           "params": [
             {
               "name": "parent_object_id",
-              "value": "0xe15bb8de6dadd21835dfe44f4973139c15f93ddea0f8c3da994d9ead562ce76e"
+              "value": "0x5612581eba57ebe7e594b809ccceec2be4dac6ff6945d49b3ecc043d049611f6"
             },
             {
               "name": "cursor",
-              "value": "0xa9334aeacc435c70ab9635e47a277d8f8dd9d87765d1aadec2db8cc24c312542"
+              "value": "0x671832358f25bfacde706e528df4e15bb8de6dadd21835dfe44f4973139c15f9"
             },
             {
               "name": "limit",
@@ -3344,39 +3619,42 @@
                     "type": "0x0000000000000000000000000000000000000000000000000000000000000009::test::TestField",
                     "value": "some_value"
                   },
-                  "bcsName": "2F1KQ3miNpBx1RzoRr1MVYMraK7RV",
+                  "bcsEncoding": "base64",
+                  "bcsName": "FDB4OTo6dGVzdDo6VGVzdEZpZWxk",
                   "type": "DynamicField",
                   "objectType": "test",
-                  "objectId": "0x36fdef6a382da344930c73d1298b0e9644b85ea6f7a348f4a7bd1a9ab069eb7f",
+                  "objectId": "0xcfd10bca4d517e9452ad5486d69ee482b758c2399039dbbedd5db24385e934d6",
                   "version": 1,
-                  "digest": "7hWCQjKfZf7oNLpSrhFJZEmYnpmSPzVLwJfFuHmMD9ct"
+                  "digest": "9oCJR2QHVThbwWtSYwmWv6oSFw26PuxXkLyFrUbNqpU2"
                 },
                 {
                   "name": {
                     "type": "0x0000000000000000000000000000000000000000000000000000000000000009::test::TestField",
                     "value": "some_value"
                   },
-                  "bcsName": "2F1KQ3miNpBx1RzoRr1MVYMraK7RV",
+                  "bcsEncoding": "base64",
+                  "bcsName": "FDB4OTo6dGVzdDo6VGVzdEZpZWxk",
                   "type": "DynamicField",
                   "objectType": "test",
-                  "objectId": "0xfe41671856fd3450dc5574abd53c793c9f22d8a72d5550df8d2d64a9155d126c",
+                  "objectId": "0x05a4a796534a1833ca2c4df8fda7d073bbbf2715d2cd82ed40dc051dd5e05f7f",
                   "version": 1,
-                  "digest": "CxuC9uMcWLk8oMg7QGaJSqUE4hwP6cMUQ94ipiN53jr3"
+                  "digest": "3F8njMJQe6DNxeuvUnHPVjuR9Lt3RNwfsBoxDcB9SXAa"
                 },
                 {
                   "name": {
                     "type": "0x0000000000000000000000000000000000000000000000000000000000000009::test::TestField",
                     "value": "some_value"
                   },
-                  "bcsName": "2F1KQ3miNpBx1RzoRr1MVYMraK7RV",
+                  "bcsEncoding": "base64",
+                  "bcsName": "FDB4OTo6dGVzdDo6VGVzdEZpZWxk",
                   "type": "DynamicField",
                   "objectType": "test",
-                  "objectId": "0x1edb2df5ea5d55c96a611371d22799d268270cd4bb4d4f520fe9bbf0cf1cebe3",
+                  "objectId": "0x6d95af2033dd243fe6bdc6886d51b7d1cb695b9491893f88a5ae1b9d4f235b3c",
                   "version": 1,
-                  "digest": "HJxTwLy4oE1Aoy3PocGfL9oHystQiyssHfmyE8YaPrw4"
+                  "digest": "9Ury7TXnLtHDrxreKjv5eMJpDAU4wZRuev4JJ1UnJBMp"
                 }
               ],
-              "nextCursor": "0x8a25d8876ea3c60e345ac3861444136b4a1b0b37a91692359a98496738a58c17",
+              "nextCursor": "0xfd0b2c4326c56b1fec231d73038dba0f0885b97982f5fcac3ec6f5c8cae16743",
               "hasNextPage": true
             }
           }
@@ -3464,7 +3742,7 @@
           "params": [
             {
               "name": "address",
-              "value": "0xa69bb635dcee0f33643b4729ae81730d55e5e26860fac6839ce2d7ed7e6f29d2"
+              "value": "0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827"
             },
             {
               "name": "query",
@@ -3475,7 +3753,7 @@
                       "StructType": "0x2::coin::Coin<0x2::sui::SUI>"
                     },
                     {
-                      "AddressOwner": "0xa69bb635dcee0f33643b4729ae81730d55e5e26860fac6839ce2d7ed7e6f29d2"
+                      "AddressOwner": "0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827"
                     },
                     {
                       "Version": "13488"
@@ -3495,7 +3773,7 @@
             },
             {
               "name": "cursor",
-              "value": "0x76a1b4c23f2d9a9b6f0d8b2c17beace292b72aea16d6fb49b7d1ae51f33b01ed"
+              "value": "0x0cd4bb4d4f520fe9bbf0cf1cebe3f2549412826c3c9261bff9786c240123749f"
             },
             {
               "name": "limit",
@@ -3508,45 +3786,45 @@
               "data": [
                 {
                   "data": {
-                    "objectId": "0x3d6255ff8223c12b0fd985c49d5777a0d65ad3d707164b2a378eee639ebc2690",
+                    "objectId": "0x0b37a91692359a98496738a58c17a9334aeacc435c70ab9635e47a277d8f8dd9",
                     "version": "13488",
-                    "digest": "A6v9pFTLH3PkDSvEGgVjW1JhL7CtcUQKwGmgXK8SQNsc",
+                    "digest": "FZzfCnKCSRW2jN9AwkiarjYQapViUQAh799aiRMZ4YC2",
                     "type": "0x2::coin::Coin<0x2::sui::SUI>",
                     "owner": {
-                      "AddressOwner": "0xa69bb635dcee0f33643b4729ae81730d55e5e26860fac6839ce2d7ed7e6f29d2"
+                      "AddressOwner": "0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827"
                     },
-                    "previousTransaction": "AZiaEnge9YnawyLosmuxd8grpoiYasfpvBEjSLFUmJ8m",
+                    "previousTransaction": "AJhAseKLEndWYT45FbvYGgCJQTqZP537xqNnthY9FqSa",
                     "storageRebate": "100"
                   }
                 },
                 {
                   "data": {
-                    "objectId": "0x1a6e30f43933bbf40f5f5b6ce1f44957337dcb28f32e0355326f8c7d932bd54d",
+                    "objectId": "0xd4feace07fc863a2eef286c3e95ed48e2c181bb65db5beaf7ea664b4ca6b744c",
                     "version": "13488",
-                    "digest": "Fn1HG7LyUcLDps6bhYQkPWXpeUXgisznxRJ2qvn7Q1JN",
+                    "digest": "3cxBDcfnkVgtXWhnMnKKkMGtZdiEorUhb1vdp2DkVyfi",
                     "type": "0x2::coin::Coin<0x2::sui::SUI>",
                     "owner": {
-                      "AddressOwner": "0xa69bb635dcee0f33643b4729ae81730d55e5e26860fac6839ce2d7ed7e6f29d2"
+                      "AddressOwner": "0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827"
                     },
-                    "previousTransaction": "5EZjpdpApGGb48UZtuRgXuTRDBgkFDYaiNUtUNg7788k",
+                    "previousTransaction": "8qCvxDHh5LtDfF95Ci9G7vvQN2P6y4v55S9xoKBYp7FM",
                     "storageRebate": "100"
                   }
                 },
                 {
                   "data": {
-                    "objectId": "0x28628a24386298faa98850887f64da841b87279efd098d59a66a3d9adc87cce8",
+                    "objectId": "0xe26860fac6839ce2d7ed7e6f29d276a1b4c23f2d9a9b6f0d8b2c17beace292b7",
                     "version": "13488",
-                    "digest": "39aXGAwHaY3CiqWwLiBZ7JRaGSvnpvPbHxMSJAwAUY5i",
+                    "digest": "3tX9sgYC4A6nVKGjKEE5xxW6t4zkvDL9BwjuaxMg8arP",
                     "type": "0x2::coin::Coin<0x2::sui::SUI>",
                     "owner": {
-                      "AddressOwner": "0xa69bb635dcee0f33643b4729ae81730d55e5e26860fac6839ce2d7ed7e6f29d2"
+                      "AddressOwner": "0xdbc9abc01a87906b033a75750e741edb2df5ea5d55c96a611371d22799d26827"
                     },
-                    "previousTransaction": "CnBDiCrxWcJCCU1LHoda6XwwRaCSRfva8HZzfmR3p8Ag",
+                    "previousTransaction": "5Ka3vDaDy9h5UYk3Maz3vssWHrhbcGXQgwg8fL2ygyTi",
                     "storageRebate": "100"
                   }
                 }
               ],
-              "nextCursor": "0x28628a24386298faa98850887f64da841b87279efd098d59a66a3d9adc87cce8",
+              "nextCursor": "0xe26860fac6839ce2d7ed7e6f29d276a1b4c23f2d9a9b6f0d8b2c17beace292b7",
               "hasNextPage": true
             }
           }
@@ -3606,7 +3884,57 @@
             "$ref": "#/components/schemas/DelegatedStake"
           }
         }
-      }
+      },
+      "examples": [
+        {
+          "name": "Returns the staking information for the address the request provides.",
+          "params": [
+            {
+              "name": "owner",
+              "value": "0x9c76d5157eaa77c41a7bfda8db98a8e8080f7cb53b7313088ed085c73f866f21"
+            }
+          ],
+          "result": {
+            "name": "Result",
+            "value": [
+              {
+                "validatorAddress": "0x3befb84f03a24386492bd3b05b1fd386172eb450e5059ce7df0ea6d9d6cefcaa",
+                "stakingPool": "0x9a95cf69368e31b4dbe8ee9bdb3c0587bbc79d8fc6edf4007e185a962fd906df",
+                "stakes": [
+                  {
+                    "stakedSuiId": "0xb4eeb46b70f0bebcae832aeef9f7c5db76052ab656e5f81853d0cf701cdbc8eb",
+                    "stakeRequestEpoch": "62",
+                    "stakeActiveEpoch": "63",
+                    "principal": "200000000000",
+                    "status": "Active",
+                    "estimatedReward": "520000000"
+                  },
+                  {
+                    "stakedSuiId": "0xf27ab513fc6ef8c344406c78da3d5ad3a5fcc295dc8803c15989a62d33ee8590",
+                    "stakeRequestEpoch": "142",
+                    "stakeActiveEpoch": "143",
+                    "principal": "200000000000",
+                    "status": "Pending"
+                  }
+                ]
+              },
+              {
+                "validatorAddress": "0x14cfd5e91c13a481370240e392464c329a203fb9f0a8158aaab9b2a90044b26e",
+                "stakingPool": "0x14cc7fee4100fdcabda6d15c63c4b49c45ae23f2b936495cd38b1a4b04010295",
+                "stakes": [
+                  {
+                    "stakedSuiId": "0xbaa75ac72e548aeecf2ce8b4e88530651d6e8f93e0fb79b4bc65a512beb5b9f3",
+                    "stakeRequestEpoch": "244",
+                    "stakeActiveEpoch": "245",
+                    "principal": "200000000000",
+                    "status": "Unstaked"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "name": "suix_getStakesByIds",
@@ -3637,7 +3965,45 @@
             "$ref": "#/components/schemas/DelegatedStake"
           }
         }
-      }
+      },
+      "examples": [
+        {
+          "name": "Returns the staking information for the address the request provides.",
+          "params": [
+            {
+              "name": "staked_sui_ids",
+              "value": [
+                "0x378423de90ed03b694cecf443c72b5387b29a731d26d98108d7abc4902107d7d",
+                "0x6a8e0f8fea6fda5488462e58724c034462b6064a08845e2ae2942fe7c4ee816d"
+              ]
+            }
+          ],
+          "result": {
+            "name": "Result",
+            "value": {
+              "validatorAddress": "0x754eb2eed23e6c6bb32c89fe1f21ab588374445e72e0402aea014b2956105799",
+              "stakingPool": "0x63ee67e81398729f87d81d62f399c041b0f8d0938923ea7e3917608ee62df437",
+              "stakes": [
+                {
+                  "stakedSuiId": "0x378423de90ed03b694cecf443c72b5387b29a731d26d98108d7abc4902107d7d",
+                  "stakeRequestEpoch": "62",
+                  "stakeActiveEpoch": "63",
+                  "principal": "200000000000",
+                  "status": "Active",
+                  "estimatedReward": "520000000"
+                },
+                {
+                  "stakedSuiId": "0x6a8e0f8fea6fda5488462e58724c034462b6064a08845e2ae2942fe7c4ee816d",
+                  "stakeRequestEpoch": "244",
+                  "stakeActiveEpoch": "245",
+                  "principal": "200000000000",
+                  "status": "Unstaked"
+                }
+              ]
+            }
+          }
+        }
+      ]
     },
     {
       "name": "suix_getTotalSupply",
@@ -3670,7 +4036,7 @@
           "params": [
             {
               "name": "coin_type",
-              "value": "0x0a52124e2d53af3bef7959609efa51761ad155441a1b73bdaeecce7c56488b13::acoin::ACOIN"
+              "value": "0xe5c651321915b06c81838c2e370109b554a448a78d3a56220f798398dde66eab::acoin::ACOIN"
             }
           ],
           "result": {
@@ -3707,15 +4073,15 @@
             "value": {
               "apys": [
                 {
-                  "address": "0xb7d1cb695b9491893f88a5ae1b9d4f235b3c7e00acf5386662fa062483ba507b",
+                  "address": "0x9d77e49d53f92bc8310f0ccc3257dcc85bada4a729d650f77622264321297809",
                   "apy": 0.06
                 },
                 {
-                  "address": "0x1e9e3039750f0a270f2e12441ad7f611a5f7fd0b2c4326c56b1fec231d73038d",
+                  "address": "0x27838b06db0346808ffb0676099de0408b31759f57b69c52e09410a66f9a23c3",
                   "apy": 0.02
                 },
                 {
-                  "address": "0xba0f0885b97982f5fcac3ec6f5c8cae16743671832358f25bfacde706e528df4",
+                  "address": "0x4be9913b6697a5e83e02e2a0fc747057ba0901e4d9b1e04de75ea2699a441321",
                   "apy": 0.05
                 }
               ],
@@ -3736,7 +4102,7 @@
       "params": [
         {
           "name": "query",
-          "description": "the event query criteria.",
+          "description": "The event query criteria. See [Event filter](https://docs.sui.io/build/event_api#event-filters) documentation for examples.",
           "required": true,
           "schema": {
             "$ref": "#/components/schemas/EventFilter"
@@ -3781,7 +4147,7 @@
               "name": "query",
               "value": {
                 "MoveModule": {
-                  "package": "0x30651d6e8f93e0fb79b4bc65a512beb5b9f3378423de90ed03b694cecf443c72",
+                  "package": "0xa395759ca37c6e1ffc179184e98a6f9a2da5d78f6e34b0e5044ed52a6bc0a1bc",
                   "module": "test"
                 }
               }
@@ -3789,7 +4155,7 @@
             {
               "name": "cursor",
               "value": {
-                "txDigest": "Nb5kW8n655ApSBA19d2K8UVFGtMnJHa1mJQRH1h5N9L",
+                "txDigest": "Eg3ynETJfTfPKyvJzq3VLG6MngURYHPMjjUJ3Xt1t7tf",
                 "eventSeq": "1"
               }
             },
@@ -3808,55 +4174,59 @@
               "data": [
                 {
                   "id": {
-                    "txDigest": "8WecQq8Qd79MmrHRXYudNG7e6vjWC9HtGAT4XZFyyWRM",
+                    "txDigest": "FFwCMgC7FHBLEwfL9JeSeR2EhMAZMykUPVW1kE3HgTMe",
                     "eventSeq": "1"
                   },
-                  "packageId": "0x28f9c59f430eaba84b8bee9b43a30f9cc83fa395759ca37c6e1ffc179184e98a",
+                  "packageId": "0xb2fd632992b01aa25900867288b63d6255ff8223c12b0fd985c49d5777a0d65a",
                   "transactionModule": "test",
-                  "sender": "0xc5db76052ab656e5f81853d0cf701cdbc8ebf27ab513fc6ef8c344406c78da3d",
+                  "sender": "0xcceee09f44d558691334ec0aff47af033f57162a2f33056e2585e2c46863ac02",
                   "type": "0x3::test::Test<0x3::test::Test>",
                   "parsedJson": "some_value",
+                  "bcsEncoding": "base64",
                   "bcs": ""
                 },
                 {
                   "id": {
-                    "txDigest": "CNLhn3qWzHhfmmLQTdinbFDd2DuXFPN9z77UUqsC4Z4A",
+                    "txDigest": "FUMhRSj76es8MYeaRYeaBnppk56cuEehKwL2CiU82U7B",
                     "eventSeq": "1"
                   },
-                  "packageId": "0x28f9c59f430eaba84b8bee9b43a30f9cc83fa395759ca37c6e1ffc179184e98a",
+                  "packageId": "0xb2fd632992b01aa25900867288b63d6255ff8223c12b0fd985c49d5777a0d65a",
                   "transactionModule": "test",
-                  "sender": "0x5ad3a5fcc295dc8803c15989a62d33ee859014cfd5e91c13a481370240e39246",
+                  "sender": "0x84bd999f9ff7a1804872957fafa528628a24386298faa98850887f64da841b87",
                   "type": "0x3::test::Test<0x3::test::Test>",
                   "parsedJson": "some_value",
+                  "bcsEncoding": "base64",
                   "bcs": ""
                 },
                 {
                   "id": {
-                    "txDigest": "FEhceVx5a6mkeZH8dPxthQkEEPkWfjWN3w1e6uTB5rFm",
+                    "txDigest": "CkEYWW2zxTCGBLvUcTARhyX92fu2uc7cnCUXfCiqAypp",
                     "eventSeq": "1"
                   },
-                  "packageId": "0x28f9c59f430eaba84b8bee9b43a30f9cc83fa395759ca37c6e1ffc179184e98a",
+                  "packageId": "0xb2fd632992b01aa25900867288b63d6255ff8223c12b0fd985c49d5777a0d65a",
                   "transactionModule": "test",
-                  "sender": "0x4c329a203fb9f0a8158aaab9b2a90044b26e14cc7fee4100fdcabda6d15c63c4",
+                  "sender": "0x279efd098d59a66a3d9adc87cce81fe9ec69dc8105b2b60140589ec8be44c29f",
                   "type": "0x3::test::Test<0x3::test::Test>",
                   "parsedJson": "some_value",
+                  "bcsEncoding": "base64",
                   "bcs": ""
                 },
                 {
                   "id": {
-                    "txDigest": "Nb5kW8n655ApSBA19d2K8UVFGtMnJHa1mJQRH1h5N9L",
+                    "txDigest": "Eg3ynETJfTfPKyvJzq3VLG6MngURYHPMjjUJ3Xt1t7tf",
                     "eventSeq": "1"
                   },
-                  "packageId": "0x28f9c59f430eaba84b8bee9b43a30f9cc83fa395759ca37c6e1ffc179184e98a",
+                  "packageId": "0xb2fd632992b01aa25900867288b63d6255ff8223c12b0fd985c49d5777a0d65a",
                   "transactionModule": "test",
-                  "sender": "0xb49c45ae23f2b936495cd38b1a4b04010295baa75ac72e548aeecf2ce8b4e885",
+                  "sender": "0x289be027d2a94f744b4c59fda7b528f9c59f430eaba84b8bee9b43a30f9cc83f",
                   "type": "0x3::test::Test<0x3::test::Test>",
                   "parsedJson": "some_value",
+                  "bcsEncoding": "base64",
                   "bcs": ""
                 }
               ],
               "nextCursor": {
-                "txDigest": "Nb5kW8n655ApSBA19d2K8UVFGtMnJHa1mJQRH1h5N9L",
+                "txDigest": "Eg3ynETJfTfPKyvJzq3VLG6MngURYHPMjjUJ3Xt1t7tf",
                 "eventSeq": "1"
               },
               "hasNextPage": false
@@ -3986,7 +4356,22 @@
         "schema": {
           "$ref": "#/components/schemas/SuiAddress"
         }
-      }
+      },
+      "examples": [
+        {
+          "name": "Returns the resolved address for the name the request provides.",
+          "params": [
+            {
+              "name": "name",
+              "value": "example.sui"
+            }
+          ],
+          "result": {
+            "name": "Result",
+            "value": "0x6710024f81dd33ab6833482ee8034e779a48e6ef635c7f856df4905022458bfb"
+          }
+        }
+      ]
     },
     {
       "name": "suix_resolveNameServiceNames",
@@ -4026,7 +4411,36 @@
         "schema": {
           "$ref": "#/components/schemas/Page_for_String_and_ObjectID"
         }
-      }
+      },
+      "examples": [
+        {
+          "name": "Returns the SuiNS name for the address the request provides. Currently, the API returns only the first name in cases where there are multiple. Future support will use the cursor ID and limit values in the request to control pagination of the response for addresses with multiple names.",
+          "params": [
+            {
+              "name": "address",
+              "value": "0x5cd6fa76ed1d18f05f15e35075252ddec4fb83621d55952d9172fcfcb72feae2"
+            },
+            {
+              "name": "cursor",
+              "value": "0xd22bbb46f892c42d9ec0ae4de93e02c75973a51c17180798237326a58694a2cf"
+            },
+            {
+              "name": "limit",
+              "value": 3
+            }
+          ],
+          "result": {
+            "name": "Result",
+            "value": {
+              "data": [
+                "example.sui"
+              ],
+              "nextCursor": "0xd22bbb46f892c42d9ec0ae4de93e02c75973a51c17180798237326a58694a2cf",
+              "hasNextPage": false
+            }
+          }
+        }
+      ]
     },
     {
       "name": "suix_subscribeEvent",
@@ -4045,7 +4459,7 @@
       "params": [
         {
           "name": "filter",
-          "description": "the filter criteria of the event stream, see the [Sui docs](https://docs.sui.io/build/pubsub#event-filters) for detailed examples.",
+          "description": "The filter criteria of the event stream. See [Event filter](https://docs.sui.io/build/event_api#event-filters) documentation for examples.",
           "required": true,
           "schema": {
             "$ref": "#/components/schemas/EventFilter"
@@ -4908,6 +5322,23 @@
   ],
   "components": {
     "schemas": {
+      "Authenticator": {
+        "oneOf": [
+          {
+            "description": "The contained SuiAddress exclusively has all permissions: read, write, delete, transfer",
+            "type": "object",
+            "required": [
+              "SingleOwner"
+            ],
+            "properties": {
+              "SingleOwner": {
+                "$ref": "#/components/schemas/SuiAddress"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
       "AuthorityPublicKeyBytes": {
         "description": "Defines the compressed version of the public key that we pass around in Sui",
         "allOf": [
@@ -4915,73 +5346,6 @@
             "$ref": "#/components/schemas/Base64"
           }
         ]
-      },
-      "AuxInputs": {
-        "description": "A parsed result of all aux inputs.",
-        "type": "object",
-        "required": [
-          "addr_seed",
-          "eph_public_key",
-          "jwt_sha2_hash",
-          "jwt_signature",
-          "key_claim_name",
-          "masked_content",
-          "max_epoch",
-          "num_sha2_blocks",
-          "payload_len",
-          "payload_start_index"
-        ],
-        "properties": {
-          "addr_seed": {
-            "type": "string"
-          },
-          "eph_public_key": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "jwt_sha2_hash": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "jwt_signature": {
-            "type": "string"
-          },
-          "key_claim_name": {
-            "type": "string"
-          },
-          "masked_content": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "uint8",
-              "minimum": 0.0
-            }
-          },
-          "max_epoch": {
-            "type": "integer",
-            "format": "uint64",
-            "minimum": 0.0
-          },
-          "num_sha2_blocks": {
-            "type": "integer",
-            "format": "uint8",
-            "minimum": 0.0
-          },
-          "payload_len": {
-            "type": "integer",
-            "format": "uint16",
-            "minimum": 0.0
-          },
-          "payload_start_index": {
-            "type": "integer",
-            "format": "uint16",
-            "minimum": 0.0
-          }
-        }
       },
       "Balance": {
         "type": "object",
@@ -5046,10 +5410,21 @@
       "BigInt_for_uint128": {
         "type": "string"
       },
+      "BigInt_for_uint16": {
+        "type": "string"
+      },
       "BigInt_for_uint32": {
         "type": "string"
       },
       "BigInt_for_uint64": {
+        "type": "string"
+      },
+      "Bn254FqElement": {
+        "description": "A struct that stores a Bn254 Fq field element as 32 bytes.",
+        "type": "string"
+      },
+      "Bn254FrElement": {
+        "description": "A struct that stores a Bn254 Fr field element as 32 bytes.",
         "type": "string"
       },
       "Checkpoint": {
@@ -5194,6 +5569,24 @@
           }
         ]
       },
+      "Claim": {
+        "description": "A claim consists of value and index_mod_4.",
+        "type": "object",
+        "required": [
+          "indexMod4",
+          "value"
+        ],
+        "properties": {
+          "indexMod4": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0.0
+          },
+          "value": {
+            "type": "string"
+          }
+        }
+      },
       "Coin": {
         "type": "object",
         "required": [
@@ -5292,6 +5685,112 @@
               }
             },
             "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "ZkLogin"
+            ],
+            "properties": {
+              "ZkLogin": {
+                "$ref": "#/components/schemas/ZkLoginAuthenticatorAsBytes"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "ConsensusCommitDigest": {
+        "$ref": "#/components/schemas/Digest"
+      },
+      "ConsensusDeterminedVersionAssignments": {
+        "description": "Uses an enum to allow for future expansion of the ConsensusDeterminedVersionAssignments.",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "CancelledTransactions"
+            ],
+            "properties": {
+              "CancelledTransactions": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "$ref": "#/components/schemas/TransactionDigest"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "$ref": "#/components/schemas/ObjectID"
+                          },
+                          {
+                            "$ref": "#/components/schemas/SequenceNumber2"
+                          }
+                        ],
+                        "maxItems": 2,
+                        "minItems": 2
+                      }
+                    }
+                  ],
+                  "maxItems": 2,
+                  "minItems": 2
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "CancelledTransactionsV2"
+            ],
+            "properties": {
+              "CancelledTransactionsV2": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "$ref": "#/components/schemas/TransactionDigest"
+                    },
+                    {
+                      "type": "array",
+                      "items": {
+                        "type": "array",
+                        "items": [
+                          {
+                            "type": "array",
+                            "items": [
+                              {
+                                "$ref": "#/components/schemas/ObjectID"
+                              },
+                              {
+                                "$ref": "#/components/schemas/SequenceNumber2"
+                              }
+                            ],
+                            "maxItems": 2,
+                            "minItems": 2
+                          },
+                          {
+                            "$ref": "#/components/schemas/SequenceNumber2"
+                          }
+                        ],
+                        "maxItems": 2,
+                        "minItems": 2
+                      }
+                    }
+                  ],
+                  "maxItems": 2,
+                  "minItems": 2
+                }
+              }
+            },
+            "additionalProperties": false
           }
         ]
       },
@@ -5376,6 +5875,71 @@
           }
         }
       },
+      "DevInspectArgs": {
+        "description": "Additional rguments supplied to dev inspect beyond what is allowed in today's API.",
+        "type": "object",
+        "properties": {
+          "gasBudget": {
+            "description": "The gas budget for the transaction.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "gasObjects": {
+            "description": "The gas objects used to pay for the transaction.",
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "array",
+              "items": [
+                {
+                  "$ref": "#/components/schemas/ObjectID"
+                },
+                {
+                  "$ref": "#/components/schemas/SequenceNumber2"
+                },
+                {
+                  "$ref": "#/components/schemas/ObjectDigest"
+                }
+              ],
+              "maxItems": 3,
+              "minItems": 3
+            }
+          },
+          "gasSponsor": {
+            "description": "The sponsor of the gas for the transaction, might be different from the sender.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SuiAddress"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "showRawTxnDataAndEffects": {
+            "description": "Whether to return the raw transaction data and effects.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "skipChecks": {
+            "description": "Whether to skip transaction checks for the transaction.",
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        }
+      },
       "DevInspectResults": {
         "description": "The response from processing a dev inspect transaction",
         "type": "object",
@@ -5404,6 +5968,24 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/Event"
+            }
+          },
+          "rawEffects": {
+            "description": "The raw effects of the transaction that was dev inspected.",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0.0
+            }
+          },
+          "rawTxnData": {
+            "description": "The raw transaction data that was dev inspected.",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0.0
             }
           },
           "results": {
@@ -5488,8 +6070,45 @@
       },
       "DynamicFieldInfo": {
         "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "bcsEncoding",
+              "bcsName"
+            ],
+            "properties": {
+              "bcsEncoding": {
+                "type": "string",
+                "enum": [
+                  "base64"
+                ]
+              },
+              "bcsName": {
+                "$ref": "#/components/schemas/Base64"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "bcsEncoding",
+              "bcsName"
+            ],
+            "properties": {
+              "bcsEncoding": {
+                "type": "string",
+                "enum": [
+                  "base58"
+                ]
+              },
+              "bcsName": {
+                "$ref": "#/components/schemas/Base58"
+              }
+            }
+          }
+        ],
         "required": [
-          "bcsName",
           "digest",
           "name",
           "objectId",
@@ -5498,9 +6117,6 @@
           "version"
         ],
         "properties": {
-          "bcsName": {
-            "$ref": "#/components/schemas/Base58"
-          },
           "digest": {
             "$ref": "#/components/schemas/ObjectDigest"
           },
@@ -5517,7 +6133,7 @@
             "$ref": "#/components/schemas/DynamicFieldType"
           },
           "version": {
-            "$ref": "#/components/schemas/SequenceNumber"
+            "$ref": "#/components/schemas/SequenceNumber2"
           }
         }
       },
@@ -5607,8 +6223,45 @@
       },
       "Event": {
         "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "required": [
+              "bcs",
+              "bcsEncoding"
+            ],
+            "properties": {
+              "bcs": {
+                "$ref": "#/components/schemas/Base64"
+              },
+              "bcsEncoding": {
+                "type": "string",
+                "enum": [
+                  "base64"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "bcs",
+              "bcsEncoding"
+            ],
+            "properties": {
+              "bcs": {
+                "$ref": "#/components/schemas/Base58"
+              },
+              "bcsEncoding": {
+                "type": "string",
+                "enum": [
+                  "base58"
+                ]
+              }
+            }
+          }
+        ],
         "required": [
-          "bcs",
           "id",
           "packageId",
           "parsedJson",
@@ -5617,14 +6270,6 @@
           "type"
         ],
         "properties": {
-          "bcs": {
-            "description": "Base 58 encoded bcs bytes of the move event",
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/Base58"
-              }
-            ]
-          },
           "id": {
             "description": "Sequential event ID, ie (transaction seq number, event seq number). 1) Serves as a unique event ID for each fullnode 2) Also serves to sequence events for the purposes of pagination and querying. A higher id is an event seen later by that fullnode. This ID is the \"cursor\" for event querying.",
             "allOf": [
@@ -5676,6 +6321,36 @@
       "EventFilter": {
         "oneOf": [
           {
+            "description": "Return all events.",
+            "type": "object",
+            "required": [
+              "All"
+            ],
+            "properties": {
+              "All": {
+                "type": "array",
+                "maxItems": 0
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "description": "Return events that match any of the given filters. Only supported on event subscriptions.",
+            "type": "object",
+            "required": [
+              "Any"
+            ],
+            "properties": {
+              "Any": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EventFilter"
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          {
             "description": "Query by sender address.",
             "type": "object",
             "required": [
@@ -5702,20 +6377,7 @@
             "additionalProperties": false
           },
           {
-            "description": "Return events emitted in a specified Package.",
-            "type": "object",
-            "required": [
-              "Package"
-            ],
-            "properties": {
-              "Package": {
-                "$ref": "#/components/schemas/ObjectID"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "description": "Return events emitted in a specified Move module.",
+            "description": "Return events emitted in a specified Move module. If the event is defined in Module A but emitted in a tx with Module B, query `MoveModule` by module B returns the event. Query `MoveEventModule` by module A returns the event too.",
             "type": "object",
             "required": [
               "MoveModule"
@@ -5746,7 +6408,7 @@
             "additionalProperties": false
           },
           {
-            "description": "Return events with the given move event struct name",
+            "description": "Return events with the given Move event struct name (struct tag). For example, if the event is defined in `0xabcd::MyModule`, and named `Foo`, then the struct tag is `0xabcd::MyModule::Foo`.",
             "type": "object",
             "required": [
               "MoveEventType"
@@ -5759,7 +6421,7 @@
             "additionalProperties": false
           },
           {
-            "description": "Return events with the given move event module name",
+            "description": "Return events with the given Move module name where the event struct is defined. If the event is defined in Module A but emitted in a tx with Module B, query `MoveEventModule` by module A returns the event. Query `MoveModule` by module B returns the event too.",
             "type": "object",
             "required": [
               "MoveEventModule"
@@ -5784,28 +6446,6 @@
                       }
                     ]
                   }
-                }
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "required": [
-              "MoveEventField"
-            ],
-            "properties": {
-              "MoveEventField": {
-                "type": "object",
-                "required": [
-                  "path",
-                  "value"
-                ],
-                "properties": {
-                  "path": {
-                    "type": "string"
-                  },
-                  "value": true
                 }
               }
             },
@@ -5845,85 +6485,11 @@
               }
             },
             "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "required": [
-              "All"
-            ],
-            "properties": {
-              "All": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EventFilter"
-                }
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "required": [
-              "Any"
-            ],
-            "properties": {
-              "Any": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/EventFilter"
-                }
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "required": [
-              "And"
-            ],
-            "properties": {
-              "And": {
-                "type": "array",
-                "items": [
-                  {
-                    "$ref": "#/components/schemas/EventFilter"
-                  },
-                  {
-                    "$ref": "#/components/schemas/EventFilter"
-                  }
-                ],
-                "maxItems": 2,
-                "minItems": 2
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "required": [
-              "Or"
-            ],
-            "properties": {
-              "Or": {
-                "type": "array",
-                "items": [
-                  {
-                    "$ref": "#/components/schemas/EventFilter"
-                  },
-                  {
-                    "$ref": "#/components/schemas/EventFilter"
-                  }
-                ],
-                "maxItems": 2,
-                "minItems": 2
-              }
-            },
-            "additionalProperties": false
           }
         ]
       },
       "EventID": {
-        "description": "Unique ID of a Sui Event, the ID is a combination of tx seq number and event seq number, the ID is local to this particular fullnode and will be different from other fullnode.",
+        "description": "Unique ID of a Sui Event, the ID is a combination of transaction digest and event seq number.",
         "type": "object",
         "required": [
           "eventSeq",
@@ -6069,6 +6635,18 @@
           {
             "type": "object",
             "required": [
+              "MultiSigLegacy"
+            ],
+            "properties": {
+              "MultiSigLegacy": {
+                "$ref": "#/components/schemas/MultiSigLegacy"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
               "Signature"
             ],
             "properties": {
@@ -6086,6 +6664,18 @@
             "properties": {
               "ZkLoginAuthenticator": {
                 "$ref": "#/components/schemas/ZkLoginAuthenticator"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "PasskeyAuthenticator"
+            ],
+            "properties": {
+              "PasskeyAuthenticator": {
+                "$ref": "#/components/schemas/PasskeyAuthenticator"
               }
             },
             "additionalProperties": false
@@ -6164,7 +6754,7 @@
                     "$ref": "#/components/schemas/ObjectID"
                   },
                   "initial_shared_version": {
-                    "$ref": "#/components/schemas/SequenceNumber"
+                    "$ref": "#/components/schemas/SequenceNumber2"
                   },
                   "mutable": {
                     "default": true,
@@ -6176,35 +6766,6 @@
             "additionalProperties": false
           }
         ]
-      },
-      "LoadedChildObject": {
-        "type": "object",
-        "required": [
-          "objectId",
-          "sequenceNumber"
-        ],
-        "properties": {
-          "objectId": {
-            "$ref": "#/components/schemas/ObjectID"
-          },
-          "sequenceNumber": {
-            "$ref": "#/components/schemas/SequenceNumber"
-          }
-        }
-      },
-      "LoadedChildObjectsResponse": {
-        "type": "object",
-        "required": [
-          "loadedChildObjects"
-        ],
-        "properties": {
-          "loadedChildObjects": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LoadedChildObject"
-            }
-          }
-        }
       },
       "MoveCallParams": {
         "type": "object",
@@ -6340,11 +6901,68 @@
                 "type": "null"
               }
             ]
+          },
+          {
+            "$ref": "#/components/schemas/MoveVariant"
           }
         ]
       },
+      "MoveVariant": {
+        "type": "object",
+        "required": [
+          "fields",
+          "type",
+          "variant"
+        ],
+        "properties": {
+          "fields": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/MoveValue"
+            }
+          },
+          "type": {
+            "type": "string"
+          },
+          "variant": {
+            "type": "string"
+          }
+        }
+      },
       "MultiSig": {
         "description": "The struct that contains signatures and public keys necessary for authenticating a MultiSig.",
+        "type": "object",
+        "required": [
+          "bitmap",
+          "multisig_pk",
+          "sigs"
+        ],
+        "properties": {
+          "bitmap": {
+            "description": "A bitmap that indicates the position of which public key the signature should be authenticated with.",
+            "type": "integer",
+            "format": "uint16",
+            "minimum": 0.0
+          },
+          "multisig_pk": {
+            "description": "The public key encoded with each public key with its signature scheme used along with the corresponding weight.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/MultiSigPublicKey"
+              }
+            ]
+          },
+          "sigs": {
+            "description": "The plain signature encoded with signature scheme.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CompressedSignature"
+            }
+          }
+        }
+      },
+      "MultiSigLegacy": {
+        "description": "Deprecated, use [struct MultiSig] instead. The struct that contains signatures and public keys necessary for authenticating a MultiSigLegacy.",
         "type": "object",
         "required": [
           "bitmap",
@@ -6364,7 +6982,7 @@
             "description": "The public key encoded with each public key with its signature scheme used along with the corresponding weight.",
             "allOf": [
               {
-                "$ref": "#/components/schemas/MultiSigPublicKey"
+                "$ref": "#/components/schemas/MultiSigPublicKeyLegacy"
               }
             ]
           },
@@ -6379,6 +6997,41 @@
       },
       "MultiSigPublicKey": {
         "description": "The struct that contains the public key used for authenticating a MultiSig.",
+        "type": "object",
+        "required": [
+          "pk_map",
+          "threshold"
+        ],
+        "properties": {
+          "pk_map": {
+            "description": "A list of public key and its corresponding weight.",
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": [
+                {
+                  "$ref": "#/components/schemas/PublicKey"
+                },
+                {
+                  "type": "integer",
+                  "format": "uint8",
+                  "minimum": 0.0
+                }
+              ],
+              "maxItems": 2,
+              "minItems": 2
+            }
+          },
+          "threshold": {
+            "description": "If the total weight of the public keys corresponding to verified signatures is larger than threshold, the MultiSig is verified.",
+            "type": "integer",
+            "format": "uint16",
+            "minimum": 0.0
+          }
+        }
+      },
+      "MultiSigPublicKeyLegacy": {
+        "description": "Deprecated, use [struct MultiSigPublicKey] instead. The struct that contains the public key used for authenticating a MultiSig.",
         "type": "object",
         "required": [
           "pk_map",
@@ -6856,7 +7509,7 @@
                     "$ref": "#/components/schemas/ObjectID"
                   },
                   {
-                    "$ref": "#/components/schemas/SequenceNumber"
+                    "$ref": "#/components/schemas/SequenceNumber2"
                   }
                 ],
                 "maxItems": 2,
@@ -6887,10 +7540,10 @@
                 ],
                 "properties": {
                   "asked_version": {
-                    "$ref": "#/components/schemas/SequenceNumber"
+                    "$ref": "#/components/schemas/SequenceNumber2"
                   },
                   "latest_version": {
-                    "$ref": "#/components/schemas/SequenceNumber"
+                    "$ref": "#/components/schemas/SequenceNumber2"
                   },
                   "object_id": {
                     "$ref": "#/components/schemas/ObjectID"
@@ -7009,7 +7662,7 @@
                 "description": "Object version.",
                 "allOf": [
                   {
-                    "$ref": "#/components/schemas/SequenceNumber"
+                    "$ref": "#/components/schemas/SequenceNumber2"
                   }
                 ]
               }
@@ -7146,7 +7799,7 @@
                     "description": "The version at which the object became shared",
                     "allOf": [
                       {
-                        "$ref": "#/components/schemas/SequenceNumber"
+                        "$ref": "#/components/schemas/SequenceNumber2"
                       }
                     ]
                   }
@@ -7161,6 +7814,41 @@
             "enum": [
               "Immutable"
             ]
+          },
+          {
+            "description": "Object is sequenced via consensus. Ownership is managed by the configured authenticator.\n\nNote: wondering what happened to `V1`? `Shared` above was the V1 of consensus objects.",
+            "type": "object",
+            "required": [
+              "ConsensusV2"
+            ],
+            "properties": {
+              "ConsensusV2": {
+                "type": "object",
+                "required": [
+                  "authenticator",
+                  "start_version"
+                ],
+                "properties": {
+                  "authenticator": {
+                    "description": "The authentication mode of the object",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/Authenticator"
+                      }
+                    ]
+                  },
+                  "start_version": {
+                    "description": "The version at which the object most recently became a consensus object. This serves the same function as `initial_shared_version`, except it may change if the object's Owner type changes.",
+                    "allOf": [
+                      {
+                        "$ref": "#/components/schemas/SequenceNumber2"
+                      }
+                    ]
+                  }
+                }
+              }
+            },
+            "additionalProperties": false
           }
         ]
       },
@@ -7193,7 +7881,7 @@
           }
         }
       },
-      "Page_for_Coin_and_ObjectID": {
+      "Page_for_Coin_and_String": {
         "description": "`next_cursor` points to the last item in the page; Reading with `next_cursor` will start from the next item after `next_cursor` if `next_cursor` is `Some`, otherwise it will start from the first item.",
         "type": "object",
         "required": [
@@ -7211,13 +7899,9 @@
             "type": "boolean"
           },
           "nextCursor": {
-            "anyOf": [
-              {
-                "$ref": "#/components/schemas/ObjectID"
-              },
-              {
-                "type": "null"
-              }
+            "type": [
+              "string",
+              "null"
             ]
           }
         }
@@ -7367,6 +8051,29 @@
           }
         }
       },
+      "PasskeyAuthenticator": {
+        "description": "An passkey authenticator with parsed fields. See field defition below. Can be initialized from [struct RawPasskeyAuthenticator].",
+        "type": "object",
+        "required": [
+          "authenticator_data",
+          "client_data_json"
+        ],
+        "properties": {
+          "authenticator_data": {
+            "description": "`authenticatorData` is a bytearray that encodes [Authenticator Data](https://www.w3.org/TR/webauthn-2/#sctn-authenticator-data) structure returned by the authenticator attestation response as is.",
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0.0
+            }
+          },
+          "client_data_json": {
+            "description": "`clientDataJSON` contains a JSON-compatible UTF-8 encoded string of the client data which is passed to the authenticator by the client during the authentication request (see [CollectedClientData](https://www.w3.org/TR/webauthn-2/#dictdef-collectedclientdata))",
+            "type": "string"
+          }
+        }
+      },
       "ProtocolConfig": {
         "type": "object",
         "required": [
@@ -7412,6 +8119,18 @@
           {
             "type": "object",
             "required": [
+              "u16"
+            ],
+            "properties": {
+              "u16": {
+                "$ref": "#/components/schemas/BigInt_for_uint16"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
               "u32"
             ],
             "properties": {
@@ -7444,26 +8163,23 @@
               }
             },
             "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "bool"
+            ],
+            "properties": {
+              "bool": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
           }
         ]
       },
       "ProtocolVersion": {
         "$ref": "#/components/schemas/BigInt_for_uint64"
-      },
-      "PublicInputs": {
-        "description": "The public inputs containing an array of string that is the all inputs hash.",
-        "type": "object",
-        "required": [
-          "inputs"
-        ],
-        "properties": {
-          "inputs": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        }
       },
       "PublicKey": {
         "oneOf": [
@@ -7498,6 +8214,30 @@
             ],
             "properties": {
               "Secp256r1": {
+                "$ref": "#/components/schemas/Base64"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "ZkLogin"
+            ],
+            "properties": {
+              "ZkLogin": {
+                "$ref": "#/components/schemas/ZkLoginPublicIdentifier"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "Passkey"
+            ],
+            "properties": {
+              "Passkey": {
                 "$ref": "#/components/schemas/Base64"
               }
             },
@@ -7561,7 +8301,7 @@
                 "type": "string"
               },
               "version": {
-                "$ref": "#/components/schemas/SequenceNumber"
+                "$ref": "#/components/schemas/SequenceNumber2"
               }
             }
           },
@@ -7604,7 +8344,7 @@
                 }
               },
               "version": {
-                "$ref": "#/components/schemas/SequenceNumber"
+                "$ref": "#/components/schemas/SequenceNumber2"
               }
             }
           }
@@ -7620,6 +8360,9 @@
         "type": "integer",
         "format": "uint64",
         "minimum": 0.0
+      },
+      "SequenceNumber2": {
+        "$ref": "#/components/schemas/BigInt_for_uint64"
       },
       "Signature": {
         "oneOf": [
@@ -7737,6 +8480,25 @@
           }
         }
       },
+      "SuiActiveJwk": {
+        "type": "object",
+        "required": [
+          "epoch",
+          "jwk",
+          "jwk_id"
+        ],
+        "properties": {
+          "epoch": {
+            "$ref": "#/components/schemas/BigInt_for_uint64"
+          },
+          "jwk": {
+            "$ref": "#/components/schemas/SuiJWK"
+          },
+          "jwk_id": {
+            "$ref": "#/components/schemas/SuiJwkId"
+          }
+        }
+      },
       "SuiAddress": {
         "$ref": "#/components/schemas/Hex"
       },
@@ -7809,6 +8571,17 @@
           }
         ]
       },
+      "SuiAuthenticatorStateExpire": {
+        "type": "object",
+        "required": [
+          "min_epoch"
+        ],
+        "properties": {
+          "min_epoch": {
+            "$ref": "#/components/schemas/BigInt_for_uint64"
+          }
+        }
+      },
       "SuiCallArg": {
         "oneOf": [
           {
@@ -7865,6 +8638,32 @@
                     ]
                   }
                 }
+              },
+              {
+                "type": "object",
+                "required": [
+                  "digest",
+                  "objectId",
+                  "objectType",
+                  "version"
+                ],
+                "properties": {
+                  "digest": {
+                    "$ref": "#/components/schemas/ObjectDigest"
+                  },
+                  "objectId": {
+                    "$ref": "#/components/schemas/ObjectID"
+                  },
+                  "objectType": {
+                    "type": "string",
+                    "enum": [
+                      "receiving"
+                    ]
+                  },
+                  "version": {
+                    "$ref": "#/components/schemas/SequenceNumber"
+                  }
+                }
               }
             ],
             "required": [
@@ -7905,6 +8704,33 @@
             }
           }
         ]
+      },
+      "SuiChangeEpoch": {
+        "type": "object",
+        "required": [
+          "computation_charge",
+          "epoch",
+          "epoch_start_timestamp_ms",
+          "storage_charge",
+          "storage_rebate"
+        ],
+        "properties": {
+          "computation_charge": {
+            "$ref": "#/components/schemas/BigInt_for_uint64"
+          },
+          "epoch": {
+            "$ref": "#/components/schemas/BigInt_for_uint64"
+          },
+          "epoch_start_timestamp_ms": {
+            "$ref": "#/components/schemas/BigInt_for_uint64"
+          },
+          "storage_charge": {
+            "$ref": "#/components/schemas/BigInt_for_uint64"
+          },
+          "storage_rebate": {
+            "$ref": "#/components/schemas/BigInt_for_uint64"
+          }
+        }
       },
       "SuiCoinMetadata": {
         "type": "object",
@@ -7952,6 +8778,66 @@
             "type": "string"
           }
         }
+      },
+      "SuiEndOfEpochTransactionKind": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "AuthenticatorStateCreate",
+              "RandomnessStateCreate",
+              "CoinDenyListStateCreate"
+            ]
+          },
+          {
+            "type": "object",
+            "required": [
+              "ChangeEpoch"
+            ],
+            "properties": {
+              "ChangeEpoch": {
+                "$ref": "#/components/schemas/SuiChangeEpoch"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "AuthenticatorStateExpire"
+            ],
+            "properties": {
+              "AuthenticatorStateExpire": {
+                "$ref": "#/components/schemas/SuiAuthenticatorStateExpire"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "BridgeStateCreate"
+            ],
+            "properties": {
+              "BridgeStateCreate": {
+                "$ref": "#/components/schemas/CheckpointDigest"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "required": [
+              "BridgeCommitteeUpdate"
+            ],
+            "properties": {
+              "BridgeCommitteeUpdate": {
+                "$ref": "#/components/schemas/SequenceNumber2"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
       },
       "SuiExecutionResult": {
         "type": "object",
@@ -8005,7 +8891,45 @@
           }
         }
       },
+      "SuiJWK": {
+        "type": "object",
+        "required": [
+          "alg",
+          "e",
+          "kty",
+          "n"
+        ],
+        "properties": {
+          "alg": {
+            "type": "string"
+          },
+          "e": {
+            "type": "string"
+          },
+          "kty": {
+            "type": "string"
+          },
+          "n": {
+            "type": "string"
+          }
+        }
+      },
       "SuiJsonValue": {},
+      "SuiJwkId": {
+        "type": "object",
+        "required": [
+          "iss",
+          "kid"
+        ],
+        "properties": {
+          "iss": {
+            "type": "string"
+          },
+          "kid": {
+            "type": "string"
+          }
+        }
+      },
       "SuiMoveAbility": {
         "type": "string",
         "enum": [
@@ -8041,6 +8965,34 @@
           },
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "SuiMoveNormalizedEnum": {
+        "type": "object",
+        "required": [
+          "abilities",
+          "typeParameters",
+          "variants"
+        ],
+        "properties": {
+          "abilities": {
+            "$ref": "#/components/schemas/SuiMoveAbilitySet"
+          },
+          "typeParameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SuiMoveStructTypeParameter"
+            }
+          },
+          "variants": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SuiMoveNormalizedField"
+              }
+            }
           }
         }
       },
@@ -8108,6 +9060,12 @@
         "properties": {
           "address": {
             "type": "string"
+          },
+          "enums": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/SuiMoveNormalizedEnum"
+            }
           },
           "exposedFunctions": {
             "type": "object",
@@ -9681,6 +10639,165 @@
                 }
               }
             }
+          },
+          {
+            "description": "A transaction which updates global authenticator state",
+            "type": "object",
+            "required": [
+              "epoch",
+              "kind",
+              "new_active_jwks",
+              "round"
+            ],
+            "properties": {
+              "epoch": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "AuthenticatorStateUpdate"
+                ]
+              },
+              "new_active_jwks": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SuiActiveJwk"
+                }
+              },
+              "round": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              }
+            }
+          },
+          {
+            "description": "A transaction which updates global randomness state",
+            "type": "object",
+            "required": [
+              "epoch",
+              "kind",
+              "random_bytes",
+              "randomness_round"
+            ],
+            "properties": {
+              "epoch": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "RandomnessStateUpdate"
+                ]
+              },
+              "random_bytes": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "uint8",
+                  "minimum": 0.0
+                }
+              },
+              "randomness_round": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              }
+            }
+          },
+          {
+            "description": "The transaction which occurs only at the end of the epoch",
+            "type": "object",
+            "required": [
+              "kind",
+              "transactions"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "EndOfEpochTransaction"
+                ]
+              },
+              "transactions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SuiEndOfEpochTransactionKind"
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "commit_timestamp_ms",
+              "consensus_commit_digest",
+              "epoch",
+              "kind",
+              "round"
+            ],
+            "properties": {
+              "commit_timestamp_ms": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              },
+              "consensus_commit_digest": {
+                "$ref": "#/components/schemas/ConsensusCommitDigest"
+              },
+              "epoch": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "ConsensusCommitPrologueV2"
+                ]
+              },
+              "round": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "commit_timestamp_ms",
+              "consensus_commit_digest",
+              "consensus_determined_version_assignments",
+              "epoch",
+              "kind",
+              "round"
+            ],
+            "properties": {
+              "commit_timestamp_ms": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              },
+              "consensus_commit_digest": {
+                "$ref": "#/components/schemas/ConsensusCommitDigest"
+              },
+              "consensus_determined_version_assignments": {
+                "$ref": "#/components/schemas/ConsensusDeterminedVersionAssignments"
+              },
+              "epoch": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "ConsensusCommitPrologueV3"
+                ]
+              },
+              "round": {
+                "$ref": "#/components/schemas/BigInt_for_uint64"
+              },
+              "sub_dag_index": {
+                "default": null,
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/BigInt_for_uint64"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
           }
         ]
       },
@@ -9753,6 +10870,14 @@
               "$ref": "#/components/schemas/ObjectChange"
             }
           },
+          "rawEffects": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "uint8",
+              "minimum": 0.0
+            }
+          },
           "rawTransaction": {
             "description": "BCS encoded [SenderSignedData] that includes input object references returns empty array if `show_raw_transaction` is false",
             "allOf": [
@@ -9812,6 +10937,11 @@
             "default": false,
             "type": "boolean"
           },
+          "showRawEffects": {
+            "description": "Whether to show raw transaction effects. Default to be False",
+            "default": false,
+            "type": "boolean"
+          },
           "showRawInput": {
             "description": "Whether to show bcs-encoded transaction input data",
             "default": false,
@@ -9862,7 +10992,7 @@
       "TransactionFilter": {
         "oneOf": [
           {
-            "description": "Query by checkpoint.",
+            "description": "CURRENTLY NOT SUPPORTED. Query by checkpoint.",
             "type": "object",
             "required": [
               "Checkpoint"
@@ -9934,6 +11064,19 @@
             "additionalProperties": false
           },
           {
+            "description": "Query for transactions that touch this object.",
+            "type": "object",
+            "required": [
+              "AffectedObject"
+            ],
+            "properties": {
+              "AffectedObject": {
+                "$ref": "#/components/schemas/ObjectID"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
             "description": "Query by sender address.",
             "type": "object",
             "required": [
@@ -9985,7 +11128,7 @@
             "additionalProperties": false
           },
           {
-            "description": "Query txs that have a given address as sender or recipient.",
+            "description": "CURRENTLY NOT SUPPORTED. Query txs that have a given address as sender or recipient.",
             "type": "object",
             "required": [
               "FromOrToAddress"
@@ -10017,6 +11160,22 @@
               }
             },
             "additionalProperties": false
+          },
+          {
+            "description": "Query transactions of any given kind in the input.",
+            "type": "object",
+            "required": [
+              "TransactionKindIn"
+            ],
+            "properties": {
+              "TransactionKindIn": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "additionalProperties": false
           }
         ]
       },
@@ -10039,19 +11198,19 @@
         "description": "Identifies a struct and the module it was defined in",
         "type": "object",
         "required": [
+          "datatype_name",
           "module_name",
-          "package",
-          "struct_name"
+          "package"
         ],
         "properties": {
+          "datatype_name": {
+            "type": "string"
+          },
           "module_name": {
             "type": "string"
           },
           "package": {
             "$ref": "#/components/schemas/ObjectID"
-          },
-          "struct_name": {
-            "type": "string"
           }
         }
       },
@@ -10078,7 +11237,7 @@
             "description": "Version of the upgraded package",
             "allOf": [
               {
-                "$ref": "#/components/schemas/SequenceNumber"
+                "$ref": "#/components/schemas/SequenceNumber2"
               }
             ]
           }
@@ -10122,59 +11281,115 @@
         "description": "An zk login authenticator with all the necessary fields.",
         "type": "object",
         "required": [
-          "aux_inputs",
-          "proof",
-          "public_inputs",
-          "user_signature"
+          "inputs",
+          "maxEpoch",
+          "userSignature"
         ],
         "properties": {
-          "aux_inputs": {
-            "$ref": "#/components/schemas/AuxInputs"
+          "inputs": {
+            "$ref": "#/components/schemas/ZkLoginInputs"
           },
-          "proof": {
-            "$ref": "#/components/schemas/ZkLoginProof"
+          "maxEpoch": {
+            "type": "integer",
+            "format": "uint64",
+            "minimum": 0.0
           },
-          "public_inputs": {
-            "$ref": "#/components/schemas/PublicInputs"
-          },
-          "user_signature": {
+          "userSignature": {
             "$ref": "#/components/schemas/Signature"
           }
         }
       },
-      "ZkLoginProof": {
-        "description": "The zk login proof.",
+      "ZkLoginAuthenticatorAsBytes": {
+        "$ref": "#/components/schemas/Base64"
+      },
+      "ZkLoginInputs": {
+        "description": "All inputs required for the zk login proof verification and other public inputs.",
         "type": "object",
         "required": [
-          "pi_a",
-          "pi_b",
-          "pi_c",
-          "protocol"
+          "addressSeed",
+          "headerBase64",
+          "issBase64Details",
+          "proofPoints"
         ],
         "properties": {
-          "pi_a": {
+          "addressSeed": {
+            "$ref": "#/components/schemas/Bn254FrElement"
+          },
+          "headerBase64": {
+            "type": "string"
+          },
+          "issBase64Details": {
+            "$ref": "#/components/schemas/Claim"
+          },
+          "proofPoints": {
+            "$ref": "#/components/schemas/ZkLoginProof"
+          }
+        }
+      },
+      "ZkLoginIntentScope": {
+        "type": "string",
+        "enum": [
+          "TransactionData",
+          "PersonalMessage"
+        ]
+      },
+      "ZkLoginProof": {
+        "description": "The struct for zk login proof.",
+        "type": "object",
+        "required": [
+          "a",
+          "b",
+          "c"
+        ],
+        "properties": {
+          "a": {
             "type": "array",
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/Bn254FqElement"
             }
           },
-          "pi_b": {
+          "b": {
             "type": "array",
             "items": {
               "type": "array",
               "items": {
-                "type": "string"
+                "$ref": "#/components/schemas/Bn254FqElement"
               }
             }
           },
-          "pi_c": {
+          "c": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bn254FqElement"
+            }
+          }
+        }
+      },
+      "ZkLoginPublicIdentifier": {
+        "description": "A wrapper struct to retrofit in [enum PublicKey] for zkLogin. Useful to construct [struct MultiSigPublicKey].",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Base64"
+          }
+        ]
+      },
+      "ZkLoginVerifyResult": {
+        "type": "object",
+        "required": [
+          "errors",
+          "success"
+        ],
+        "properties": {
+          "errors": {
+            "description": "The errors field captures any verification error",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "protocol": {
-            "type": "string"
+          "success": {
+            "description": "The boolean result of the verification. If true, errors should be empty.",
+            "type": "boolean"
           }
         }
       }

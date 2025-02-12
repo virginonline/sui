@@ -8,12 +8,10 @@
 
 //# publish
 module test::m1 {
-    use sui::object::{Self, UID};
-    use sui::tx_context::TxContext;
     use sui::coin::Coin;
     use sui::sui::SUI;
 
-    struct R has key, store { id: UID }
+    public struct R has key, store { id: UID }
     public fun r(ctx: &mut TxContext): R { R { id: object::new(ctx) } }
 
     public fun v(): u64 { 100 }
@@ -37,7 +35,7 @@ module test::m1 {
 //> test::m1::priv(Input(0));
 //> test::m1::priv(Input(0));
 
-//# programmable --sender A --inputs @A  --gas-budget 100000000000000
+//# programmable --sender A --inputs @A  --gas-budget 10000000000
 //> 0: test::m1::v();
 //> 1: SplitCoins(Gas, [Result(0)]);
 //> test::m1::coin(Gas);

@@ -8,8 +8,7 @@ use crate::executor::{ExecutionResult, Executor};
 use once_cell::sync::Lazy;
 use proptest::{prelude::*, strategy::Union};
 use std::{fmt, sync::Arc};
-use sui_adapter::type_layout_resolver::TypeLayoutResolver;
-use sui_types::{storage::ObjectStore, transaction::VerifiedTransaction};
+use sui_types::{storage::ObjectStore, transaction::Transaction};
 
 mod account;
 mod helpers;
@@ -50,12 +49,12 @@ pub fn default_num_transactions() -> usize {
 /// Represents any sort of transaction that can be done in an account universe.
 pub trait AUTransactionGen: fmt::Debug {
     /// Applies this transaction onto the universe, updating balances within the universe as
-    /// necessary. Returns a signed transaction that can be run on the VM and the the execution status.
+    /// necessary. Returns a signed transaction that can be run on the VM and the execution status.
     fn apply(
         &self,
         universe: &mut AccountUniverse,
         exec: &mut Executor,
-    ) -> (VerifiedTransaction, ExecutionResult);
+    ) -> (Transaction, ExecutionResult);
 
     /// Creates an arced version of this transaction, suitable for dynamic dispatch.
     fn arced(self) -> Arc<dyn AUTransactionGen>
@@ -71,7 +70,7 @@ impl AUTransactionGen for Arc<dyn AUTransactionGen> {
         &self,
         universe: &mut AccountUniverse,
         exec: &mut Executor,
-    ) -> (VerifiedTransaction, ExecutionResult) {
+    ) -> (Transaction, ExecutionResult) {
         (**self).apply(universe, exec)
     }
 }
@@ -128,15 +127,17 @@ pub fn assert_accounts_match(
     executor: &Executor,
 ) -> Result<(), TestCaseError> {
     let state = executor.state.clone();
-    let store = state.db();
+    let backing_package_store = state.get_backing_package_store();
+    let object_store = state.get_object_store();
     let epoch_store = state.load_epoch_store_one_call_per_task();
-    let move_vm = epoch_store.move_vm();
-    let mut layout_resolver = TypeLayoutResolver::new(move_vm, store.as_ref());
+    let mut layout_resolver = epoch_store
+        .executor()
+        .type_layout_resolver(Box::new(backing_package_store.as_ref()));
     for (idx, account) in universe.accounts().iter().enumerate() {
         for (balance_idx, acc_object) in account.current_coins.iter().enumerate() {
-            let object = store.get_object(&acc_object.id()).unwrap().unwrap();
+            let object = object_store.get_object(&acc_object.id()).unwrap();
             let total_sui_value =
-                object.get_total_sui(&mut layout_resolver).unwrap() - object.storage_rebate;
+                object.get_total_sui(layout_resolver.as_mut()).unwrap() - object.storage_rebate;
             let account_balance_i = account.current_balances[balance_idx];
             prop_assert_eq!(
                 account_balance_i,

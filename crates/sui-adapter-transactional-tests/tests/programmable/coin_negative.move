@@ -7,12 +7,9 @@
 
 //# publish --sender A
 module test::fake {
-    use std::option;
     use sui::coin;
-    use sui::transfer;
-    use sui::tx_context::{Self, TxContext};
 
-    struct FAKE has drop {}
+    public struct FAKE has drop {}
 
     fun init(witness: FAKE, ctx: &mut TxContext) {
         let (treasury_cap, metadata) = coin::create_currency(witness, 2, b"FAKE", b"", b"", option::none(), ctx);
@@ -29,5 +26,5 @@ module test::fake {
 //# programmable --sender A --inputs object(2,0) 2
 //> SplitCoins(Input(0), [Input(1)]);
 
-//# programmable --sender A --inputs 18446744073709551615  --gas-budget 100000000000000
+//# programmable --sender A --inputs 18446744073709551615  --gas-budget 10000000000
 //> SplitCoins(Gas, [Input(0)])

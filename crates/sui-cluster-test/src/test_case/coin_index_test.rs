@@ -7,11 +7,12 @@ use jsonrpsee::rpc_params;
 use move_core_types::language_storage::StructTag;
 use serde_json::json;
 use std::collections::HashMap;
-use sui_core::test_utils::compile_managed_coin_package;
 use sui_json::SuiJsonValue;
 use sui_json_rpc_types::ObjectChange;
 use sui_json_rpc_types::SuiTransactionBlockResponse;
 use sui_json_rpc_types::{Balance, SuiTransactionBlockResponseOptions};
+use sui_move_build::test_utils::compile_managed_coin_package;
+use sui_test_transaction_builder::make_staking_transaction;
 use sui_types::base_types::{ObjectID, ObjectRef};
 use sui_types::gas_coin::GAS;
 use sui_types::object::Owner;
@@ -100,13 +101,10 @@ impl TestCaseImpl for CoinIndexTest {
             .get_latest_sui_system_state()
             .await
             .active_validators
-            .get(0)
+            .first()
             .unwrap()
             .sui_address;
-        let txn = ctx
-            .get_wallet()
-            .make_staking_transaction(validator_addr)
-            .await;
+        let txn = make_staking_transaction(ctx.get_wallet(), validator_addr).await;
 
         let response = client
             .quorum_driver_api()
@@ -169,6 +167,7 @@ impl TestCaseImpl for CoinIndexTest {
                 args,
                 None,
                 rgp * 2_000_000,
+                None,
             )
             .await
             .unwrap();
@@ -253,6 +252,7 @@ impl TestCaseImpl for CoinIndexTest {
                 ],
                 None,
                 rgp * 2_000_000,
+                None,
             )
             .await
             .unwrap();
@@ -318,6 +318,7 @@ impl TestCaseImpl for CoinIndexTest {
                 args,
                 None,
                 rgp * 2_000_000,
+                None,
             )
             .await
             .unwrap();
@@ -357,6 +358,7 @@ impl TestCaseImpl for CoinIndexTest {
                 ],
                 None,
                 rgp * 2_000_000,
+                None,
             )
             .await
             .unwrap();
@@ -388,6 +390,7 @@ impl TestCaseImpl for CoinIndexTest {
                 ],
                 None,
                 rgp * 2_000_000,
+                None,
             )
             .await
             .unwrap();
@@ -457,6 +460,7 @@ impl TestCaseImpl for CoinIndexTest {
                 ],
                 None,
                 rgp * 2_000_000,
+                None,
             )
             .await
             .unwrap();
@@ -519,16 +523,12 @@ impl TestCaseImpl for CoinIndexTest {
             sui_coins_with_managed_coin_1.data.len(),
             sui_coins.len() + 1
         );
-        assert_eq!(
-            sui_coins_with_managed_coin_1.next_cursor,
-            Some(first_managed_coin)
-        );
         assert!(sui_coins_with_managed_coin_1.has_next_page);
         let cursor = sui_coins_with_managed_coin_1.next_cursor;
 
         let managed_coins_2_11 = client
             .coin_read_api()
-            .get_all_coins(account, cursor, Some(10))
+            .get_all_coins(account, cursor.clone(), Some(10))
             .await
             .unwrap();
         assert_eq!(
@@ -550,14 +550,14 @@ impl TestCaseImpl for CoinIndexTest {
 
         let managed_coins_12_40 = client
             .coin_read_api()
-            .get_all_coins(account, cursor, None)
+            .get_all_coins(account, cursor.clone(), None)
             .await
             .unwrap();
         assert_eq!(
             managed_coins_12_40,
             client
                 .coin_read_api()
-                .get_coins(account, Some(coin_type_str.clone()), cursor, None)
+                .get_coins(account, Some(coin_type_str.clone()), cursor.clone(), None)
                 .await
                 .unwrap(),
         );
@@ -570,14 +570,19 @@ impl TestCaseImpl for CoinIndexTest {
 
         let managed_coins_12_40 = client
             .coin_read_api()
-            .get_all_coins(account, cursor, Some(30))
+            .get_all_coins(account, cursor.clone(), Some(30))
             .await
             .unwrap();
         assert_eq!(
             managed_coins_12_40,
             client
                 .coin_read_api()
-                .get_coins(account, Some(coin_type_str.clone()), cursor, Some(30))
+                .get_coins(
+                    account,
+                    Some(coin_type_str.clone()),
+                    cursor.clone(),
+                    Some(30)
+                )
                 .await
                 .unwrap(),
         );
@@ -593,7 +598,7 @@ impl TestCaseImpl for CoinIndexTest {
         let _ = add_to_envelope(ctx, package.0, envelope.0, removed_coin_id).await;
         let managed_coins_12_39 = client
             .coin_read_api()
-            .get_all_coins(account, cursor, Some(40))
+            .get_all_coins(account, cursor.clone(), Some(40))
             .await
             .unwrap();
         assert_eq!(
@@ -627,7 +632,7 @@ async fn publish_managed_coin_package(
     let compiled_package = compile_managed_coin_package();
     let all_module_bytes =
         compiled_package.get_package_base64(/* with_unpublished_deps */ false);
-    let dependencies = compiled_package.get_dependency_original_package_ids();
+    let dependencies = compiled_package.get_dependency_storage_package_ids();
 
     let params = rpc_params![
         ctx.get_wallet_address(),
@@ -703,6 +708,7 @@ async fn add_to_envelope(
             ],
             None,
             rgp * 2_000_000,
+            None,
         )
         .await
         .unwrap();

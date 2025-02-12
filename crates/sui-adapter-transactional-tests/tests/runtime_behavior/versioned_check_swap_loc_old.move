@@ -3,12 +3,12 @@
 
 // test old behavior of invariant violation
 
-//# init --protocol_version 6 --addresses test=0x0
+//# init --protocol-version 6 --addresses test=0x0
 
 //# publish
 module test::m {
     public fun t1(cond: bool) {
-        let x: vector<u64>;
+        let mut x: vector<u64>;
         let r: &vector<u64>;
         if (cond) {
             x = vector[];

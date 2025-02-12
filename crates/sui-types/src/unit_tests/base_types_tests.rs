@@ -15,12 +15,28 @@ use crate::crypto::{
     get_key_pair, get_key_pair_from_bytes, AccountKeyPair, AuthorityKeyPair, AuthoritySignature,
     Signature, SuiAuthoritySignature, SuiSignature,
 };
+use crate::digests::Digest;
 use crate::id::{ID, UID};
 use crate::{gas_coin::GasCoin, object::Object, SUI_FRAMEWORK_ADDRESS};
 use shared_crypto::intent::{Intent, IntentMessage, IntentScope};
 use sui_protocol_config::ProtocolConfig;
 
 use super::*;
+
+#[test]
+fn test_bcs_enum() {
+    let address = Owner::AddressOwner(SuiAddress::random_for_testing_only());
+    let shared = Owner::Shared {
+        initial_shared_version: 1.into(),
+    };
+
+    let address_ser = bcs::to_bytes(&address).unwrap();
+    let shared_ser = bcs::to_bytes(&shared).unwrap();
+
+    println!("{:?}", address_ser);
+    println!("{:?}", shared_ser);
+    assert!(shared_ser.len() < address_ser.len());
+}
 
 #[test]
 fn test_signatures() {
@@ -342,10 +358,12 @@ fn test_move_object_size_for_gas_metering() {
 #[test]
 fn test_move_package_size_for_gas_metering() {
     let module = file_format::empty_module();
+    let config = ProtocolConfig::get_for_max_version_UNSAFE();
     let package = Object::new_package(
         &[module],
-        TransactionDigest::genesis(),
-        ProtocolConfig::get_for_max_version().max_move_package_size(),
+        TransactionDigest::genesis_marker(),
+        config.max_move_package_size(),
+        config.move_binary_format_version(),
         &[], // empty dependencies for empty package (no modules)
     )
     .unwrap();
@@ -435,4 +453,32 @@ fn move_object_type_consistency() {
     assert!(ty.is_dynamic_field());
     assert_consistent(&UID::type_());
     assert_consistent(&ID::type_());
+}
+
+#[test]
+fn next_lexicographical_digest() {
+    let mut output = [0; 32];
+    output[31] = 1;
+    assert_eq!(
+        TransactionDigest::ZERO.next_lexicographical(),
+        Some(TransactionDigest::from(output))
+    );
+
+    let max = [255; 32];
+    let mut input = max;
+    input[31] = 254;
+    assert_eq!(Digest::from(max).next_lexicographical(), None);
+    assert_eq!(
+        Digest::from(input).next_lexicographical(),
+        Some(Digest::from(max))
+    );
+
+    input = max;
+    input[0] = 0;
+    output = [0; 32];
+    output[0] = 1;
+    assert_eq!(
+        Digest::from(input).next_lexicographical(),
+        Some(Digest::from(output))
+    );
 }

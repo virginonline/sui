@@ -17,7 +17,7 @@ use sui_types::object::Object;
 use sui_types::sui_serde::BigInt;
 use sui_types::sui_serde::SequenceNumber as AsSequenceNumber;
 
-pub type CoinPage = Page<Coin, ObjectID>;
+pub type CoinPage = Page<Coin, String>;
 
 #[serde_as]
 #[derive(Serialize, Deserialize, Debug, JsonSchema, PartialEq, Eq, Clone)]
@@ -34,8 +34,19 @@ pub struct Balance {
     pub locked_balance: HashMap<EpochId, u128>,
 }
 
+impl Balance {
+    pub fn zero(coin_type: String) -> Self {
+        Self {
+            coin_type,
+            coin_object_count: 0,
+            total_balance: 0,
+            locked_balance: HashMap::new(),
+        }
+    }
+}
+
 #[serde_as]
-#[derive(Serialize, Deserialize, Debug, JsonSchema, PartialEq, Eq)]
+#[derive(Serialize, Deserialize, Debug, JsonSchema, PartialEq, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Coin {
     pub coin_type: String,
@@ -56,7 +67,7 @@ impl Coin {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, JsonSchema, Clone)]
+#[derive(Serialize, Deserialize, Debug, JsonSchema, Clone, PartialEq, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct SuiCoinMetadata {
     /// Number of decimal places the coin uses.

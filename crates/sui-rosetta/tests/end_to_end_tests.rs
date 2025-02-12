@@ -1,23 +1,25 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-use std::time::Duration;
-
 use serde_json::json;
+use std::num::NonZeroUsize;
+use std::time::Duration;
 
 use rosetta_client::start_rosetta_test_server;
 use sui_json_rpc_types::SuiTransactionBlockResponseOptions;
 use sui_keys::keystore::AccountKeystore;
 use sui_rosetta::operations::Operations;
+use sui_rosetta::types::Currencies;
 use sui_rosetta::types::{
-    AccountBalanceRequest, AccountBalanceResponse, AccountIdentifier, NetworkIdentifier,
+    AccountBalanceRequest, AccountBalanceResponse, AccountIdentifier, Currency, NetworkIdentifier,
     SubAccount, SubAccountType, SuiEnv,
 };
+use sui_rosetta::CoinMetadataCache;
 use sui_sdk::rpc_types::{SuiExecutionStatus, SuiTransactionBlockEffectsAPI};
 use sui_swarm_config::genesis_config::{DEFAULT_GAS_AMOUNT, DEFAULT_NUMBER_OF_OBJECT_PER_ACCOUNT};
 use sui_types::quorum_driver_types::ExecuteTransactionRequestType;
 use sui_types::utils::to_sender_signed_transaction;
-use test_utils::network::TestClusterBuilder;
+use test_cluster::TestClusterBuilder;
 
 use crate::rosetta_client::RosettaEndpoint;
 
@@ -25,7 +27,7 @@ mod rosetta_client;
 
 #[tokio::test]
 async fn test_get_staked_sui() {
-    let test_cluster = TestClusterBuilder::new().build().await.unwrap();
+    let test_cluster = TestClusterBuilder::new().build().await;
     let address = test_cluster.get_address_0();
     let client = test_cluster.wallet.get_client().await.unwrap();
     let keystore = &test_cluster.wallet.config.keystore;
@@ -46,7 +48,7 @@ async fn test_get_staked_sui() {
             sub_account: None,
         },
         block_identifier: Default::default(),
-        currencies: vec![],
+        currencies: Currencies(vec![Currency::default()]),
     };
 
     let response: AccountBalanceResponse = rosetta_client
@@ -67,7 +69,7 @@ async fn test_get_staked_sui() {
             }),
         },
         block_identifier: Default::default(),
-        currencies: vec![],
+        currencies: Currencies(vec![Currency::default()]),
     };
     let response: AccountBalanceResponse = rosetta_client
         .call(RosettaEndpoint::Balance, &request)
@@ -126,7 +128,7 @@ async fn test_get_staked_sui() {
 
 #[tokio::test]
 async fn test_stake() {
-    let test_cluster = TestClusterBuilder::new().build().await.unwrap();
+    let test_cluster = TestClusterBuilder::new().build().await;
     let sender = test_cluster.get_address_0();
     let client = test_cluster.wallet.get_client().await.unwrap();
     let keystore = &test_cluster.wallet.config.keystore;
@@ -146,7 +148,7 @@ async fn test_stake() {
             "operation_identifier":{"index":0},
             "type":"Stake",
             "account": { "address" : sender.to_string() },
-            "amount" : { "value": "-1000000000" , "currency": { "symbol": "SUI", "decimals": 9}},
+            "amount" : { "value": "-1000000000" },
             "metadata": { "Stake" : {"validator": validator.to_string()} }
         }]
     ))
@@ -174,7 +176,10 @@ async fn test_stake() {
         tx.effects.as_ref().unwrap().status()
     );
 
-    let ops2 = Operations::try_from(tx).unwrap();
+    let coin_cache = CoinMetadataCache::new(client, NonZeroUsize::new(2).unwrap());
+    let ops2 = Operations::try_from_response(tx, &coin_cache)
+        .await
+        .unwrap();
     assert!(
         ops2.contains(&ops),
         "Operation mismatch. expecting:{}, got:{}",
@@ -187,7 +192,7 @@ async fn test_stake() {
 
 #[tokio::test]
 async fn test_stake_all() {
-    let test_cluster = TestClusterBuilder::new().build().await.unwrap();
+    let test_cluster = TestClusterBuilder::new().build().await;
     let sender = test_cluster.get_address_0();
     let client = test_cluster.wallet.get_client().await.unwrap();
     let keystore = &test_cluster.wallet.config.keystore;
@@ -234,7 +239,10 @@ async fn test_stake_all() {
         tx.effects.as_ref().unwrap().status()
     );
 
-    let ops2 = Operations::try_from(tx).unwrap();
+    let coin_cache = CoinMetadataCache::new(client, NonZeroUsize::new(2).unwrap());
+    let ops2 = Operations::try_from_response(tx, &coin_cache)
+        .await
+        .unwrap();
     assert!(
         ops2.contains(&ops),
         "Operation mismatch. expecting:{}, got:{}",
@@ -247,11 +255,12 @@ async fn test_stake_all() {
 
 #[tokio::test]
 async fn test_withdraw_stake() {
+    telemetry_subscribers::init_for_testing();
+
     let test_cluster = TestClusterBuilder::new()
-        .with_epoch_duration_ms(10000)
+        .with_epoch_duration_ms(60000)
         .build()
-        .await
-        .unwrap();
+        .await;
     let sender = test_cluster.get_address_0();
     let client = test_cluster.wallet.get_client().await.unwrap();
     let keystore = &test_cluster.wallet.config.keystore;
@@ -272,7 +281,7 @@ async fn test_withdraw_stake() {
             "operation_identifier":{"index":0},
             "type":"Stake",
             "account": { "address" : sender.to_string() },
-            "amount" : { "value": "-1000000000" , "currency": { "symbol": "SUI", "decimals": 9}},
+            "amount" : { "value": "-1000000000" },
             "metadata": { "Stake" : {"validator": validator.to_string()} }
         }]
     ))
@@ -315,8 +324,8 @@ async fn test_withdraw_stake() {
     assert_eq!(1, response.balances.len());
     assert_eq!(1000000000, response.balances[0].value);
 
-    // wait for epoch.
-    tokio::time::sleep(Duration::from_millis(15000)).await;
+    // Trigger epoch change.
+    test_cluster.trigger_reconfiguration().await;
 
     // withdraw all stake
     let ops = serde_json::from_value(json!(
@@ -348,8 +357,10 @@ async fn test_withdraw_stake() {
         tx.effects.as_ref().unwrap().status()
     );
     println!("Sui TX: {tx:?}");
-
-    let ops2 = Operations::try_from(tx).unwrap();
+    let coin_cache = CoinMetadataCache::new(client, NonZeroUsize::new(2).unwrap());
+    let ops2 = Operations::try_from_response(tx, &coin_cache)
+        .await
+        .unwrap();
     assert!(
         ops2.contains(&ops),
         "Operation mismatch. expecting:{}, got:{}",
@@ -374,7 +385,7 @@ async fn test_withdraw_stake() {
 
 #[tokio::test]
 async fn test_pay_sui() {
-    let test_cluster = TestClusterBuilder::new().build().await.unwrap();
+    let test_cluster = TestClusterBuilder::new().build().await;
     let sender = test_cluster.get_address_0();
     let recipient = test_cluster.get_address_1();
     let client = test_cluster.wallet.get_client().await.unwrap();
@@ -387,12 +398,12 @@ async fn test_pay_sui() {
             "operation_identifier":{"index":0},
             "type":"PaySui",
             "account": { "address" : recipient.to_string() },
-            "amount" : { "value": "1000000000" , "currency": { "symbol": "SUI", "decimals": 9}}
+            "amount" : { "value": "1000000000" }
         },{
             "operation_identifier":{"index":1},
             "type":"PaySui",
             "account": { "address" : sender.to_string() },
-            "amount" : { "value": "-1000000000" , "currency": { "symbol": "SUI", "decimals": 9}}
+            "amount" : { "value": "-1000000000" }
         }]
     ))
     .unwrap();
@@ -417,8 +428,10 @@ async fn test_pay_sui() {
         tx.effects.as_ref().unwrap().status()
     );
     println!("Sui TX: {tx:?}");
-
-    let ops2 = Operations::try_from(tx).unwrap();
+    let coin_cache = CoinMetadataCache::new(client, NonZeroUsize::new(2).unwrap());
+    let ops2 = Operations::try_from_response(tx, &coin_cache)
+        .await
+        .unwrap();
     assert!(
         ops2.contains(&ops),
         "Operation mismatch. expecting:{}, got:{}",
@@ -432,27 +445,28 @@ async fn test_pay_sui_multiple_times() {
     let test_cluster = TestClusterBuilder::new()
         .with_epoch_duration_ms(36000000)
         .build()
-        .await
-        .unwrap();
+        .await;
     let sender = test_cluster.get_address_0();
     let recipient = test_cluster.get_address_1();
     let client = test_cluster.wallet.get_client().await.unwrap();
     let keystore = &test_cluster.wallet.config.keystore;
 
     let (rosetta_client, _handle) = start_rosetta_test_server(client.clone()).await;
+    let coin_cache = CoinMetadataCache::new(client.clone(), NonZeroUsize::new(2).unwrap());
 
-    for _ in 1..100 {
+    for i in 1..20 {
+        println!("Iteration: {}", i);
         let ops = serde_json::from_value(json!(
             [{
                 "operation_identifier":{"index":0},
                 "type":"PaySui",
                 "account": { "address" : recipient.to_string() },
-                "amount" : { "value": "1000000000" , "currency": { "symbol": "SUI", "decimals": 9}}
+                "amount" : { "value": "1000000000" }
             },{
                 "operation_identifier":{"index":1},
                 "type":"PaySui",
                 "account": { "address" : sender.to_string() },
-                "amount" : { "value": "-1000000000" , "currency": { "symbol": "SUI", "decimals": 9}}
+                "amount" : { "value": "-1000000000" }
             }]
         ))
         .unwrap();
@@ -476,8 +490,9 @@ async fn test_pay_sui_multiple_times() {
             &SuiExecutionStatus::Success,
             tx.effects.as_ref().unwrap().status()
         );
-
-        let ops2 = Operations::try_from(tx).unwrap();
+        let ops2 = Operations::try_from_response(tx, &coin_cache)
+            .await
+            .unwrap();
         assert!(
             ops2.contains(&ops),
             "Operation mismatch. expecting:{}, got:{}",

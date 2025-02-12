@@ -3,23 +3,19 @@
 
 // Test creating objects just below the size limit, and above it
 
-//# init --addresses Test=0x0 --accounts A
+//# init --addresses Test=0x0 --accounts A --max-gas 100000000000000
 
 //# publish
 
 module Test::M1 {
-    use std::vector;
     use sui::bcs;
-    use sui::object::{Self, UID};
-    use sui::tx_context::{Self, TxContext};
-    use sui::transfer;
 
-    struct S has key, store {
+    public struct S has key, store {
         id: UID,
         contents: vector<u8>
     }
 
-    struct Wrapper has key {
+    public struct Wrapper has key {
         id: UID,
         s: S,
     }
@@ -28,15 +24,15 @@ module Test::M1 {
     public fun create_object_with_size(n: u64, ctx: &mut TxContext): S {
         // minimum object size for S is 32 bytes for UID + 1 byte for vector length
         assert!(n > std::address::length() + 1, 0);
-        let contents = vector[];
-        let i = 0;
+        let mut contents = vector[];
+        let mut i = 0;
         let bytes_to_add = n - (std::address::length() + 1);
         while (i < bytes_to_add) {
             vector::push_back(&mut contents, 9);
             i = i + 1;
         };
-        let s = S { id: object::new(ctx), contents };
-        let size = vector::length(&bcs::to_bytes(&s));
+        let mut s = S { id: object::new(ctx), contents };
+        let mut size = vector::length(&bcs::to_bytes(&s));
         // shrink by 1 byte until we match size. mismatch happens because of len(UID) + vector length byte
         while (size > n) {
             let _ = vector::pop_back(&mut s.contents);
@@ -64,8 +60,8 @@ module Test::M1 {
 
     /// Add `n` bytes to the `s` inside `wrapper`, then unwrap it. This should fail
     /// if `s` is larger than the max object size
-    public entry fun add_bytes_then_unwrap(wrapper: Wrapper, n: u64, ctx: &mut TxContext) {
-        let i = 0;
+    public entry fun add_bytes_then_unwrap(mut wrapper: Wrapper, n: u64, ctx: &mut TxContext) {
+        let mut i = 0;
         while (i < n) {
             vector::push_back(&mut wrapper.s.contents, 7);
             i = i + 1
@@ -76,33 +72,14 @@ module Test::M1 {
     }
 }
 
-// create above size limit should fail
-//# run Test::M1::transfer_object_with_size --args 256001 --sender A --gas-budget 10000000000000 --gas-price 1 --protocol-version 2
-
-// create under size limit should succeed
-//# run Test::M1::transfer_object_with_size --args 255999 --sender A --gas-budget 100000000000000 --gas-price 1 --protocol-version 2
-
-// create at size limit should succeed
-//# run Test::M1::transfer_object_with_size --args 256000 --sender A --gas-budget 100000000000000 --gas-price 1 --protocol-version 2
-
-// adding 1 byte to an object at the size limit should fail
-//# run Test::M1::add_byte --args object(4,0) --sender A --gas-budget 100000000000000 --gas-price 1 --protocol-version 2
-
-// create at size limit, wrap, increase to over size limit while wrapped, then unwrap. should fail
-//# run Test::M1::transfer_object_with_size --args 255968 --sender A --gas-budget 100000000000000 --gas-price 1 --protocol-version 2
-
-//# run Test::M1::wrap --args object(6,0) --sender A --gas-budget 100000000000000
-
-//# run Test::M1::add_bytes_then_unwrap --args object(7,0) 33 --sender A --gas-budget 100000000000000 --gas-price 1 --protocol-version 2
-
 
 // tests below all run out of gas with realistic prices
 
 // create above size limit should fail
-//# run Test::M1::transfer_object_with_size --args 256001 --sender A --gas-budget 10000000000000 --gas-price 1
+//# run Test::M1::transfer_object_with_size --args 256001 --sender A --gas-budget 10000000000000
 
 // create under size limit should succeed
-//# run Test::M1::transfer_object_with_size --args 255999 --sender A --gas-budget 100000000000000 --gas-price 1
+//# run Test::M1::transfer_object_with_size --args 255999 --sender A --gas-budget 100000000000000
 
 // create at size limit should succeed
-//# run Test::M1::transfer_object_with_size --args 256000 --sender A --gas-budget 100000000000000 --gas-price 1
+//# run Test::M1::transfer_object_with_size --args 256000 --sender A --gas-budget 100000000000000
