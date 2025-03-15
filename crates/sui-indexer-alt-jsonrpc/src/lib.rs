@@ -23,7 +23,7 @@ use prometheus::Registry;
 use serde_json::json;
 use sui_open_rpc::Project;
 use sui_pg_db::DbArgs;
-use tokio::{join, signal, task::JoinHandle};
+use tokio::task::JoinHandle;
 use tokio_util::sync::CancellationToken;
 use tower_layer::Identity;
 use tracing::info;
@@ -180,27 +180,10 @@ impl RpcService {
             cancel_handle.stop()
         });
 
-        // Set-up another helper task that will listen for Ctrl-C and trigger the cancellation
-        // token.
-        #[cfg(not(msim))]
-        let ctrl_c_cancel = cancel.clone();
-        #[cfg(not(msim))]
-        let h_ctrl_c = tokio::spawn(async move {
-            tokio::select! {
-                _ = ctrl_c_cancel.cancelled() => {}
-                _ = signal::ctrl_c() => {
-                    ctrl_c_cancel.cancel();
-                }
-            }
-        });
-
         Ok(tokio::spawn(async move {
             handle.stopped().await;
             cancel.cancel();
-            #[cfg(not(msim))]
-            let _ = join!(h_cancel, h_ctrl_c);
-            #[cfg(msim)]
-            let _ = h_cancel;
+            let _ = h_cancel.await;
         }))
     }
 }
@@ -218,13 +201,17 @@ impl Default for RpcArgs {
 /// command-line). The service will continue to run until the cancellation token is triggered, and
 /// will signal cancellation on the token when it is shutting down.
 ///
+/// Access to reads is controlled by the `database_url` -- if it is `None`, reads will not work.
+/// Similarly, access to writes (executing and dry-running transactions) is controlled by
+/// `write_args.fullnode_rpc_url`, which can be omitted to disable writes from this RPC.
+///
 /// The service may spin up auxiliary services (such as the system package task) to support itself,
 /// and will clean these up on shutdown as well.
 pub async fn start_rpc(
-    database_url: Url,
+    database_url: Option<Url>,
     db_args: DbArgs,
     rpc_args: RpcArgs,
-    write_args: Option<WriteArgs>,
+    write_args: WriteArgs,
     system_package_task_args: SystemPackageTaskArgs,
     rpc_config: RpcConfig,
     registry: &Registry,
@@ -233,7 +220,15 @@ pub async fn start_rpc(
     let mut rpc = RpcService::new(rpc_args, registry, cancel.child_token())
         .context("Failed to create RPC service")?;
 
-    let context = Context::new(database_url, db_args, rpc_config, rpc.metrics(), registry).await?;
+    let context = Context::new(
+        database_url,
+        db_args,
+        rpc_config,
+        rpc.metrics(),
+        registry,
+        cancel.child_token(),
+    )
+    .await?;
 
     let system_package_task = SystemPackageTask::new(
         context.clone(),
@@ -253,8 +248,11 @@ pub async fn start_rpc(
     rpc.add_module(Transactions(context.clone()))?;
 
     // Add the write module if a fullnode rpc url is provided.
-    if let Some(write_args) = write_args {
-        rpc.add_module(Write::new(write_args, context.config().write.clone())?)?;
+    if let Some(fullnode_rpc_url) = write_args.fullnode_rpc_url {
+        rpc.add_module(Write::new(
+            fullnode_rpc_url,
+            context.config().write.clone(),
+        )?)?;
     }
 
     let h_rpc = rpc.run().await.context("Failed to start RPC service")?;

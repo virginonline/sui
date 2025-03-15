@@ -562,7 +562,7 @@ impl SuiNode {
                 .get_highest_executed_checkpoint_seq_number()
                 .expect("checkpoint store read cannot fail")
                 .unwrap_or(0),
-        );
+        )?;
 
         info!("created epoch store");
 
@@ -1372,8 +1372,10 @@ impl SuiNode {
         ExecutionTimeObserver::spawn(
             epoch_store.clone(),
             Box::new(consensus_adapter.clone()),
-            config.local_execution_time_channel_capacity,
-            config.local_execution_time_cache_size(),
+            config
+                .execution_time_observer_config
+                .clone()
+                .unwrap_or_default(),
         );
 
         let throughput_calculator = Arc::new(ConsensusThroughputCalculator::new(
