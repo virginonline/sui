@@ -4016,6 +4016,11 @@
       "permanent": true
     },
     {
+      "source": "/guides/developer/nautilus/marlin",
+      "destination": "/guides/developer/nautilus/community-dev-toolsk",
+      "permanent": true
+    },
+    {
       "source": "/sui-glossary",
       "destination": "/references/sui-glossary",
       "permanent": true
