@@ -124,7 +124,10 @@ use sui_json_rpc_types::{
 use sui_macros::{fail_point, fail_point_arg, fail_point_async, fail_point_if};
 use sui_storage::key_value_store::{TransactionKeyValueStore, TransactionKeyValueStoreTrait};
 use sui_storage::key_value_store_metrics::KeyValueStoreMetrics;
+use sui_types::accumulator_root::AccumulatorValue;
 use sui_types::authenticator_state::get_authenticator_state;
+use sui_types::balance::Balance;
+use sui_types::coin_reservation;
 use sui_types::committee::{EpochId, ProtocolVersion};
 use sui_types::crypto::{AuthoritySignInfo, Signer, default_hash};
 use sui_types::deny_list_v1::check_coin_deny_list_v1;
@@ -4765,6 +4768,82 @@ impl AuthorityState {
             })
             .transpose()?;
         Ok(layout)
+    }
+
+    /// Returns a fake ObjectRef representing an address balance, along with the balance value
+    /// and the previous transaction digest. The ObjectRef can be returned to JSON-RPC clients
+    /// that don't understand address balances.
+    #[instrument(level = "trace", skip_all)]
+    pub fn get_address_balance_coin_info(
+        &self,
+        owner: SuiAddress,
+        balance_type: TypeTag,
+    ) -> SuiResult<Option<(ObjectRef, u64, TransactionDigest)>> {
+        let accumulator_id = AccumulatorValue::get_field_id(owner, &balance_type)?;
+        let accumulator_obj = AccumulatorValue::load_object_by_id(
+            self.get_child_object_resolver().as_ref(),
+            None,
+            *accumulator_id.inner(),
+        )?;
+
+        let Some(accumulator_obj) = accumulator_obj else {
+            return Ok(None);
+        };
+
+        // Extract the currency type from balance_type (e.g., SUI from Balance<SUI>).
+        // get_balance expects the currency type, not the balance type.
+        let currency_type =
+            Balance::maybe_get_balance_type_param(&balance_type).unwrap_or(balance_type);
+
+        let balance = crate::accumulators::balances::get_balance(
+            owner,
+            self.get_child_object_resolver().as_ref(),
+            currency_type,
+        )?;
+
+        if balance == 0 {
+            return Ok(None);
+        };
+
+        let object_ref = coin_reservation::encode_object_ref(
+            accumulator_obj.id(),
+            accumulator_obj.version(),
+            self.load_epoch_store_one_call_per_task().epoch(),
+            balance,
+            self.get_chain_identifier(),
+        );
+
+        Ok(Some((
+            object_ref,
+            balance,
+            accumulator_obj.previous_transaction,
+        )))
+    }
+
+    /// Returns fake ObjectRefs for all address balances of an owner, keyed by coin type string.
+    /// Used by get_all_coins to include fake coins for each coin type.
+    #[instrument(level = "trace", skip_all)]
+    pub fn get_all_address_balance_coin_infos(
+        &self,
+        owner: SuiAddress,
+    ) -> SuiResult<std::collections::HashMap<String, (ObjectRef, u64, TransactionDigest)>> {
+        let indexes = self
+            .indexes
+            .as_ref()
+            .ok_or(SuiErrorKind::IndexStoreNotAvailable)?;
+
+        let mut result = std::collections::HashMap::new();
+        for currency_type in indexes.get_address_balance_coin_types_iter(owner) {
+            let balance_type = sui_types::balance::Balance::type_tag(currency_type.clone());
+            if let Some((obj_ref, balance, prev_tx)) =
+                self.get_address_balance_coin_info(owner, balance_type)?
+            {
+                // Use currency_type.to_string() to match the format in CoinIndexKey2
+                // (e.g., "0x2::sui::SUI", not "0x2::coin::Coin<0x2::sui::SUI>")
+                result.insert(currency_type.to_string(), (obj_ref, balance, prev_tx));
+            }
+        }
+        Ok(result)
     }
 
     fn get_owner_at_version(
