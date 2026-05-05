@@ -22,7 +22,9 @@ use crate::ObjectKey;
 use crate::ObjectRead;
 use crate::TransactionInfo;
 use crate::TransactionRead;
+use crate::gql::AddressOwnedObject;
 use crate::gql::queries;
+use sui_types::base_types::SuiAddress;
 
 macro_rules! block_on {
     ($expr:expr) => {{
@@ -127,6 +129,16 @@ impl TransactionRead for GraphQLClient {
 }
 
 impl GraphQLClient {
+    /// Fetch address-owned object metadata at a checkpoint, paginating through
+    /// the checkpoint-scoped ownership connection.
+    pub(crate) async fn get_address_owned_objects_at_checkpoint(
+        &self,
+        address: SuiAddress,
+        checkpoint: CheckpointSequenceNumber,
+    ) -> Result<Vec<AddressOwnedObject>, Error> {
+        queries::address_owned_objects_query::query(address, checkpoint, self).await
+    }
+
     /// Get the latest checkpoint sequence number from GraphQL RPC.
     pub async fn get_latest_checkpoint_sequence_number(
         &self,
