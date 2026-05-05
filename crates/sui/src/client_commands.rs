@@ -1858,6 +1858,7 @@ impl SuiClientCommands {
                     run_bytecode_verifier: true,
                     print_diags_to_stderr: true,
                     environment: environment.clone(),
+                    flavor: SuiFlavor::with_client(context),
                 };
                 let compiled_package = build_config
                     .build_async_from_root_pkg(&mut root_pkg)
@@ -3738,7 +3739,7 @@ pub async fn load_root_pkg_for_publish_upgrade(
     let env = find_environment(path, build_config.environment.clone(), wallet, true).await?;
 
     Ok(build_config
-        .package_loader(path, &env, SuiFlavor::new())
+        .package_loader(path, &env, SuiFlavor::with_client(wallet))
         .load()
         .await?)
 }

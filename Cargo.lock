@@ -14923,6 +14923,7 @@ dependencies = [
  "sui-framework",
  "sui-move",
  "sui-move-build",
+ "sui-package-alt",
  "sui-protocol-config",
  "sui-types",
  "sui-verifier-latest",
@@ -16168,9 +16169,12 @@ dependencies = [
  "move-package-alt",
  "serde",
  "sui-package-management",
+ "sui-protocol-config",
+ "sui-rpc-api",
  "sui-sdk",
  "tempfile",
- "toml 0.7.4",
+ "tokio",
+ "tracing",
 ]
 
 [[package]]
