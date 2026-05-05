@@ -10,7 +10,7 @@ A development tool that enables testing and developing against a local Sui netwo
 
 ## Overview
 
-`sui-forking` allows developers to start a local network in lock-step mode and execute transactions against some initial state derived from the live Sui network. This enables you to:
+`sui-fork` allows developers to start a local network in lock-step mode and execute transactions against some initial state derived from the live Sui network. This enables you to:
 
 - Depend on existing on-chain packages and data
 - Test contracts that interact with real deployed packages
@@ -21,11 +21,21 @@ A development tool that enables testing and developing against a local Sui netwo
 Unlike a standard local Sui network with validators, the forking tool runs in lock-step mode where each transaction is executed sequentially and creates a checkpoint.
 That means that you have full control over the advancement of checkpoints, time, and epochs to simulate different scenarios.
 
+## Impersonating Senders
+
+The Sui CLI supports `--forking-mode` on transaction commands such as
+`sui client upgrade`. This flag is only intended for local forked networks. It
+submits the transaction with an empty signature list, which tells the forked
+network to execute the transaction as the declared sender without requiring that
+sender's private key.
+
+Transactions with non-empty signatures still use normal signature verification.
+
 ## Forked Network vs Sui CLI Local Network
 
 The table below summarizes when to use each option:
 
-| Topic | Local forked network (`sui-forking`) | Sui CLI local network |
+| Topic | Local forked network (`sui-fork`) | Sui CLI local network |
 | --- | --- | --- |
 | Initial state | Starts from real chain state (mainnet/testnet/devnet) at a chosen checkpoint | Starts from a fresh genesis state (or from an existing one on disk) |
 | Existing on-chain packages and objects | Available from the fork point (fetched/cached on demand) | Not available unless you deploy/create them locally |
@@ -41,7 +51,7 @@ The table below summarizes when to use each option:
 Owned-object enumeration can be seeded when starting the fork:
 
 ```bash
-sui-forking start --checkpoint 12345678 --address 0x... --object 0x...
+sui-fork start --checkpoint 12345678 --address 0x... --object 0x...
 ```
 
 - `--address` is repeatable and seeds metadata for every object owned by that
