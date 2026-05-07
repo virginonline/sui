@@ -254,6 +254,23 @@ export default {
         'getting-started/onboarding/next-steps',
       ],
     },
+    {
+      type: 'category',
+      label: 'Example Apps',
+      link: { type: 'doc', id: 'getting-started/examples/index'},
+      items: [
+          'getting-started/examples/capability-pattern',
+          'getting-started/examples/dapp-kit-frontend',
+          'getting-started/examples/derived-objects',
+          'getting-started/examples/event-indexer',
+          'getting-started/examples/first-dapp',
+          'getting-started/examples/lootbox-ctf',
+          'getting-started/examples/merchant-ctf',
+          'getting-started/examples/plinko',
+          'getting-started/examples/scenario-testing',
+          'getting-started/examples/staking-ctf',
+      ]
+    },
     'getting-started/tooling',
     'getting-started/dev-cheat-sheet',
     'getting-started/sui-for-ethereum',
@@ -474,19 +491,41 @@ export default {
 	'onchain-finance/payment-intents',
   ],
 
-  suiStackSidebar: [
+suiStackSidebar: [
     'sui-stack',
     'sui-stack/on-chain-primitives/access-time',
     'sui-stack/on-chain-primitives/randomness-onchain',
     'sui-stack/sagat',
     {
       type: 'category',
-      label: 'Walrus and Seal',
-      link: { type: 'doc', id: 'sui-stack/walrus-seal/index' },
+      label: 'Walrus',
+      link: { type: 'doc', id: 'sui-stack/walrus/index' },
       items: [
-        'sui-stack/walrus-seal/sui-stack-walrus',
-        'sui-stack/walrus-seal/sui-stack-seal',
-        'sui-stack/walrus-seal/indexer-walrus',
+        'sui-stack/walrus/sui-stack-walrus',
+        'sui-stack/walrus/indexer-walrus',
+        'sui-stack/walrus/only-fins',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Seal',
+      link: { type: 'doc', id: 'sui-stack/seal/index' },
+      items: [
+        'sui-stack/seal/sui-stack-seal',
+        'sui-stack/seal/sui-chat-app',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Enoki',
+      items: [
+        {
+          type: 'link',
+          label: 'Enoki Docs',
+          href: 'https://docs.enoki.mystenlabs.com/',
+        },
+        'sui-stack/enoki/solitaire',
+        'sui-stack/enoki/ticketing-poc',
       ],
     },
     {
@@ -498,8 +537,17 @@ export default {
         'sui-stack/nautilus/nautilus-design',
         'sui-stack/nautilus/using-nautilus',
         'sui-stack/nautilus/customize-nautilus',
+        'sui-stack/nautilus/nautilus-weather-oracle',
         'sui-stack/nautilus/seal',
         'sui-stack/nautilus/community-dev-tools',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'DeepBook',
+      items: [
+        'onchain-finance/deepbookv3/deepbook',
+        'onchain-finance/deepbook-margin/deepbook-margin',
       ],
     },
     {
@@ -509,7 +557,7 @@ export default {
       items: [
         'sui-stack/zklogin-integration/zklogin',
         'sui-stack/zklogin-integration/developer-account',
-        'sui-stack/zklogin-integration/zklogin-example',
+        'sui-stack/zklogin-integration/zklogin-demo',
       ],
     },
     {
