@@ -479,7 +479,16 @@ export default {
     'sui-stack/on-chain-primitives/access-time',
     'sui-stack/on-chain-primitives/randomness-onchain',
     'sui-stack/sagat',
-    'sui-stack/indexer-walrus',
+    {
+      type: 'category',
+      label: 'Walrus and Seal',
+      link: { type: 'doc', id: 'sui-stack/walrus-seal/index' },
+      items: [
+        'sui-stack/walrus-seal/sui-stack-walrus',
+        'sui-stack/walrus-seal/sui-stack-seal',
+        'sui-stack/walrus-seal/indexer-walrus',
+      ],
+    },
     {
       type: 'category',
       label: 'Nautilus',
