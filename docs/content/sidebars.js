@@ -473,27 +473,6 @@ export default {
           ],
         },
         'onchain-finance/deepbook-margin/deepbook-margin-indexer',
-		  {
-      type: 'category',
-      label: 'DeepBook Predict',
-      link: { type: 'doc', id: 'onchain-finance/deepbook-predict/deepbook-predict' },
-      items: [
-        'onchain-finance/deepbook-predict/design',
-        {
-          type: 'category',
-          label: 'Contract Information',
-          link: { type: 'doc', id: 'onchain-finance/deepbook-predict/contract-information' },
-          items: [
-            'onchain-finance/deepbook-predict/contract-information/predict',
-            'onchain-finance/deepbook-predict/contract-information/predict-manager',
-            'onchain-finance/deepbook-predict/contract-information/market-keys',
-            'onchain-finance/deepbook-predict/contract-information/oracle',
-            'onchain-finance/deepbook-predict/contract-information/vault',
-            'onchain-finance/deepbook-predict/contract-information/registry',
-          ],
-        },
-      ],
-    },
       ],
     },
     {
@@ -548,6 +527,7 @@ suiStackSidebar: [
         'sui-stack/walrus/sui-stack-walrus',
         'sui-stack/walrus/indexer-walrus',
         'sui-stack/walrus/only-fins',
+        'sui-stack/walrus/sui-stack-walrus-sites',
       ],
     },
     {
@@ -562,6 +542,19 @@ suiStackSidebar: [
         },
         'sui-stack/seal/sui-stack-seal',
         'sui-stack/seal/sui-chat-app',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'SuiNS',
+      link: { type: 'doc', id: 'sui-stack/suins/index' },
+      items: [
+        {
+          type: 'link',
+          label: 'SuiNS Docs',
+          href: 'https://docs.suins.io',
+        },
+        'sui-stack/suins/sui-stack-suins',
       ],
     },
     {
@@ -594,9 +587,22 @@ suiStackSidebar: [
     {
       type: 'category',
       label: 'DeepBook',
-      items: [
-        'onchain-finance/deepbookv3/deepbook',
-        'onchain-finance/deepbook-margin/deepbook-margin',
+	  items: [
+		{
+          type: 'link',
+          label: 'DeepBookV3',
+          href: 'https://docs.sui.io/onchain-finance/deepbookv3/deepbook',
+        },
+		{
+          type: 'link',
+          label: 'DeepBook Margin',
+          href: 'https://docs.sui.io/onchain-finance/deepbook-margin/deepbook-margin',
+        },
+		{
+          type: 'link',
+          label: 'DeepBook Predict',
+          href: 'https://docs.sui.io/onchain-finance/deepbook-predict/deepbook-predict',
+        },
       ],
     },
     {
