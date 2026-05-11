@@ -29,6 +29,7 @@ use sui_protocol_config::{Chain, ProtocolConfig, ProtocolVersion};
 use sui_types::crypto::NetworkPublicKey;
 use sui_types::error::{SuiErrorKind, SuiResult};
 use sui_types::messages_consensus::{ConsensusPosition, ConsensusTransaction};
+use sui_types::node_role::NodeRole;
 use sui_types::{
     committee::EpochId, sui_system_state::epoch_start_sui_system_state::EpochStartSystemStateTrait,
 };
@@ -137,10 +138,11 @@ fn to_consensus_protocol_config(config: &ProtocolConfig, chain: Chain) -> Consen
     )
 }
 
-/// Used by Sui validator to start consensus protocol for each epoch.
+/// Used by Sui to start consensus protocol for each epoch.
+/// Supports both validator mode (with protocol keypair) and observer mode (without).
 pub struct ConsensusManager {
     consensus_config: ConsensusConfig,
-    protocol_keypair: ProtocolKeyPair,
+    protocol_keypair: Option<ProtocolKeyPair>,
     network_keypair: NetworkKeyPair,
     storage_base_path: PathBuf,
     metrics: Arc<ConsensusManagerMetrics>,
@@ -178,15 +180,21 @@ impl ConsensusManager {
         consensus_config: &ConsensusConfig,
         registry_service: &RegistryService,
         consensus_client: Arc<UpdatableConsensusClient>,
+        node_role: NodeRole,
     ) -> Self {
         let metrics = Arc::new(ConsensusManagerMetrics::new(
             &registry_service.default_registry(),
         ));
         let client = Arc::new(LazyMysticetiClient::new());
         let (consumer_monitor_sender, _) = broadcast::channel(1);
+        let protocol_keypair = if node_role.is_validator() {
+            Some(ProtocolKeyPair::new(node_config.worker_key_pair().copy()))
+        } else {
+            None
+        };
         Self {
             consensus_config: consensus_config.clone(),
-            protocol_keypair: ProtocolKeyPair::new(node_config.worker_key_pair().copy()),
+            protocol_keypair,
             network_keypair: NetworkKeyPair::new(node_config.network_key_pair().copy()),
             storage_base_path: consensus_config.db_path().to_path_buf(),
             metrics,
@@ -297,7 +305,7 @@ impl ConsensusManager {
             committee.clone(),
             parameters.clone(),
             to_consensus_protocol_config(protocol_config, epoch_store.get_chain()),
-            Some(self.protocol_keypair.clone()),
+            self.protocol_keypair.clone(),
             self.network_keypair.clone(),
             Arc::new(Clock::default()),
             Arc::new(tx_validator.clone()),
